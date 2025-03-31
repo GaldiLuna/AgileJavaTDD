@@ -19,17 +19,8 @@ UML - Unified Modeling Language:
 Sobrecarregar um método significa criar outros métodos com o mesmo nome, porém com assinatura diferente.
 Para fazer a instância de um objeto é utilizado o new.
 
-Livro livro1 = new Livro();
-Cliente cliente1 = new Cliente();
+Métodos podem ser sobrecarregados quando tiverem o mesmo nome porém com parâmetros diferentes.
+Metódos getter e setter tem os benefícios de proteger os atributos e evitar a mudança de código em vários lugares.
 
-livro1.titulo = "Aprendendo Java"
-livro1.emprestar(Cliente1);
+Um Construtor sempre terá o mesmo nome da classe, diferentemente dos métodos que são nomeados como verbos (palavras de ação/ordem).
 
-Livro livro1 = new Livro();
-livro1.isbn = "1234";
-
-Livro livro2 = new Livro();
-livro2.isbn = "4321";
-
-Livro livro3 = new Livro();
-livro3.isbn = "1212"
