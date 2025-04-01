@@ -24,3 +24,4 @@ Metódos getter e setter tem os benefícios de proteger os atributos e evitar a 
 
 Um Construtor sempre terá o mesmo nome da classe, diferentemente dos métodos que são nomeados como verbos (palavras de ação/ordem).
 
+O modificador static pertence à classe e não aos objetos da classe, não sendo mais necessário fazer a criação de um objeto para que possa chamar pelo método, podendo fazer isso fazendo a chamada da classe e seu método estático desejado.

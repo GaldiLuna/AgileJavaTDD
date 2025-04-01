@@ -7,20 +7,47 @@ public class ContaBancaria {
     private double saldo;
 
     public void sacar(double valor) {
-        if (valor < 0) {
+        if (valor <= 0) {
             return;
         }
         if (valor > saldo) {
             return;
         }
-        saldo -= saldo;
+        saldo -= valor;
     }
 
     public void depositar(double valor) {
-        if (valor < 0) {
+        if (valor <= 0) {
             return;
         }
-        saldo += saldo;
+        saldo += valor;
+    }
+
+    public void pix(double valor) {
+        if (valor <= 0) {
+            return;
+        }
+        if (valor > saldo) {
+            return;
+        }
+        saldo -= valor;
+    }
+
+    public void receberSalario(double valor) {
+        if (valor <= 0) {
+            return;
+        }
+        saldo += valor;
+    }
+
+    public void pagarContas(double valor) {
+        if (valor <= 0) {
+            return;
+        }
+        if (valor > saldo) {
+            return;
+        }
+        saldo -= valor;
     }
 
     public String getBanco() {

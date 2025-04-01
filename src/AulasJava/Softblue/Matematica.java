@@ -16,4 +16,14 @@ public class Matematica {
         System.out.println("Método double foi chamado:");
         return x + y;
     }
+
+    public static int novoSomar(int a, int b) {
+        System.out.println("Método novoSomar chamado:");
+        return a + b;
+    }
+
+    public static int subtrair(int a, int b) {
+        System.out.println("Método subtrair chamado:");
+        return a - b;
+    }
 }
