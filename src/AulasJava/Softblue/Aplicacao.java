@@ -11,7 +11,8 @@ public class Aplicacao {
         p2.nome = "Maria";
 
         p1.receber(5);
-        System.out.println("\n" + p1.nome + " recebeu um pacote de figurinhas e agora tem: " + p1.numFigurinhas);
+        System.out.println(" \n ");
+        System.out.println(p1.nome + " recebeu um pacote de figurinhas e agora tem: " + p1.numFigurinhas);
         p1.receber(7);
         System.out.println(p1.nome + " recebeu um pacote de figurinhas e agora tem: " + p1.numFigurinhas);
         p2.receber(4);
@@ -27,7 +28,8 @@ public class Aplicacao {
 
         System.out.println("No final: ");
         System.out.println(p1.nome + " ficou com " + p1.numFigurinhas + " figurinhas.");
-        System.out.println(p2.nome + " ficou com " + p2.numFigurinhas + " figurinhas. \n" );
+        System.out.println(p2.nome + " ficou com " + p2.numFigurinhas + " figurinhas.");
+        System.out.println(" \n ");
 
         Matematica m1 = new Matematica();
 
@@ -37,7 +39,8 @@ public class Aplicacao {
         int soma2 = m1.somar(10, 20, 40);
         System.out.println("Total da soma2 = " + soma2 + "\n");
         double soma3 = m1.somar(1.0, 2.0);
-        System.out.println("Total da soma3 = " + soma3 + "\n");
+        System.out.println("Total da soma3 = " + soma3);
+        System.out.println(" \n ");
 
         Operacao op = new Operacao();
         int x = 10;
@@ -47,7 +50,8 @@ public class Aplicacao {
         Valor valor = new Valor();
         valor.v = 10;
         op.alterarValor(valor);
-        System.out.println("valor foi iniciado em 0 e após alteração => " + valor.v + "\n \n");
+        System.out.println("valor foi iniciado em 0 e após alteração => " + valor.v);
+        System.out.println(" \n\n ");
 
         ContaBancaria cb = new ContaBancaria();
         String banco = cb.getBanco();
@@ -79,9 +83,10 @@ public class Aplicacao {
         System.out.println("A área do Retângulo 2 é de: " + area2);
 
         Quadrado q = new Quadrado(7);
-        System.out.println("A área do Quadrado é de: " + q.calcularArea() + "\n");
+        System.out.println("A área do Quadrado é de: " + q.calcularArea());
+        System.out.println(" \n ");
 
-//        Comentado o bloco com a criação do objeto para chamar a classe e seu metodo estático logo abaixo.
+//Comentado o bloco com a criação do objeto para chamar a classe e seu metodo estático logo abaixo.
 //        Matematica m2 = new Matematica();
 //        int soma4 = m2.novoSomar(10, 5);
 //        int subtracao = m2.subtrair(50, 10);
@@ -90,9 +95,10 @@ public class Aplicacao {
         System.out.println("Total da soma4 = " + soma4 + "\n");
 
         int subtracao = Matematica.subtrair(50, 10);
-        System.out.println("Total da subtracao = " + subtracao + "\n");
+        System.out.println("Total da subtracao = " + subtracao);
+        System.out.println(" \n ");
 
-//Criação do bloco estático elimina a necessidade do construtor abaixo para inicializar a variável com valor.
+//Criação do bloco estático na classe elimina a necessidade do construtor abaixo para inicializar a variável com valor.
 //        Contador c1 = new Contador();
 //        c1.incrementar();
 //        Contador c2 = new Contador();
@@ -108,7 +114,8 @@ public class Aplicacao {
         Contador.incrementar();
 
         System.out.println("Após incrementar, o valor do Contador chamando o método getValor é: " + Contador.getValor());
-        System.out.println("Após incrementar, o valor do Contador chamando o atributo da classe é: " + Contador.valor + "\n");
+        System.out.println("Após incrementar, o valor do Contador chamando o atributo da classe é: " + Contador.valor);
+        System.out.println(" \n ");
 
         Constantes.setAV1(8.0);
         double nota1 = Constantes.getAV1();
@@ -128,7 +135,7 @@ public class Aplicacao {
         }
 
         String mensagem;
-        if (situacao == Constantes.APROVADO) {
+        if (situacao.equals(Constantes.APROVADO)) {
             mensagem = Constantes.WINNER;
         } else {
             mensagem = Constantes.LOSER;
@@ -137,5 +144,45 @@ public class Aplicacao {
         System.out.println("Prezado Aluno, suas notas foram: Av1- " + nota1 + ", Av2- " + nota2 + ", Av3- " + nota3 + ", Av4- " + nota4);
         System.out.println("Ficando com a Média: " + media);
         System.out.println("Sendo assim a situação do Aluno é de: " + situacao + " - " + mensagem);
+        System.out.println(" \n ");
+
+        Veiculo v = new Veiculo();
+        //v.setMarca("AAA");
+        //v.setModelo("BBB");
+        //v.setAno(2025);
+        //v.getMarca();
+        //v.getModelo();
+        //v.getAno();
+
+        Carro car = new Carro();
+        System.out.println("\nCarro:");
+        car.setMarca("Jeep");
+        car.setModelo("Commander");
+        car.setAno(2025);
+        car.setQuatroPortas(true);
+        car.imprimirDados();
+        //v.buzinar();
+        //car.buzinar();
+
+        Motocicleta mot = new Motocicleta();
+        System.out.println("\nMoto:");
+        mot.setMarca("Honda");
+        mot.setModelo("Falcon");
+        mot.setAno(2025);
+        mot.imprimirDados();
+        //mot.empinar();
+        //v.buzinar();
+        //mot.buzinar();
+
+        Caminhao cam = new Caminhao();
+        System.out.println("\nCaminhão:");
+        cam.setMarca("Mercedez");
+        cam.setModelo("L1620");
+        cam.setAno(2000);
+        cam.imprimirDados();
+        //v.buzinar();
+        //cam.buzinar();
+
+        //System.out.println(" \n ");
     }
 }

@@ -25,3 +25,9 @@ Metódos getter e setter tem os benefícios de proteger os atributos e evitar a 
 Um Construtor sempre terá o mesmo nome da classe, diferentemente dos métodos que são nomeados como verbos (palavras de ação/ordem).
 
 O modificador static pertence à classe e não aos objetos da classe, não sendo mais necessário fazer a criação de um objeto para que possa chamar pelo método, podendo fazer isso fazendo a chamada da classe e seu método estático desejado.
+
+Para que uma classe possa herdar atributos e métodos de outra classe basta incluir o extends.
+Podemos modificar um comportamento herdado de outra classe utilizando o overriding.
+Na herança uma instância pode chamar apenas os métodos globais ou pode chamar os métodos locais(específicos) + os globais de acordo com a forma que foi criada essa instância.
+
+Quando um atributo de classe é definido como public, isso quer dizer que esse atributo pode ser lido em qualquer parte do código, quando esse atributo é definido como private, isso quer dizer que apenas a classe que foi definido pode ler livremente esse atributo, sendo necessário chamar métodos getters para que outras classes possam ter acesso e quando os atributos saõ definidos como protected, isso quer dizer que todas as classes e subclasses tem acesso a leitura desse atributo.
