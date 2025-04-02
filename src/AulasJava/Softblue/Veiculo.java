@@ -37,4 +37,13 @@ public class Veiculo {
     public void setAno(int ano) {
         this.ano = ano;
     }
+
+//    public Veiculo() {
+//        System.out.println("Veiculo()");
+//    }
+
+//    public Veiculo(String marca) {
+//        this.marca = marca;
+//        System.out.println("Veiculo(String");
+//    }
 }

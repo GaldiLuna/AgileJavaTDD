@@ -183,6 +183,8 @@ public class Aplicacao {
         //v.buzinar();
         //cam.buzinar();
 
+        Carro c = new Carro();
+
         //System.out.println(" \n ");
     }
 }

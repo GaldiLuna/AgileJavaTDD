@@ -21,4 +21,9 @@ public class Carro extends Veiculo {
         super.imprimirDados(); //Forma de referenciar atributos da classe global no código local, evitando repetir código.
         System.out.println("Quatro portas: " + quatroPortas);
     }
+
+//    public Carro(String marca) {
+//        super(marca);
+//        System.out.println("Carro(String)");
+//    }
 }
