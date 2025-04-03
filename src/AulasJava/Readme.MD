@@ -31,3 +31,6 @@ Podemos modificar um comportamento herdado de outra classe utilizando o overridi
 Na herança uma instância pode chamar apenas os métodos globais ou pode chamar os métodos locais(específicos) + os globais de acordo com a forma que foi criada essa instância.
 
 Quando um atributo de classe é definido como public, isso quer dizer que esse atributo pode ser lido em qualquer parte do código, quando esse atributo é definido como private, isso quer dizer que apenas a classe que foi definido pode ler livremente esse atributo, sendo necessário chamar métodos getters para que outras classes possam ter acesso e quando os atributos saõ definidos como protected, isso quer dizer que todas as classes e subclasses tem acesso a leitura desse atributo.
+
+Não existe herança de construtores, existe a chamada da superclasse super(); dentro do construtor.
+

@@ -39,11 +39,12 @@ public class Veiculo {
     }
 
 //    public Veiculo() {
+//        super();
 //        System.out.println("Veiculo()");
 //    }
 
 //    public Veiculo(String marca) {
 //        this.marca = marca;
-//        System.out.println("Veiculo(String");
+//        System.out.println("Veiculo(String)");
 //    }
 }

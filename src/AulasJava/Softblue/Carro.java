@@ -23,7 +23,7 @@ public class Carro extends Veiculo {
     }
 
 //    public Carro(String marca) {
-//        super(marca);
+//        super("Lamborghini");
 //        System.out.println("Carro(String)");
 //    }
 }

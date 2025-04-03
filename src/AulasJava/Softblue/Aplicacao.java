@@ -183,8 +183,36 @@ public class Aplicacao {
         //v.buzinar();
         //cam.buzinar();
 
-        Carro c = new Carro();
+        //Carro c = new Carro("Lamborghini");
+        System.out.println(" \n ");
 
-        //System.out.println(" \n ");
+        Animais a = new Cachorros();
+        if (a instanceof Cachorros) {
+            Cachorros dog = (Cachorros) a;
+            dog.morder();
+        }
+
+        Cachorros c = new Cachorros();
+        Gatos g = new Gatos();
+
+        falar(c);
+        falar(g);
+        System.out.println(" \n ");
+
+        Preparador preparador1 = new Preparador();
+        Preparador preparador2 = new Preparador();
+
+        LeiteQuente leite = new LeiteQuente();
+        preparador1.prepararBebida(leite);
+        System.out.println(" ");
+
+        Refrigerante refrigerante = new Refrigerante();
+        preparador2.prepararBebida(refrigerante);
+
+        System.out.println(" \n ");
+    }
+
+    private static void falar(Animais a) {
+        a.falar();
     }
 }
