@@ -1,0 +1,34 @@
+<project name="ChessProject" default="run-tests" basedir=".">
+    <property name="src.dir" value="src"/>
+    <property name="build.dir" value="build"/>
+    <property name="lib.dir" value="lib"/>
+
+    <!-- Compila as classes -->
+    <target name="compile">
+        <mkdir dir="${build.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false">
+            <classpath>
+                <fileset dir="${lib.dir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+        </javac>
+    </target>
+
+    <!-- Executa os testes usando JUnit -->
+    <target name="run-tests" depends="compile">
+        <junit printsummary="yes" haltonfailure="yes">
+            <classpath>
+                <pathelement path="${build.dir}"/>
+                <fileset dir="${lib.dir}">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+            <batchtest fork="yes" todir="${build.dir}/test-reports">
+                <fileset dir="${src.dir}">
+                    <include name="**/*Test.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+</project>

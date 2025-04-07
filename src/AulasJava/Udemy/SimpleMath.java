@@ -1,3 +1,4 @@
+/*
 package AulasJava.Udemy;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
@@ -21,4 +22,20 @@ void testSum_WhenSixDotTwoIsAddedByTwo_ShouldReturnEightDotTwo() {
 
     // Then / Assert
     assertEquals(8.2D, actual, () -> "6.2 + 2 did not produce 8.2!");
+
+    // Exemplo de Injeção de Dependências nos métodos de checkout e pagamento abaixo.
+    public void checkout(Cart cart) {
+        PayoutProcessor payoutProcessor = new PayoutProcessor();
+        payoutProcessor.processPayment(cart);
+    }
+
+    PayoutProcessor payoutProcessor;
+    public CartCheckout(PayoutProcessor payoutProcessor) {
+        this.payoutProcessor = payoutProcessor;
+    }
+
+    public void Checkout(Cart cart, PayoutProcessor payoutProcessor) {
+        payoutProcessor.processPayment(cart);
+    }
 }
+*/

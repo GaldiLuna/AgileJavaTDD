@@ -34,3 +34,19 @@ Quando um atributo de classe é definido como public, isso quer dizer que esse a
 
 Não existe herança de construtores, existe a chamada da superclasse super(); dentro do construtor.
 
+* TDD::
+
+Princípio F.I.R.S.T.
+Fast - os testes unitários devem executar rapidamente;
+Independent - os testes unitários devem ser independentes uns dos outros;
+Repeatable - os testes unitários devem ser repetitíveis;
+Self-validating - os testes unitários devem se auto validarem;
+Thorought $ Timely - os testes unitários devem cobrir casos extremos.
+
+Pirâmide de Testes:
+Os testes unitários estão na base da pirâmide pois são escritos antes de qualquer outro tipo de testes, são muito rápidos e são testes de pequenos trechos de código isolados que utilizam objetos fakes ou mockadas.
+Os testes de integração estão no meio da pirâmide e neles não são usados objetos fakes e nem mokados, neles tem acessos reais aos banco de dados ou enviar requisições HTTP reais e por isso são mais lentos que os testes unitários.
+Testes ponta-a-ponta (end-to-end) estão no topo da pirâmide e são testes automatizados da funcionalidade de software/aplicação, são ainda mais lentos que os testes de integração.
+
+JUnit:
+É um framework de testes que permite fazer e implementar testes unitários.
