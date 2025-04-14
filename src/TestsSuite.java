@@ -4,9 +4,10 @@ import chess.pieces.PawnTest;
 import junit.framework.TestSuite;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ PawnTest.class, BoardTest.class})
+@Suite.SuiteClasses({ PawnTest.class, BoardTest.class, CharacterTest.class })
 
 public class TestsSuite {
     public static TestSuite suite() {
@@ -18,3 +19,4 @@ public class TestsSuite {
     }
 
 }
+

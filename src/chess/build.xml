@@ -1,34 +1,43 @@
-<project name="ChessProject" default="run-tests" basedir=".">
+<!-- build.xml -->
+<project name="ChessProject" default="test" basedir=".">
+    <!-- Propriedades -->
     <property name="src.dir" value="src"/>
     <property name="build.dir" value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
     <property name="lib.dir" value="lib"/>
+    <property name="junit.jar" value="${lib.dir}/junit.jar"/>
 
-    <!-- Compila as classes -->
-    <target name="compile">
+    <!-- Inicialização -->
+    <target name="init">
         <mkdir dir="${build.dir}"/>
-        <javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false">
+        <mkdir dir="${classes.dir}"/>
+    </target>
+
+    <!-- Compilação -->
+    <target name="compile" depends="init">
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false">
             <classpath>
-                <fileset dir="${lib.dir}">
-                    <include name="**/*.jar"/>
-                </fileset>
+                <pathelement path="${junit.jar}"/>
             </classpath>
         </javac>
     </target>
 
-    <!-- Executa os testes usando JUnit -->
-    <target name="run-tests" depends="compile">
+    <!-- Execução dos testes -->
+    <target name="test" depends="compile">
         <junit printsummary="yes" haltonfailure="yes">
             <classpath>
-                <pathelement path="${build.dir}"/>
-                <fileset dir="${lib.dir}">
-                    <include name="**/*.jar"/>
-                </fileset>
+                <pathelement path="${classes.dir}"/>
+                <pathelement path="${junit.jar}"/>
             </classpath>
-            <batchtest fork="yes" todir="${build.dir}/test-reports">
-                <fileset dir="${src.dir}">
-                    <include name="**/*Test.java"/>
-                </fileset>
+            <batchtest>
+                <fileset dir="${classes.dir}" includes="chess/TestSuite.class"/>
             </batchtest>
+            <formatter type="plain"/>
         </junit>
+    </target>
+
+    <!-- Limpeza -->
+    <target name="clean">
+        <delete dir="${build.dir}"/>
     </target>
 </project>

@@ -7,6 +7,7 @@ public class Pawn {
     private String color;
     private boolean isWhite;
     private char representation;
+    private char printableRepresentation;
     public static final String WHITE = "White";
     public static final String BLACK = "Black";
     //public static final String BLANK = "";
@@ -15,8 +16,9 @@ public class Pawn {
      * Cria um peão com a cor específica.
      * @param color a cor do peão
      */
-    public Pawn(String color) {
+    public Pawn(String color, char printableRepresentation) {
         this.color = color;
+        this.printableRepresentation = printableRepresentation;
     }
 
     /**
@@ -31,7 +33,8 @@ public class Pawn {
      * Cria um peão branco por padrão.
      */
     public Pawn() {
-        this(WHITE);
+        this.color = WHITE;
+        this.printableRepresentation = 'p';
     }
 
     /**
@@ -47,6 +50,10 @@ public class Pawn {
     }
 
     public char getPrintableRepresentation() {
+        return printableRepresentation;
+    }
+
+    public char getRepresentation() {
         return representation;
     }
 

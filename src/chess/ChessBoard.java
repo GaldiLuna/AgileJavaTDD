@@ -8,14 +8,26 @@ public class ChessBoard {
 
     //Representa as 8 fileiras do tabuleiro.
     private ArrayList<ArrayList<Pawn>> ranks;
+    private ArrayList<Pawn> secondRank = new ArrayList<>();
+    private ArrayList<Pawn> seventhRank = new ArrayList<>();
     private List<Pawn> pieces = new ArrayList<>();
 
-    public void AddPawn(Pawn pawn) {
-        pieces.add(pawn);
-    }
+    //public void AddPawn(Pawn pawn) {pieces.add(pawn);}
 
     public List<Pawn> getPawns() {
         return pieces;
+    }
+    public List<Pawn> getPieces() {
+        return pieces;
+    }
+
+    public List<Pawn> getRank(int rank) {
+        if (rank == 2) {
+            return secondRank;
+        } else if (rank == 7) {
+            return seventhRank;
+        }
+        return new ArrayList<>();
     }
 
     public int getPieceCount() {
@@ -23,10 +35,18 @@ public class ChessBoard {
     }
 
     public void addPawn(Pawn pawn) {
+        pieces.add(pawn);
         if (!(pawn instanceof Pawn)) {
             throw new IllegalArgumentException("Apenas peões podem ser adicionados ao tabuleiro.");
         }
         pieces.add(pawn);
+    }
+
+    public ChessBoard() {
+        for (int i = 0; i < 8; i++) {
+            pieces.add(new Pawn(Pawn.WHITE, 'p'));
+            pieces.add(new Pawn(Pawn.BLACK, 'P'));
+        }
     }
 
     public String Board() {
@@ -49,6 +69,24 @@ public class ChessBoard {
     }
 
     public void initialize() {
+        pieces.clear();
+        secondRank.clear();
+        seventhRank.clear();
+
+        //Adiciona peões brancos na segunda fileira
+        for (int i = 0; i < 8; i++) {
+            Pawn whitePawn = new Pawn(Pawn.WHITE, 'p');
+            secondRank.add(whitePawn);
+            pieces.add(whitePawn);
+        }
+
+        //Adiciona peões pretos na sétima fileira
+        for (int i = 0; i < 8; i++) {
+            Pawn blackPawn = new Pawn(Pawn.BLACK, 'P');
+            seventhRank.add(blackPawn);
+            pieces.add(blackPawn);
+        }
+
         //Cria a fileira de peões brancos (na segunda fileira).
         ArrayList<Pawn> whitePawns = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
@@ -87,6 +125,30 @@ public class ChessBoard {
             }
         }
         return boardString.toString();
+    }
+
+    @Override
+    public String toString() {
+        String result = "";
+        //StringBuilder sb = new StringBuilder();
+        for (int rank = 8; rank >= 1; rank--) {
+            List<Pawn> pawns = getRank(rank);
+            if (pawns.isEmpty()) {
+                sb.append("........");
+            } else {
+                for (Pawn pawn : pawns) {
+                    rankStr += pawn.getPrintableRepresentation()
+                    //sb.append(pawn.getPrintableRepresentation());
+                }
+                result += rankStr;
+            }
+            if (rank > 1) {
+                result += System.lineSeparator();
+                //sb.append(System.lineSeparator());
+            }
+        }
+        return result;
+        //return sb.toString();
     }
 
 }

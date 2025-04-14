@@ -1,16 +1,21 @@
 package chess.pieces;
-import static org.junit.Assert.*;
 import org.junit.Test;
-import junit.framework.*;
-import chess.pieces.Pawn;
 
 public class PawnTest extends junit.framework.TestCase {
-    public void testCreatePawns() {
+    public void testCreatePawnWithoutColor() {
+        Pawn pawn = new Pawn();
+        assertEquals(Pawn.WHITE, pawn.getColor());
+        assertEquals('p', pawn.getPrintableRepresentation());
+    }
+
+    public void testCreateColorPawns() {
         Pawn firstPawn = new Pawn(Pawn.WHITE);
         assertEquals(Pawn.WHITE, firstPawn.getColor());
+        assertEquals('p', firstPawn.getPrintableRepresentation());
 
         Pawn secondPawn = new Pawn(Pawn.BLACK);
         assertEquals(Pawn.BLACK, secondPawn.getColor());
+        assertEquals('P', secondPawn.getPrintableRepresentation());
     }
 
     @Test
