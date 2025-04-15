@@ -28,19 +28,23 @@ public class BoardTest extends junit.framework.TestCase {
         ChessBoard board = new ChessBoard();
 
         Pawn p = new Pawn(Pawn.WHITE);
-        Pawn P = new Pawn(Pawn.BLACK);
-
         board.addPawn(p);
-        board.addPawn(P);
-
-        assertEquals(2, board.getPieceCount());
+        board.addPawn(whitePawn);
+        assertEquals(1, board.getPieceCount());
         List<Pawn> pieces = board.getPieces();
+        assertEquals(1, pieces.size());
+        assertTrue(pieces.contains(whitePawn));
+        assertTrue(board.getPawns().contains(p));
+
+        Pawn P = new Pawn(Pawn.BLACK);
+        board.addPawn(P);
+        board.addPawn(balckPawn);
+        assertEquals(2, board.getPieceCount());
         pieces = board.getPieces();
         assertEquals(2, pieces.size());
-
-        // "p" = branca e "P" = preta
-        assertTrue(board.getPawns().contains(p));
         assertTrue(board.getPawns().contains(P));
+        assertTrue(pieces.contains(whitePawn));
+        assertTrue(pieces.contains(blackPawn));
 
     }
 

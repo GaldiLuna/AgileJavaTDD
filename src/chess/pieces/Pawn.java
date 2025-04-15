@@ -37,6 +37,9 @@ public class Pawn {
         this.printableRepresentation = 'p';
     }
 
+    public void Pawn(String color, char printableRepresentation) {}
+    public void Pawn(boolean color, char printableRepresentation) {}
+
     /**
      * Retorna a cor do peão.
      * @return a cor do peão

@@ -130,25 +130,25 @@ public class ChessBoard {
     @Override
     public String toString() {
         String result = "";
-        //StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         for (int rank = 8; rank >= 1; rank--) {
             List<Pawn> pawns = getRank(rank);
             if (pawns.isEmpty()) {
                 sb.append("........");
             } else {
                 for (Pawn pawn : pawns) {
-                    rankStr += pawn.getPrintableRepresentation()
-                    //sb.append(pawn.getPrintableRepresentation());
+                    //rankStr += pawn.getPrintableRepresentation();
+                    sb.append(pawn.getPrintableRepresentation());
                 }
-                result += rankStr;
+                //result += rankStr;
             }
             if (rank > 1) {
-                result += System.lineSeparator();
-                //sb.append(System.lineSeparator());
+                //result += System.lineSeparator();
+                sb.append(System.lineSeparator());
             }
         }
-        return result;
-        //return sb.toString();
+        //return result;
+        return sb.toString();
     }
 
 }
