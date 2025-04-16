@@ -7,7 +7,11 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ PawnTest.class, BoardTest.class, CharacterTest.class })
+@Suite.SuiteClasses({
+        PawnTest.class,
+        BoardTest.class,
+        CharacterTest.class
+})
 
 public class TestsSuite {
     public static TestSuite suite() {

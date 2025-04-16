@@ -50,3 +50,5 @@ Testes ponta-a-ponta (end-to-end) estão no topo da pirâmide e são testes auto
 
 JUnit:
 É um framework de testes que permite fazer e implementar testes unitários.
+
+ESTUDAR AINDA MAIS!!!
