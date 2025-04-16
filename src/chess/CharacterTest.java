@@ -3,6 +3,7 @@ import org.junit.Test;
 
 public class CharacterTest extends junit.framework.TestCase {
 
+    @Test
     public void testWhiteSpace() {
         //Testa se os caracteres de espaço, nova linha e tabulação são espaços em branco.
         assertTrue(Character.isWhitespace('\n')); //Nova linha

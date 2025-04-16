@@ -34,13 +34,13 @@ public class ChessBoard {
         return pieces.size();
     }
 
-    public void addPawn(Pawn pawn) {
-        pieces.add(pawn);
-        if (!(pawn instanceof Pawn)) {
-            throw new IllegalArgumentException("Apenas peões podem ser adicionados ao tabuleiro.");
-        }
-        pieces.add(pawn);
-    }
+//    public void addPawn(Pawn pawn) {
+//        pieces.add(pawn);
+//        if (!(pawn instanceof Pawn)) {
+//            throw new IllegalArgumentException("Apenas peões podem ser adicionados ao tabuleiro.");
+//        }
+//        pieces.add(pawn);
+//    }
 
     public ChessBoard() {
         for (int i = 0; i < 8; i++) {
