@@ -52,3 +52,7 @@ JUnit:
 É um framework de testes que permite fazer e implementar testes unitários.
 
 ESTUDAR AINDA MAIS!!!
+
+Lembrar:
+Avançar na leitura do livro e buscar uma promoção de curso que ajude.
+Fé em Deus que vai dar certo!
