@@ -12,6 +12,7 @@ public class CourseSession {
     //private int numberOfStudents = 0;
     private ArrayList<Student> students = new ArrayList<Student>();
     private Date startDate;
+    private static int count;
 
     /**
      * Constrói uma CourseSession que começa em uma data específica.
@@ -22,6 +23,20 @@ public class CourseSession {
         this.department = department;
         this.number = number;
         this.startDate = startDate;
+        //incrementCount(); //ISSO NÃO DEVE SER FEITO
+        CourseSession.incrementCount();
+    }
+
+    private static void incrementCount() {
+        count = count + 1;
+    }
+
+    static void resetCount() {
+        count = 0;
+    }
+
+    static int getCount() {
+        return count;
     }
 
     public String getDepartment() {
