@@ -1,5 +1,6 @@
 package Tests.sis.report;
 import Tests.sis.studentinfo.*;
+import static Tests.sis.report.ReportConstant.NEWLINE;
 
 public class RosterReporter {
     static final String NEWLINE = System.getProperty("line.separator");

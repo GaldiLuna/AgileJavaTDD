@@ -14,4 +14,12 @@ public class StudentTest extends TestCase {
 
         //assertEquals(firstStudentName, firstStudent.name);
     }
+// TESTE FEITO PARA VERIFICAR A VARIÁVEL COMO ESTÁTICA DENTRO DE STUDENT
+//    public void testBadStatic() {
+//        Student studentA = new Student("a");
+//        assertEquals("a", studentA.getName());
+//        Student studentB = new Student("b");
+//        assertEquals("b", studentB.getName());
+//        assertEquals("a", studentA.getName());
+//    }
 }

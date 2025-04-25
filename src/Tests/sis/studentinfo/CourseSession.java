@@ -19,16 +19,21 @@ public class CourseSession {
      *
      * @param startDate a data em que a sessão do curso se inicia.
      */
-    public CourseSession(String department, String number, Date startDate) {
+    private CourseSession(String department, String number, Date startDate) {
         this.department = department;
         this.number = number;
         this.startDate = startDate;
-        //incrementCount(); //ISSO NÃO DEVE SER FEITO
-        CourseSession.incrementCount();
+        //incrementCount();
+        //CourseSession.incrementCount();
+    }
+
+    public static CourseSession create(String department, String number, Date startDate) {
+        incrementCount();
+        return new CourseSession(department, number, startDate);
     }
 
     private static void incrementCount() {
-        count = count + 1;
+        count = count + 1; //pode ser "count += 1" ou também "++count" e "count++"
     }
 
     static void resetCount() {

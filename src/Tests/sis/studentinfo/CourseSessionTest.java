@@ -2,6 +2,7 @@ package Tests.sis.studentinfo;
 import Tests.sis.studentinfo.CourseSession;
 import junit.framework.TestCase;
 import java.util.*;
+import static Tests.sis.studentinfo.DateUtil.createDate;
 
 public class CourseSessionTest extends TestCase {
     private CourseSession session;
@@ -56,7 +57,7 @@ public class CourseSessionTest extends TestCase {
     }
 
     private CourseSession createCourseSession() {
-        return new CourseSession("ENGL", "101", startDate);
+        return CourseSession.create("ENGL", "101", startDate);
     }
 
 }

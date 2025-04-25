@@ -2,11 +2,12 @@ package Tests.sis.report;
 import Tests.sis.report.RosterReporter;
 import Tests.sis.studentinfo.*;
 import junit.framework.*;
+import static Tests.sis.report.ReportConstant.NEWLINE;
 
 public class RosterReporterTest extends TestCase {
     public void testRosterReport(){
         CourseSession session =
-                new CourseSession("ENGL", "101",
+                CourseSession.create("ENGL", "101",
                         DateUtil.createDate(2003, 1, 6));
 
         session.enroll(new Student("A"));
@@ -17,10 +18,10 @@ public class RosterReporterTest extends TestCase {
 
         assertEquals(
                 RosterReporter.ROSTER_REPORT_HEADER +
-                        "A" + RosterReporter.NEWLINE +
-                        "B" + RosterReporter.NEWLINE +
+                        "A" + NEWLINE +
+                        "B" + NEWLINE +
                         RosterReporter.ROSTER_REPORT_FOOTER + "2" +
-                        RosterReporter.NEWLINE, rosterReport);
+                        NEWLINE, rosterReport);
     }
 
 }
