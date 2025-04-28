@@ -13,6 +13,8 @@ public class CourseSession {
     private ArrayList<Student> students = new ArrayList<Student>();
     private Date startDate;
     private static int count;
+    //private static int CREDITS = 3;
+    private int numberOfCredits;
 
     /**
      * Constrói uma CourseSession que começa em uma data específica.
@@ -59,6 +61,7 @@ public class CourseSession {
 
     public void enroll(Student student) {
         //numberOfStudents = numberOfStudents +1;
+        student.addCredits(numberOfCredits);
         students.add(student);
     }
 
@@ -83,6 +86,9 @@ public class CourseSession {
         int numberOfDays = sessionLength * daysInWeek - daysFromFridayToMonday;
         calendar.add(Calendar.DAY_OF_YEAR, numberOfDays);
         return calendar.getTime();
+    }
+    void setNumberOfCredits(int numberOfCredits) {
+        this.numberOfCredits = numberOfCredits;
     }
 
 }
