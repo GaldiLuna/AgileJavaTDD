@@ -1,6 +1,6 @@
 import chess.BoardTest;
 import chess.CharacterTest;
-import chess.pieces.PawnTest;
+import chess.pieces.PieceTest;
 //import junit.framework.TestSuite;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -8,19 +8,12 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({
-    PawnTest.class,
+    PieceTest.class,
     BoardTest.class,
     CharacterTest.class
 })
 
 public class TestsSuite{
-//    public static TestSuite suite() {
-//        TestSuite suite = new TestSuite();
-//        suite.addTestSuite(PawnTest.class);
-//        suite.addTestSuite(BoardTest.class);
-//        suite.addTestSuite(CharacterTest.class);
-//        return suite;
-//    }
 
 }
 
