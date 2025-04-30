@@ -1,10 +1,12 @@
 package chess.pieces;
 import org.junit.Test;
+import chess.pieces.Piece;
 
 public class PieceTest extends junit.framework.TestCase {
     @Test
     public void testCreatePawnWithoutColor() {
         Piece pawn = new Piece();
+        //Piece pawn = Piece.of(Color.WHITE, "pawn");
         assertEquals(Piece.WHITE, pawn.getColor());
         assertEquals('p', pawn.getPrintableRepresentation());
     }

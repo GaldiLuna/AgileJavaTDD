@@ -2,8 +2,8 @@ package chess;
 import chess.pieces.Piece;
 import org.junit.Before;
 import org.junit.Test;
-
-import static junit.framework.TestCase.assertTrue;
+import junit.framework.TestCase.*;
+import util.StringUtil;
 
 public class BoardTest extends junit.framework.TestCase {
     private ChessBoard board;
@@ -12,6 +12,7 @@ public class BoardTest extends junit.framework.TestCase {
     public void setUp() {
         board = new ChessBoard();
     }
+    //protected void setUp() { board = new ChessBoard(); }
 
     @Test
     public void testBoardStartsEmpty() {
@@ -22,7 +23,15 @@ public class BoardTest extends junit.framework.TestCase {
     @Test
     public void testCreate() {
         board.initialize();
-        assertEquals(16, board.getPieceCount());
+        assertEquals(32, board.getPieceCount());
+        String blankRank = StringUtil.appendNewLine("........");
+        assertEquals(
+            StringUtil.appendNewLine("RNBQKBNR") +
+                    StringUtil.appendNewLine("PPPPPPPP") +
+                    blankRank + blankRank + blankRank + blankRank +
+                    StringUtil.appendNewLine("pppppppp") +
+                    StringUtil.appendNewLine("rnbqkbnr"),
+                    board.printBoard());
 
         //Verifica a segunda fileira (brancos)
         StringBuilder secondRank = new StringBuilder();
@@ -48,8 +57,8 @@ public class BoardTest extends junit.framework.TestCase {
                 "........" + System.lineSeparator() +
                 "pppppppp" + System.lineSeparator() + // rank 2 "PPPPPPPP"
                 "........";
-        System.out.println("Board representation: ");
-        System.out.println(board.toString());
+//        System.out.println("Board representation: ");
+//        System.out.println(board.toString());
         assertEquals(expectedBoard, board.toString());
     }
 
