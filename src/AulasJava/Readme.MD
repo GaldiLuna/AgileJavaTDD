@@ -54,5 +54,6 @@ JUnit:
 ESTUDAR AINDA MAIS!!!
 
 Lembrar:
-Avançar na leitura do livro e buscar uma promoção de curso que ajude.
+Avançar na leitura do livro e fazer o curso na Udemy e DIO para ajudar.
 Fé em Deus que vai dar certo!
+Me ajuda Pai!

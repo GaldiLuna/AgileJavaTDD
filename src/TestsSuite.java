@@ -1,7 +1,7 @@
 import chess.BoardTest;
 import chess.CharacterTest;
 import chess.pieces.PieceTest;
-//import junit.framework.TestSuite;
+import junit.framework.TestSuite;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
