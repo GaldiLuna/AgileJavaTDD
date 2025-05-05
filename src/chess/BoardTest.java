@@ -49,14 +49,14 @@ public class BoardTest extends junit.framework.TestCase {
 
         //Verifica a representação completa do tabuleiro
         String expectedBoard =
-                "........" + System.lineSeparator() +
-                "PPPPPPPP" + System.lineSeparator() + // rank 7 "pppppppp"
-                "........" + System.lineSeparator() +
-                "........" + System.lineSeparator() +
-                "........" + System.lineSeparator() +
-                "........" + System.lineSeparator() +
-                "pppppppp" + System.lineSeparator() + // rank 2 "PPPPPPPP"
-                "........";
+                "RNBQKBNR" + StringUtil.NEWLINE +
+                "PPPPPPPP" + StringUtil.NEWLINE + // rank 7 "pppppppp"
+                "........" + StringUtil.NEWLINE +
+                "........" + StringUtil.NEWLINE +
+                "........" + StringUtil.NEWLINE +
+                "........" + StringUtil.NEWLINE +
+                "pppppppp" + StringUtil.NEWLINE + // rank 2 "PPPPPPPP"
+                "rnbqkbnr";
 //        System.out.println("Board representation: ");
 //        System.out.println(board.toString());
         assertEquals(expectedBoard, board.toString());
@@ -75,14 +75,14 @@ public class BoardTest extends junit.framework.TestCase {
     public void testBoardPrinting() {
         board.initialize();
         String expected =
-                "........" + System.lineSeparator() +
-                "PPPPPPPP" + System.lineSeparator() +
-                "........" + System.lineSeparator() +
-                "........" + System.lineSeparator() +
-                "........" + System.lineSeparator() +
-                "........" + System.lineSeparator() +
-                "pppppppp" + System.lineSeparator() +
-                "........";
+                "RNBQKBNR" + StringUtil.NEWLINE +
+                "PPPPPPPP" + StringUtil.NEWLINE +
+                "........" + StringUtil.NEWLINE +
+                "........" + StringUtil.NEWLINE +
+                "........" + StringUtil.NEWLINE +
+                "........" + StringUtil.NEWLINE +
+                "pppppppp" + StringUtil.NEWLINE +
+                "rnbqkbnr";
         assertEquals(expected, board.printBoard());
     }
 

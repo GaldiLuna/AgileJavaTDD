@@ -7,22 +7,35 @@ import java.awt.*;
  */
 public class Piece {
     private String color;
+    private String name;
     private boolean isWhite;
     private char printableRepresentation;
     public static final String WHITE = "White";
     public static final String BLACK = "Black";
     public static final String BLANK = "";
-    //private final Color color;
-    private final String name;
+    public enum Color { WHITE, BLACK }
+    public enum Type { PAWN, KNIGHT, ROOK, BISHOP, QUEEN, KING }
+//    public enum Names { UpName, LowName }
+//    public enum UpName { P, N, R, B, Q, K}
+//    public enum LowName { p, n, r, b, q, k}
+    private final Color colors;
+    private final Type type;
+//    private final Names names;
+//    private final UpName upperNames;
+//    private final LowName lowerNames;
 
-    private Piece(Color color, String name) {
+    private Piece(String color, String name) {
         this.color = color;
         this.name = name;
     }
 
-    public enum Color { WHITE, BLACK }
+    private Piece(Color colors, Type type, Names names) {
+        this.colors = colors;
+        this.type = type;
+        this.printableRepresentation = printableRepresentation;
+    }
 
-    public static Piece of(Color color, String name) {
+    public static Piece of(String color, String name) {
         if (!isValidName(name)) {
             throw new IllegalArgumentException("Invalid piece name: " + name);
         }
@@ -38,25 +51,8 @@ public class Piece {
                 "king".equalsIgnoreCase(name);
     }
 
-    public Color getColor() {
-        return color;
-    }
-
     public String getName() {
         return name;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof Piece)) return false;
-        Piece other = (Piece) obj;
-        return color == other.color && name.equals(other. name);
-    }
-
-    @Override
-    public int hashCode() {
-        return 31 * color.hashCode() + name.hashCode();
     }
 
     /**
@@ -98,6 +94,77 @@ public class Piece {
 
     public char getPrintableRepresentation() {
         return printableRepresentation;
+    }
+
+    //MÉTODOS DE FÁBRICA DAS PEÇAS.
+    public static Piece createWhitePawn() {
+        return new Piece(Color.WHITE, Type.PAWN);
+    }
+    public static Piece createBlackPawn() {
+        return new Piece(Color.BLACK, Type.PAWN);
+    }
+
+    public static Piece createWhiteKnight() {
+        return new Piece(Color.WHITE, Type.KNIGHT);
+    }
+    public static Piece createBlackKnight() {
+        return new Piece(Color.BLACK, Type.KNIGHT);
+    }
+
+    public static Piece createWhiteRook() {
+        return new Piece(Color.WHITE, Type.ROOK);
+    }
+    public static Piece createBlackRook() {
+        return new Piece(Color.BLACK, Type.ROOK);
+    }
+
+    public static Piece createWhiteBishop() {
+        return new Piece(Color.WHITE, Type.BISHOP);
+    }
+    public static Piece createBlackBishop() {
+        return new Piece(Color.BLACK, Type.BISHOP);
+    }
+
+    public static Piece createWhiteQueen() {
+        return new Piece(Color.WHITE, Type.QUEEN);
+    }
+    public static Piece createBlackQueen() {
+        return new Piece(Color.BLACK, Type.QUEEN);
+    }
+
+    public static Piece createWhiteKing() {
+        return new Piece(Color.WHITE, Type.KING);
+    }
+    public static Piece createBlackKing() {
+        return new Piece(Color.BLACK, Type.KING);
+    }
+    //FIM DOS MÉTODOS DE FÁBRICA DAS PEÇAS.
+
+    public Color getColors() {
+        return colors;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Piece piece = (Piece) obj;
+        return colors == piece.colors && type == piece.type;
+        if (!(obj instanceof Piece)) return false;
+        Piece other = (Piece) obj;
+        return colors == other.colors && type.equals(other.type);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = colors.hashCode();
+        result = 31 * result + type.hashCode();
+        return result;
+        return 31 * colors.hashCode() + type.hashCode();
     }
 
 }
