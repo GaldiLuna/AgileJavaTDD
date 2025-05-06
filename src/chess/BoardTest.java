@@ -1,96 +1,37 @@
 package chess;
 import chess.pieces.Piece;
-import org.junit.Before;
-import org.junit.Test;
-import junit.framework.TestCase.*;
 import util.StringUtil;
 
+import javax.sql.rowset.serial.SQLOutputImpl;
+
 public class BoardTest extends junit.framework.TestCase {
-    private ChessBoard board;
+    private Board board;
 
-    @Before
-    public void setUp() {
-        board = new ChessBoard();
-    }
-    //protected void setUp() { board = new ChessBoard(); }
+    protected void setUp() { board = new Board(); }
 
-    @Test
     public void testBoardStartsEmpty() {
-        ChessBoard board = new ChessBoard();
-        assertEquals(0, board.getPieceCount());
+        Board board = new Board();
+        assertEquals(0, board.pieceCount());
     }
 
-    @Test
     public void testCreate() {
         board.initialize();
-        assertEquals(32, board.getPieceCount());
+        assertEquals(32, board.pieceCount());
+        assertEquals(16, Piece.getWhitePieceCount());
+        assertEquals(16, Piece.getBlackPieceCount());
+
         String blankRank = StringUtil.appendNewLine("........");
-        assertEquals(
-            StringUtil.appendNewLine("RNBQKBNR") +
-                    StringUtil.appendNewLine("PPPPPPPP") +
-                    blankRank + blankRank + blankRank + blankRank +
-                    StringUtil.appendNewLine("pppppppp") +
-                    StringUtil.appendNewLine("rnbqkbnr"),
-                    board.printBoard());
-
-        //Verifica a segunda fileira (brancos)
-        StringBuilder secondRank = new StringBuilder();
-        for (Piece pawn : board.getRank(2)) {
-            secondRank.append(pawn != null ? pawn.getPrintableRepresentation() : '.');
-        }
-        assertEquals("pppppppp", secondRank.toString());
-
-        //Verifica a sétima fileira (pretos)
-        StringBuilder seventhRank = new StringBuilder();
-        for (Piece pawn : board.getRank(7)) {
-            seventhRank.append(pawn != null ? pawn.getPrintableRepresentation() : '.');
-        }
-        assertEquals("PPPPPPPP", seventhRank.toString());
-
-        //Verifica a representação completa do tabuleiro
         String expectedBoard =
-                "RNBQKBNR" + StringUtil.NEWLINE +
-                "PPPPPPPP" + StringUtil.NEWLINE + // rank 7 "pppppppp"
-                "........" + StringUtil.NEWLINE +
-                "........" + StringUtil.NEWLINE +
-                "........" + StringUtil.NEWLINE +
-                "........" + StringUtil.NEWLINE +
-                "pppppppp" + StringUtil.NEWLINE + // rank 2 "PPPPPPPP"
-                "rnbqkbnr";
-//        System.out.println("Board representation: ");
-//        System.out.println(board.toString());
-        assertEquals(expectedBoard, board.toString());
-    }
+                StringUtil.appendNewLine("RNBQKBNR") + //Linha 8 peças pretas
+                StringUtil.appendNewLine("PPPPPPPP") + //Linha 7 peões pretos
+                blankRank + blankRank + blankRank + blankRank + //Linhas 6, 5, 4 e 3 vazias
+                StringUtil.appendNewLine("pppppppp") + //Linha 2 peões brancos
+                StringUtil.appendNewLine("rnbqkbnr"); //Linha 1 peças brancas
+        assertEquals(expectedBoard, board.printAll());
 
-    @Test
-    public void testInitializeRanks() {
-        board.initialize();
-        //Verifica se a segunda fileira contém "pppppppp"
-        assertEquals("pppppppp", board.getRankPrintable(1)); // rank 2
-        //Verifica se a penúltima fileira contém "PPPPPPPP"
-        assertEquals("PPPPPPPP", board.getRankPrintable(6)); // rank 7
-    }
-
-    @Test
-    public void testBoardPrinting() {
-        board.initialize();
-        String expected =
-                "RNBQKBNR" + StringUtil.NEWLINE +
-                "PPPPPPPP" + StringUtil.NEWLINE +
-                "........" + StringUtil.NEWLINE +
-                "........" + StringUtil.NEWLINE +
-                "........" + StringUtil.NEWLINE +
-                "........" + StringUtil.NEWLINE +
-                "pppppppp" + StringUtil.NEWLINE +
-                "rnbqkbnr";
-        assertEquals(expected, board.printBoard());
-    }
-
-    @Test
-    public void testDisplayBoard() {
-        board.initialize();
-        //Exibe o tabuleiro no console para verificação manual
-        System.out.println(board.printBoard());
+        //Impressão do tabuleiro no console:
+        System.out.println("Visualização do Tabuleiro:");
+        System.out.println(board.printAll());
     }
 
 }

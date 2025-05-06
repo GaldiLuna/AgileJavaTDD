@@ -3,35 +3,35 @@ import org.junit.Test;
 import chess.pieces.Piece;
 
 public class PieceTest extends junit.framework.TestCase {
-    @Test
-    public void testCreatePawnWithoutColor() {
-        Piece pawn = new Piece();
-        //Piece pawn = Piece.of(Color.WHITE, "pawn");
-        assertEquals(Piece.WHITE, pawn.getColor());
-        assertEquals('p', pawn.getPrintableRepresentation());
+
+    public void testCreateWhitePiece(){
+        Piece pawn = Piece.createWhitePawn();
+        assertEquals(Piece.Color.WHITE, pawn.getColors());
+        assertEquals(Piece.Type.PAWN, pawn.getType());
+        assertEquals(Piece.Symbol.p, pawn.getSymbol());
     }
 
-    @Test
-    public void testCreateWhitePawn() {
-        Piece pawn = new Piece(Piece.WHITE, 'p');
-        assertEquals(Piece.WHITE, pawn.getColor());
-        assertEquals('p', pawn.getPrintableRepresentation());
+    public void testCreateBlackPiece(){
+        Piece pawn = Piece.createBlackPawn();
+        assertEquals(Piece.Color.BLACK, pawn.getColors());
+        assertEquals(Piece.Type.PAWN, pawn.getType());
+        assertEquals(Piece.Symbol.P, pawn.getSymbol());
     }
 
-    @Test
-    public void testCreateBlackPawn() {
-        Piece pawn = new Piece(Piece.BLACK, 'P');
-        assertEquals(Piece.BLACK, pawn.getColor());
-        assertEquals('P', pawn.getPrintableRepresentation());
+    public void testEquality() {
+        Piece pawn1 = Piece.createWhitePawn();
+        Piece pawn2 = Piece.createWhitePawn();
+        Piece blackPawn = Piece.createBlackPawn();
+        assertEquals(pawn1, pawn2);
+        assertFalse(pawn1.equals(blackPawn));
     }
 
-    @Test
-    public void testPawnRepresentation() {
-        Piece whitePawn = new Piece(true, 'p');
-        assertEquals('p', whitePawn.getPrintableRepresentation());
-
-        Piece blackPawn = new Piece(false, 'P');
-        assertEquals('P', blackPawn.getPrintableRepresentation());
+    public void testPieceCount() {
+        Piece.resetCounts();
+        Piece.createWhitePawn();
+        Piece.createBlackPawn();
+        assertEquals(1, Piece.getWhitePieceCount());
+        assertEquals(1, Piece.getBlackPieceCount());
     }
 
 }
