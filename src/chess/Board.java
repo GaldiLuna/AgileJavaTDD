@@ -65,26 +65,6 @@ public class Board {
                     sb.append('.');
                 } else {
                     sb.append(piece.getSymbol().name());
-//                    switch (piece.getType()) {
-//                        case PAWN:
-//                            sb.append(piece.getColors() == Piece.Color.WHITE ? 'P' : 'p');
-//                            break;
-//                        case ROOK:
-//                            sb.append(piece.getColors() == Piece.Color.WHITE ? 'R' : 'r');
-//                            break;
-//                        case KNIGHT:
-//                            sb.append(piece.getColors() == Piece.Color.WHITE ? 'N' : 'n');
-//                            break;
-//                        case BISHOP:
-//                            sb.append(piece.getColors() == Piece.Color.WHITE ? 'B' : 'b');
-//                            break;
-//                        case QUEEN:
-//                            sb.append(piece.getColors() == Piece.Color.WHITE ? 'Q' : 'q');
-//                            break;
-//                        case KING:
-//                            sb.append(piece.getColors() == Piece.Color.WHITE ? 'K' : 'k');
-//                            break;
-//                    }
                 }
             }
             sb = new StringBuilder(StringUtil.appendNewLine(sb.toString()));
