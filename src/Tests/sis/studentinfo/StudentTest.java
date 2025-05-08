@@ -2,41 +2,17 @@ package Tests.sis.studentinfo;
 import junit.framework.TestCase;
 
 public class StudentTest extends TestCase {
+    private static final double GRADE_TOLERANCE = 0.05;
+
     public void testCreate() {
         final String firstStudentName = "Jane Doe";
         Student firstStudent = new Student(firstStudentName);
-        //firstStudent.name = "June Crow";
         assertEquals(firstStudentName, firstStudent.getName());
 
         final String secondStudentName = "Joe Blow";
         Student secondStudent = new Student(secondStudentName);
         assertEquals(secondStudentName, secondStudent.getName());
-
-        //assertEquals(firstStudentName, firstStudent.name);
     }
-// TESTE FEITO PARA VERIFICAR A VARIÁVEL name COMO ESTÁTICA DENTRO DE STUDENT
-//    public void testBadStatic() {
-//        Student studentA = new Student("a");
-//        assertEquals("a", studentA.getName());
-//        Student studentB = new Student("b");
-//        assertEquals("b", studentB.getName());
-//        assertEquals("a", studentA.getName());
-//    }
-
-// TESTES UNIFICADOS LOGO ABAIXO NO testStudentStatus
-//    public void testFullTime() {
-//        Student boolStudent = new Student("Bool");
-//        assertFalse(boolStudent.isFullTime());
-//    }
-//
-//    public void testCredits() {
-//        Student credStudent = new Student("Credt");
-//        assertEquals(0, credStudent.getCredits());
-//        credStudent.addCredits(3);
-//        assertEquals(3, credStudent.getCredits);
-//        credStudent.addCredits(4);
-//        assertEquals(7, credStudent.getCredits);
-//    }
 
     public void testStudentStatus() {
         Student testStudent = new Student("TestBolCred");
@@ -63,5 +39,46 @@ public class StudentTest extends TestCase {
         assertTrue(statStudent.isInState());
         statStudent.setState("PE");
         assertFalse(statStudent.isInState());;
+    }
+
+    private void assertGpa(Student student, double expectedGpa) {
+        assertEquals(expectedGpa, student.getGpa(), GRADE_TOLERANCE);
+    }
+
+    public void testCalculateGpa() {
+        Student student = new Student("a");
+        assertGpa(student, 0.0);
+        student.addGrade(Student.Grade.A);
+        assertGpa(student, 4.0);
+        student.addGrade(Student.Grade.B);
+        assertGpa(student, 3.5);
+        student.addGrade(Student.Grade.C);
+        assertGpa(student, 3.0);
+        student.addGrade(Student.Grade.D);
+        assertGpa(student, 2.5);
+        student.addGrade(Student.Grade.F);
+        assertGpa(student, 2.0);
+    }
+
+    public void testCalculateHonorsStudentGpa() {
+        assertGpa(createHonorsStudent(), 0.0);
+        assertGpa(createHonorsStudent(Student.Grade.A), 5.0);
+        assertGpa(createHonorsStudent(Student.Grade.B), 4.0);
+        assertGpa(createHonorsStudent(Student.Grade.C), 3.0);
+        assertGpa(createHonorsStudent(Student.Grade.D), 2.0);
+        assertGpa(createHonorsStudent(Student.Grade.F), 0.0);
+    }
+
+    private Student createHonorsStudent(Student.Grade grade) {
+        Student student = createHonorsStudent();
+        student.addGrade(grade);
+        return student;
+    }
+
+    private Student createHonorsStudent() {
+        Student student = new Student("a");
+        student.setHonors();
+        return student;
+        //CONTINUAR DESSA PARTE DA TRADUÇÃO: O código para resolver isso é trivial: private boolean isHonors = false;
     }
 }

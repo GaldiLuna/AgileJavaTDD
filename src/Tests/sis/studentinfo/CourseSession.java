@@ -6,7 +6,7 @@ import java.util.*;
  *
  * @author GaldiLuna
  */
-public class CourseSession {
+public class CourseSession implements Comparable<CourseSession> {
     private String department;
     private String number;
     //private int numberOfStudents = 0;
@@ -89,6 +89,13 @@ public class CourseSession {
     }
     void setNumberOfCredits(int numberOfCredits) {
         this.numberOfCredits = numberOfCredits;
+    }
+
+    public int compareTo(CourseSession that) {
+        int compare = this.getDepartment().compareTo(that.getDepartment());
+        if (compare == 0)
+            compare = this.getNumber().compareTo(that.getNumber());
+        return compare;
     }
 
 }
