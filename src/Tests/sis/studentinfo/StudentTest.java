@@ -79,6 +79,6 @@ public class StudentTest extends TestCase {
         Student student = new Student("a");
         student.setHonors();
         return student;
-        //CONTINUAR DESSA PARTE DA TRADUÇÃO: O código para resolver isso é trivial: private boolean isHonors = false;
+
     }
 }
