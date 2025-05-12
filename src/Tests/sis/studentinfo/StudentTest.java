@@ -77,7 +77,7 @@ public class StudentTest extends TestCase {
 
     private Student createHonorsStudent() {
         Student student = new Student("a");
-        student.setHonors();
+        //student.setHonors();
         return student;
 
     }

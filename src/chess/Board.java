@@ -7,9 +7,10 @@ import java.util.*;
 public class Board {
     private Piece[][] board;
     private int pieceCount;
+    private List<Piece> pieces = new ArrayList<>(Collections.nCopies(64, null)); //Tabuleiro 8x8
 
     public Board() {
-        board = new Piece[8][8];
+        board = new Piece[8][8]; //8 linhas e 8 colunas
         pieceCount = 0;
     }
 
@@ -54,6 +55,60 @@ public class Board {
 
     public int pieceCount() {
         return pieceCount;
+    }
+
+    public int countPieces(Piece.Collor colors, char representation) {
+        int count = 0;
+        for (Piece piece : pieces) {
+            if (piece != null && piece.getColors() == colors && piece.getRepresentation() == representation) {
+                count++;
+            }
+        }
+        return count;
+        //Teste: Para o tabuleiro fornecido, countPieces(Piece.Color.BLACK, 'p') deve retornar 3 (peões pretos).
+    }
+
+    public Piece getPieceAt(String location) {
+        int file = Character.toLowerCase((location.charAt(0))) - 'a'; //a=0, b=1, etc.
+        int rank = 8 - (location.charAt(1) - '0'); // "8" -> 0, "1 -> 7, etc.
+        int index = rank * 8 + file;
+        return pieces.get(index);
+        //Teste: Para a configuração inicial, getPieceAt("a8") retorna a torre preta,
+        // e getPieceAt("e1") retorna o rei branco.
+    }
+
+    public void placePiece(Piece piece, String location) {
+        int file = Character.toLowerCase((location.charAt(0))) - 'a'; //a=0, b=1, etc.
+        int rank = 8 - (location.charAt(1) - '0'); // "8" -> 0, "1 -> 7, etc.
+        int index = rank * 8 + file;
+        pieces.set(index, piece);
+        //Teste: Crie um tabuleiro vazio e verifique que não há peças inicialmente,
+        // depois use placePiece para adicionar peças e teste com getPieceAt.
+    }
+
+    public double calculateStrength(Piece.Collor colors) {
+        double strength = 0.0;
+        Map<Integer, Integer> pawnsPerFile = new HashMap<>();
+
+        for (Piece piece : pieces) {
+            if (piece != null && piece.getColors() == colors) {
+                switch (piece.getType()) {
+                    case QUEEN: strength += 9; break;
+                    case ROOK: strength += 5; break;
+                    case BISHOP: strength += 3; break;
+                    case KNIGHT: strength += 2.5; break;
+                    case PAWN:
+                        int file = pieces.indexOf(piece) % 8;
+                        int count = pawnsPerFile.getOrDefault(file, 0);
+                        strength += (count > 0) ? 0.5 : 1;
+                        pawnsPerFile.put(file, count + 1);
+                        break;
+                }
+            }
+        }
+        return strength;
+        //Teste: Para o tabuleiro dado, calculateStrength(Piece.Color.BLACK) retorna 20,
+        // e calculateStrength(Piece.Color.WHITE) retorna 19.5.
     }
 
     public String printAll() {

@@ -4,18 +4,33 @@ import chess.pieces.Piece;
 
 public class PieceTest extends junit.framework.TestCase {
 
+    public void testCreates() {
+        verifyCreation(
+            Piece.createWhitePawn(), Piece.createBlackRook(),
+            Piece.Type.PAWN, Piece.PAWN_REPRESENTATION);
+    }
+
+    private void verifyCreation(Piece whitePiece, Piece blackPiece, Piece.Type type, char representation) {
+        assertTrue(whitePiece.isWhite());
+        assertEquals(type, whitePiece.getType());
+        assertEquals(representation, whitePiece.getRepresentation());
+        assertTrue(blackPiece.isBlack());
+        assertEquals(type, blackPiece.getType());
+        assertEquals(Character.toUpperCase(representation), blackPiece.getRepresentation());
+    }
+
     public void testCreateWhitePiece(){
         Piece pawn = Piece.createWhitePawn();
-        assertEquals(Piece.Color.WHITE, pawn.getColors());
+        assertEquals(Piece.Collor.WHITE, pawn.getColors());
         assertEquals(Piece.Type.PAWN, pawn.getType());
-        assertEquals(Piece.Symbol.p, pawn.getSymbol());
+        assertEquals(Piece.PAWN_REPRESENTATION, pawn.getRepresentation());
     }
 
     public void testCreateBlackPiece(){
         Piece pawn = Piece.createBlackPawn();
-        assertEquals(Piece.Color.BLACK, pawn.getColors());
+        assertEquals(Piece.Collor.BLACK, pawn.getColors());
         assertEquals(Piece.Type.PAWN, pawn.getType());
-        assertEquals(Piece.Symbol.P, pawn.getSymbol());
+        assertEquals(Character.toUpperCase(Piece.PAWN_REPRESENTATION), pawn.getRepresentation());
     }
 
     public void testEquality() {

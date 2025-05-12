@@ -8,23 +8,33 @@ public class Piece {
     public static final String BLACK = "Black";
     public static final String BLANK = "";
 
-    public enum Color { WHITE, BLACK }
-    public enum Type { PAWN, KNIGHT, ROOK, BISHOP, QUEEN, KING }
-    public enum Symbol { p, n, r, b, q, k, P, N, R, B, Q, K }
+    public enum Collor { WHITE, BLACK }
+    public enum Type { PAWN, ROOK, KNIGHT, BISHOP, QUEEN, KING, NO_PIECE }
+
+    private static final String symbol = "z";
+    public enum Symbol { p, r, n, b, q, k, z, P, R, N, B, Q, K, Z }
+    //Type: NO_PIECE = Symbol: z ou Z -- VERIFICAR SE USA O DE CIMA OU DE BAIXO
+
+    public static final char PAWN_REPRESENTATION = 'p';
+    public static final char ROOK_REPRESENTATION = 'r';
+    public static final char KNIGHT_REPRESENTATION = 'n';
+    public static final char BISHOP_REPRESENTATION = 'b';
+    public static final char QUEEN_REPRESENTATION = 'q';
+    public static final char KING_REPRESENTATION = 'k';
 
     private static int whitePieceCount = 0;
     private static int blackPieceCount = 0;
 
-    private final Color colors;
+    private final Collor colors;
     private final Type type;
-    private final Symbol representation;
+    private char representation;
 
     //CONSTRUTOR PRIVADO:
-    private Piece(Color colors, Type type, Symbol representation) {
+    private Piece(Collor colors, Type type, char representation) {
         this.colors = colors;
         this.type = type;
         this.representation = representation;
-        if (colors == Color.WHITE) {
+        if (colors == Collor.WHITE) {
             whitePieceCount++;
         } else {
             blackPieceCount++;
@@ -33,74 +43,82 @@ public class Piece {
 
     private static boolean isValidName(String name) {
         return "pawn".equalsIgnoreCase(name) ||
-                "knight".equalsIgnoreCase(name) ||
                 "rook".equalsIgnoreCase(name) ||
+                "knight".equalsIgnoreCase(name) ||
                 "bishop".equalsIgnoreCase(name) ||
                 "queen".equalsIgnoreCase(name) ||
                 "king".equalsIgnoreCase(name);
     }
 
-    //MÉTODOS DE FÁBRICA DAS PEÇAS.
-    public static Piece createWhitePawn() {
-        return new Piece(Color.WHITE, Type.PAWN, Symbol.p);
-    }
-    public static Piece createBlackPawn() {
-        return new Piece(Color.BLACK, Type.PAWN, Symbol.P);
+    private static Piece createPiece(Collor colors, Type type, char representation) {
+        return new Piece(colors, type, colors == Collor.WHITE ? representation : Character.toUpperCase(representation));
     }
 
-    public static Piece createWhiteKnight() {
-        return new Piece(Color.WHITE, Type.KNIGHT, Symbol.n);
+    //MÉTODOS DE FÁBRICA DAS PEÇAS.
+    public static Piece createWhitePawn() {
+        return createPiece(Collor.WHITE, Type.PAWN, PAWN_REPRESENTATION);
     }
-    public static Piece createBlackKnight() {
-        return new Piece(Color.BLACK, Type.KNIGHT, Symbol.N);
+    public static Piece createBlackPawn() {
+        return createPiece(Collor.BLACK, Type.PAWN, Character.toUpperCase(PAWN_REPRESENTATION));
     }
 
     public static Piece createWhiteRook() {
-        return new Piece(Color.WHITE, Type.ROOK, Symbol.r);
+        return createPiece(Collor.WHITE, Type.ROOK, ROOK_REPRESENTATION);
     }
     public static Piece createBlackRook() {
-        return new Piece(Color.BLACK, Type.ROOK, Symbol.R);
+        return createPiece(Collor.BLACK, Type.ROOK, Character.toUpperCase(ROOK_REPRESENTATION));
+    }
+
+    public static Piece createWhiteKnight() {
+        return createPiece(Collor.WHITE, Type.KNIGHT, KNIGHT_REPRESENTATION);
+    }
+    public static Piece createBlackKnight() {
+        return createPiece(Collor.BLACK, Type.KNIGHT, Character.toUpperCase(KNIGHT_REPRESENTATION));
     }
 
     public static Piece createWhiteBishop() {
-        return new Piece(Color.WHITE, Type.BISHOP, Symbol.b);
+        return createPiece(Collor.WHITE, Type.BISHOP, BISHOP_REPRESENTATION);
     }
     public static Piece createBlackBishop() {
-        return new Piece(Color.BLACK, Type.BISHOP, Symbol.B);
+        return createPiece(Collor.BLACK, Type.BISHOP, Character.toUpperCase(BISHOP_REPRESENTATION));
     }
 
     public static Piece createWhiteQueen() {
-        return new Piece(Color.WHITE, Type.QUEEN, Symbol.q);
+        return createPiece(Collor.WHITE, Type.QUEEN, QUEEN_REPRESENTATION);
     }
     public static Piece createBlackQueen() {
-        return new Piece(Color.BLACK, Type.QUEEN, Symbol.Q);
+        return createPiece(Collor.BLACK, Type.QUEEN, Character.toUpperCase(QUEEN_REPRESENTATION));
     }
 
     public static Piece createWhiteKing() {
-        return new Piece(Color.WHITE, Type.KING, Symbol.k);
+        return createPiece(Collor.WHITE, Type.KING, KING_REPRESENTATION);
     }
     public static Piece createBlackKing() {
-        return new Piece(Color.BLACK, Type.KING, Symbol.K);
+        return createPiece(Collor.BLACK, Type.KING, Character.toUpperCase(KING_REPRESENTATION));
     }
     //FIM DOS MÉTODOS DE FÁBRICA DAS PEÇAS.
 
     //GETTERS:
-    public Color getColors() {
+    public Collor getColors() {
         return colors;
     }
     public Type getType() {
         return type;
     }
-    public Symbol getSymbol() {
+    public char getRepresentation() {
         return representation;
+    }
+
+    public static Symbol getSymbol() {
+        return symbol;
     }
 
     //MÉTODOS PARA VERIFICAR AS CORES:
     public boolean isWhite() {
-        return colors == Color.WHITE;
+        return colors == Collor.WHITE;
     }
     public boolean isBlack() {
-        return colors == Color.BLACK;
+        return colors == Collor.BLACK;
     }
 
     //CONTADORES ESTÁTICOS:

@@ -1,8 +1,7 @@
 package Tests.sis.studentinfo;
+import java.util.*;
 
-import java.util.ArrayList;
-
-public class Student implements Comparable<Student> {
+public class Student { //public class Student implements Comparable<Student>
     private String name;
     private int credits;
     static final int CREDITS_REQUIRED_FOR_FULL_TIME = 12;
@@ -10,6 +9,7 @@ public class Student implements Comparable<Student> {
     private String state = "";
     private ArrayList<Grade> grades = new ArrayList<Grade>();
     enum Grade { A, B, C, D, F }
+    private List<Student> students = new LinkedList<Student>();
 
     public Student(String name) {
         this.name = name;
