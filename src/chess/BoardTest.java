@@ -1,7 +1,6 @@
 package chess;
 import chess.pieces.Piece;
 import util.StringUtil;
-
 import javax.sql.rowset.serial.SQLOutputImpl;
 
 public class BoardTest extends junit.framework.TestCase {

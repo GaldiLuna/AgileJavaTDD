@@ -48,4 +48,38 @@ public class ExampleTestCodes extends TestCase {
         //BIG DECIMAL SERÁ VISTO NA LIÇÃO 10, ESTOU NA 5.
     }
 
+    public void testSwitchResults() {
+        enum Score { fieldGoal, touchDown, extraPoint, twoPointConversion, safety };
+        int totalPoints = 0;
+        Score score = Score.touchDown;
+        switch (score) {
+            case fieldGoal -> totalPoints += 4;
+            case touchDown -> totalPoints += 5;
+            case extraPoint -> totalPoints += 1;
+            case twoPointConversion -> totalPoints += 2;
+            case safety -> totalPoints += 3;
+
+            /**
+             * Uma versão mais antiga de se escrever o switch case no exemplo acima é a apresentada abaixo:
+             * switch (score)
+             *      case fieldGoal:
+             *          totalPoints += 4;
+             *          break;
+             *      case touchDown:
+             *          totalPoints += 5;
+             *          break;
+             *      case extraPoint:
+             *          totalPoints += 1;
+             *          break;
+             *      case twoPointConversion:
+             *          totalPoints += 2;
+             *          break;
+             *      case safety:
+             *          totalPoints += 3;
+             *          break;
+             */
+        }
+        assertEquals(5, totalPoints);
+    }
+
 }

@@ -6,7 +6,7 @@ public class PieceTest extends junit.framework.TestCase {
 
     public void testCreates() {
         verifyCreation(
-            Piece.createWhitePawn(), Piece.createBlackRook(),
+            Piece.createWhitePawn(), Piece.createBlackPawn(),
             Piece.Type.PAWN, Piece.PAWN_REPRESENTATION);
     }
 

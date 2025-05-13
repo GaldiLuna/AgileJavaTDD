@@ -11,7 +11,7 @@ public class Piece {
     public enum Collor { WHITE, BLACK }
     public enum Type { PAWN, ROOK, KNIGHT, BISHOP, QUEEN, KING, NO_PIECE }
 
-    private static final String symbol = "z";
+    //private static final String symbol = "z";
     public enum Symbol { p, r, n, b, q, k, z, P, R, N, B, Q, K, Z }
     //Type: NO_PIECE = Symbol: z ou Z -- VERIFICAR SE USA O DE CIMA OU DE BAIXO
 
@@ -109,8 +109,8 @@ public class Piece {
         return representation;
     }
 
-    public static Symbol getSymbol() {
-        return symbol;
+    public Symbol getSymbol() {
+        return Symbol.valueOf(String.valueOf(representation));
     }
 
     //MÉTODOS PARA VERIFICAR AS CORES:

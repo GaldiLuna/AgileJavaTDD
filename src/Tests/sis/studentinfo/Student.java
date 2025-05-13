@@ -8,7 +8,7 @@ public class Student { //public class Student implements Comparable<Student>
     static final String IN_STATE = "AL";
     private String state = "";
     private ArrayList<Grade> grades = new ArrayList<Grade>();
-    enum Grade { A, B, C, D, F }
+    public enum Grade { A, B, C, D, F }
     private List<Student> students = new LinkedList<Student>();
 
     public Student(String name) {

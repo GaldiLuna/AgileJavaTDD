@@ -1,7 +1,6 @@
 package chess;
 import chess.pieces.Piece;
 import util.StringUtil;
-
 import java.util.*;
 
 public class Board {
@@ -16,6 +15,8 @@ public class Board {
 
     public void initialize() {
         Piece.resetCounts(); //Reseta contadores antes de inicializar
+        board = new Piece[8][8]; //8 linhas e 8 colunas
+        pieces = new ArrayList<>(Collections.nCopies(64, null)); //Tabuleiro 8x8
 
         //Linha 8 peças pretas:
         board[0][0] = Piece.createBlackRook();
@@ -49,6 +50,14 @@ public class Board {
         board[7][5] = Piece.createWhiteBishop();
         board[7][6] = Piece.createWhiteKnight();
         board[7][7] = Piece.createWhiteRook();
+
+        //Sincronizar pieces com board
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                int index = row * 8 + col;
+                pieces.set(index, board[row][col]);
+            }
+        }
 
         pieceCount = 32;
     }
@@ -119,7 +128,7 @@ public class Board {
                 if (piece == null) {
                     sb.append('.');
                 } else {
-                    sb.append(piece.getSymbol().name());
+                    sb.append(piece.getRepresentation());
                 }
             }
             sb = new StringBuilder(StringUtil.appendNewLine(sb.toString()));
