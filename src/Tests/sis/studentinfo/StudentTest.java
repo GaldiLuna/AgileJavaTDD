@@ -78,6 +78,7 @@ public class StudentTest extends TestCase {
     private Student createHonorsStudent() {
         Student student = new Student("a");
         //student.setHonors();
+        student.setGradingStrategy(new HonorsGradingStrategy());
         return student;
 
     }

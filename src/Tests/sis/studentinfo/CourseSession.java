@@ -21,7 +21,7 @@ public class CourseSession implements Comparable<CourseSession> {
      *
      * @param startDate a data em que a sessão do curso se inicia.
      */
-    private CourseSession(String department, String number, Date startDate) {
+    protected CourseSession(String department, String number, Date startDate) {
         this.department = department;
         this.number = number;
         this.startDate = startDate;
@@ -69,7 +69,7 @@ public class CourseSession implements Comparable<CourseSession> {
         return students.get(index);
     }
 
-    public Date getStartDate() {
+    protected Date getStartDate() {
         return startDate;
     }
 
@@ -77,13 +77,16 @@ public class CourseSession implements Comparable<CourseSession> {
         return students;
     }
 
+    protected int getSessionLength() {
+        return 16; //16 semanas para seções regulares
+    }
+
     public Date getEndDate() {
         GregorianCalendar calendar = new GregorianCalendar();
-        calendar.setTime(startDate);
-        final int sessionLength = 16;
+        calendar.setTime(getStartDate());
         final int daysInWeek = 7;
         final int daysFromFridayToMonday = 3;
-        int numberOfDays = sessionLength * daysInWeek - daysFromFridayToMonday;
+        int numberOfDays = getSessionLength() * daysInWeek - daysFromFridayToMonday;
         calendar.add(Calendar.DAY_OF_YEAR, numberOfDays);
         return calendar.getTime();
     }

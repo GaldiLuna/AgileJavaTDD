@@ -8,8 +8,24 @@ public class Student { //public class Student implements Comparable<Student>
     static final String IN_STATE = "AL";
     private String state = "";
     private ArrayList<Grade> grades = new ArrayList<Grade>();
-    public enum Grade { A, B, C, D, F }
     private List<Student> students = new LinkedList<Student>();
+    public enum Grade {
+        A(4),
+        B(3),
+        C(2),
+        D(1),
+        F(0);
+
+        private int points;
+
+        Grade(int points) {
+            this.points = points;
+        }
+
+        int getPoints() {
+            return points;
+        }
+    }
 
     public Student(String name) {
         this.name = name;
@@ -57,40 +73,17 @@ public class Student { //public class Student implements Comparable<Student>
         return gradingStrategy.getGradePointsFor(grade);
     }
 
-//    private int basicGradePointsFor(Grade grade) {
-//        if (grade == Grade.A) return  4;
-//        if (grade == Grade.B) return  3;
-//        if (grade == Grade.C) return  2;
-//        if (grade == Grade.D) return  1;
-//        return 0;
-//    }
-
     private Student createHonorsStudent() {
         Student student = new Student("a");
         student.setGradingStrategy(new HonorsGradingStrategy());
         return student;
     }
 
-    private GradingStrategy gradingStrategy = new RegularGradingStrategy();
+    //private GradingStrategy gradingStrategy = new RegularGradingStrategy();
+    private GradingStrategy gradingStrategy = new BasicGradingStrategy();
 
     void setGradingStrategy(GradingStrategy gradingStrategy) {
         this.gradingStrategy = gradingStrategy;
     }
-
-//    double gradePointsFor(Grade grade) {
-//        if (isSenatorsSon) {
-//            if (grade == Grade.A) return  4;
-//            if (grade == Grade.B) return  4;
-//            if (grade == Grade.C) return  4;
-//            if (grade == Grade.D) return  4;
-//            return 3;
-//        } else {
-//            double points = basicGradePointsFor(grade);
-//            if (isHonors)
-//                if (points > 0)
-//                    points += 1;
-//            return points;
-//        }
-//    }
 
 }

@@ -27,9 +27,9 @@ public class RosterReporter {
         buffer.append(
                 ROSTER_REPORT_FOOTER + session.getAllStudents().size() + NEWLINE);
 
-        writeHeader(buffer);
-        writeBody(buffer);
-        writeFooter(buffer);
+//        writeHeader(buffer);
+//        writeBody(buffer);
+//        writeFooter(buffer);
         return buffer.toString();
 
     }
