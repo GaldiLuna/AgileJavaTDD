@@ -14,6 +14,7 @@ public class AllTests {
         suite.addTestSuite(BasicGradingStrategyTest.class);
         suite.addTestSuite(HonorsGradingStrategyTest.class);
         suite.addTestSuite(SummerCourseSessionTest.class);
+        //suite.addTestSuite(SessionTest.class); //Classe abstrata não pode ser chamada na suite.
         return suite;
     }
 }
