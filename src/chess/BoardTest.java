@@ -9,12 +9,13 @@ public class BoardTest extends junit.framework.TestCase {
     protected void setUp() { board = new Board(); }
 
     public void testBoardStartsEmpty() {
-        Board board = new Board();
         assertEquals(0, board.pieceCount());
     }
 
     public void testCreate() {
-        board.initialize();
+        Game game = new Game();
+        game.initialize();
+        board = game.getBoard();
         assertEquals(32, board.pieceCount());
         assertEquals(16, Piece.getWhitePieceCount());
         assertEquals(16, Piece.getBlackPieceCount());

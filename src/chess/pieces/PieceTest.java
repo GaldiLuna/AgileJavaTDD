@@ -2,6 +2,10 @@ package chess.pieces;
 import org.junit.Test;
 import chess.pieces.Piece;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 public class PieceTest extends junit.framework.TestCase {
 
     public void testCreates() {
@@ -47,6 +51,18 @@ public class PieceTest extends junit.framework.TestCase {
         Piece.createBlackPawn();
         assertEquals(1, Piece.getWhitePieceCount());
         assertEquals(1, Piece.getBlackPieceCount());
+    }
+
+    public void testKingMovesFromBoard() {
+        Piece king = Piece.createWhiteKing(); //Cria uma instância de Rei Branco
+        List<String> moves = king.getPossibleMoves("e4"); //Obtém os movimentos possíveis a partir de E4
+        List<String> expectedMoves = Arrays.asList("d3", "d4", "d5", "e3", "e5", "f3", "f4", "f5"); //Locais de movimentos esperados
+
+        //Ordena as listas para garantir que a ordem não interfira na comparação
+        Collections. sort(moves);
+        Collections.sort(expectedMoves);
+
+        assertEquals(expectedMoves, moves); //Verifica se o movimento realizado foi igual ao que era esperado
     }
 
 }
