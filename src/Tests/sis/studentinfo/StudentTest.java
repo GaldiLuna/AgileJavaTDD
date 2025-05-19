@@ -8,6 +8,9 @@ public class StudentTest extends TestCase {
         final String firstStudentName = "Jane Doe";
         Student firstStudent = new Student(firstStudentName);
         assertEquals(firstStudentName, firstStudent.getName());
+        assertEquals("Jane", firstStudent.getFirstName());
+        assertEquals("Doe", firstStudent.getLastName());
+        assertEquals("", firstStudent.getMiddleName());
 
         final String secondStudentName = "Joe Blow";
         Student secondStudent = new Student(secondStudentName);

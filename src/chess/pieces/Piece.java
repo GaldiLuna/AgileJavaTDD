@@ -120,5 +120,3 @@ public abstract class Piece {
     public static Piece createBlackKing() { return new King(Collor.BLACK);}
 
 }
-
-//Para corrigir esses erros preciso criar as classes das peças e fazer seus movimentos.

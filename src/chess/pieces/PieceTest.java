@@ -11,7 +11,7 @@ public class PieceTest extends junit.framework.TestCase {
     public void testCreates() {
         verifyCreation(
             Piece.createWhitePawn(), Piece.createBlackPawn(),
-            Piece.Type.PAWN, Piece.PAWN_REPRESENTATION);
+            Piece.Type.PAWN, Piece.Type.PAWN.getRepresentation());
     }
 
     private void verifyCreation(Piece whitePiece, Piece blackPiece, Piece.Type type, char representation) {
@@ -27,14 +27,14 @@ public class PieceTest extends junit.framework.TestCase {
         Piece pawn = Piece.createWhitePawn();
         assertEquals(Piece.Collor.WHITE, pawn.getColors());
         assertEquals(Piece.Type.PAWN, pawn.getType());
-        assertEquals(Piece.PAWN_REPRESENTATION, pawn.getRepresentation());
+        assertEquals(Piece.Type.PAWN.getRepresentation(), pawn.getRepresentation());
     }
 
     public void testCreateBlackPiece(){
         Piece pawn = Piece.createBlackPawn();
         assertEquals(Piece.Collor.BLACK, pawn.getColors());
         assertEquals(Piece.Type.PAWN, pawn.getType());
-        assertEquals(Character.toUpperCase(Piece.PAWN_REPRESENTATION), pawn.getRepresentation());
+        assertEquals(Character.toUpperCase(Piece.Type.PAWN.getRepresentation()), pawn.getRepresentation());
     }
 
     public void testEquality() {

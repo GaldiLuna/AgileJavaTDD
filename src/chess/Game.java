@@ -1,8 +1,11 @@
 package chess;
-import chess.pieces.King;
 import chess.pieces.Piece;
+import chess.pieces.King;
 import chess.pieces.Queen;
-
+import chess.pieces.Bishop;
+import chess.pieces.Knight;
+import chess.pieces.Rook;
+import chess.pieces.Pawn;
 import java.util.*;
 
 public class Game {
@@ -27,7 +30,7 @@ public class Game {
         board.putPiece(new Rook(Piece.Collor.BLACK), 7, 0);
         //Linha 7 peões pretos:
         for (int i = 0; i < 8; i++) {
-            board.putPiece(new Pwan(Piece.Collor.BLACK), i, 1);
+            board.putPiece(new Pawn(Piece.Collor.BLACK), i, 1);
         }
         //Linhas 6, 5, 4 e 3 vazias:
         for (int row = 2; row < 6; row++) {
