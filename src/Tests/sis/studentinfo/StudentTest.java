@@ -12,9 +12,19 @@ public class StudentTest extends TestCase {
         assertEquals("Doe", firstStudent.getLastName());
         assertEquals("", firstStudent.getMiddleName());
 
-        final String secondStudentName = "Joe Blow";
+        final String secondStudentName = "Blow";
         Student secondStudent = new Student(secondStudentName);
         assertEquals(secondStudentName, secondStudent.getName());
+        assertEquals("", secondStudent.getFirstName());
+        assertEquals("Blow", secondStudent.getLastName());
+        assertEquals("", secondStudent.getMiddleName());
+
+        final String thirdStudentName = "Raymond Douglas Davies";
+        Student thirdStudent = new Student(thirdStudentName);
+        assertEquals(thirdStudentName, thirdStudent.getName());
+        assertEquals("Raymond", thirdStudent.getFirstName());
+        assertEquals("Davies", thirdStudent.getLastName());
+        assertEquals("Douglas", thirdStudent.getMiddleName());
     }
 
     public void testStudentStatus() {

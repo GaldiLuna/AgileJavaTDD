@@ -2,6 +2,9 @@ package Tests.sis.studentinfo;
 import java.util.*;
 
 public class Student { //public class Student implements Comparable<Student>
+    private String firstName = "";
+    private String middleName = "";
+    private String lastName;
     private String name;
     private int credits;
     static final int CREDITS_REQUIRED_FOR_FULL_TIME = 12;
@@ -26,11 +29,80 @@ public class Student { //public class Student implements Comparable<Student>
             return points;
         }
     }
+    
+    public String getFirstName() { return firstName; }
 
-    public Student(String name) {
-        this.name = name;
+    public String getMiddleName() { return middleName; }
+    
+    public String getLastName() { return lastName; }
+    
+    public Student(String fullName) {
+        this.name = fullName;
         credits = 0;
+        List<String> nameParts = split(fullName);
+        setName(nameParts);
     }
+    
+    private void setName(List<String> nameParts) {
+        this.lastName = removeLast(nameParts);
+        //this.lastName = nameParts.removeLast();
+        String name = removeLast(nameParts);
+        //String name = nameParts.removeLast();
+        if (nameParts.isEmpty())
+            this.firstName = name;
+        else {
+            this.middleName = name;
+            this.firstName = removeLast(nameParts);
+            //this.firstName = nameParts.removeLast();
+        }
+    }
+
+    private String removeLast(List<String> list) {
+        if (list.isEmpty())
+            return "";
+        return list.remove(list.size() - 1);
+    }
+
+    private List<String> tokenize(String string) {
+        List<String> results = new ArrayList<String>();
+        StringBuffer word = new StringBuffer();
+        int index = 0;
+        while (index < string.length()) {
+            char ch = string.charAt(index);
+            if (ch != ' ') //preferir o Character.isSpace
+                word.append(ch);
+            else if (word.length() > 0) {
+                results.add(word.toString());
+                word = new StringBuffer();
+            }
+            index++;
+        }
+        if (word.length() > 0)
+            results.add(word.toString());
+        return results;
+    }
+
+    private List<String> split(String name) {
+        List<String> results = new ArrayList<String>();
+        StringBuffer word = new StringBuffer();
+        for (int index = 0; index < name.length(); index++) {
+            char ch = name.charAt(index);
+            if (!Character.isWhitespace(ch))
+                word.append(ch);
+            else if (word.length() > 0) {
+                results.add(word.toString());
+                word = new StringBuffer();
+            }
+        }
+        if (word.length() > 0)
+            results.add(word.toString());
+        return results;
+    }
+
+//    public Student(String name) {
+//        this.name = name;
+//        credits = 0;
+//    }
 
     public String getName() {
         return name;
