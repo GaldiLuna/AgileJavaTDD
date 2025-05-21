@@ -3,6 +3,7 @@ import junit.framework.TestCase;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ExampleTestCodes extends TestCase {
 
@@ -150,25 +151,8 @@ public class ExampleTestCodes extends TestCase {
     private int fib(int x) {
         if (x == 0) return 0;
         if (x == 1) return 1;
-        int fib = 0;
-        int nextFib = 1;
-        int index = 0;
-        int temp;
-        do {
-            temp = fib + nextFib;
-            fib = nextFib;
-            nextFib = temp;
-        } while (++index < x);
-        return fib;
+        return fib(x - 1) + fib(x - 2);
     }
-
-//    private int fib(int x) {
-//        if (x == 0)
-//            return 0;
-//        if (x == 1)
-//            return 1;
-//        return fib(x - 1) + fib(x - 2);
-//    }
 
     public void testCommas() {
         String sequence = "1,2,3,4,5";
@@ -213,5 +197,68 @@ public class ExampleTestCodes extends TestCase {
         }
         return builder.toString();
     }
+
+    public void testEndTrim() {
+        assertEquals("", endTrim(""));
+        assertEquals(" x", endTrim(" x "));
+        assertEquals("y", endTrim("y"));
+        assertEquals("xaxa", endTrim("xaxa"));
+        assertEquals("", endTrim(" "));
+        assertEquals("xxx", endTrim("xxx\n"));
+    }
+
+    // Metodo trim que remove caracteres em branco, na verdade, remove espaços em branco,
+    //que incluem caracteres de espaço, tabulação, nova linha, alimentação de formulário e retorno de carro.
+    public String endTrim(String source) {
+        if (source.isEmpty()) {
+            return "";
+        }
+        int i = source.length() - 1;
+        while (i >= 0 && Character.isWhitespace(source.charAt(i))) {
+            i--;
+        }
+        return source.substring(0, i + 1);
+    }
+
+    public void testLabeledBreak() {
+        List<List<String>> table = new ArrayList<List<String>>();
+        List<String> row1 = new ArrayList<String>();
+        row1.add("5");
+        row1.add("2");
+        List<String> row2 = new ArrayList<String>();
+        row2.add("3");
+        row2.add("4");
+        table.add(row1);
+        table.add(row2);
+        assertTrue(found(table, "3"));
+        assertFalse(found(table, "8"));
+    }
+
+    private boolean found(List<List<String>> table, String target) {
+        boolean found = false;
+        search:
+        for (List<String> row : table) {
+            for (String value : row) {
+                if (value.equals(target)) {
+                    found = true;
+                    break search;
+                }
+            }
+        }
+        return found;
+    }
+
+    //O OPERADOR TERNÁRIO COMPACTA UMA INSTRUÇÃO IF-ELSE E SUA FORMA GERAL DE SER USADO É:
+    // condicional ? valor-verdadeiro : valor-falso
+    //VAMOS USAR COMO EXEMPLO O CÓDIGO ABAIXO QUE ESTARÁ DA FORMA NORMAL E COMPACTADA.
+    public int sessions;
+    String message1 = "the course has " + getText(sessions) + " sessions";
+    private String getText(int sessions) {
+        if (sessions == 1)
+            return "one";
+        return "many";
+    }
+    //TODA ESSA EXPRESSÃO ACIMA PODERIA SE RESUMIR A UMA ÚNICA LINHA
+    String message2 = "the course has " + (sessions == 1 ? "one" : "many") + " sessions";
 
 }

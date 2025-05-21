@@ -66,4 +66,17 @@ abstract public class Session implements Comparable<Session> {
         calendar.add(Calendar.DAY_OF_YEAR, numberOfDays);
         return calendar.getTime();
     }
+
+    double averageGpaForPartTimeStudents() {
+        double total = 0.0;
+        int count = 0;
+        for (Student student : students) {
+            if (student.isFullTime())
+                continue;
+            count++;
+            total += student.getGpa();
+        }
+        if (count == 0) return 0.0;
+        return total / count;
+    }
 }

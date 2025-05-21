@@ -56,4 +56,24 @@ abstract public class SessionTest extends TestCase {
         Session session = createSession("ANY", "999", date);
         assertTrue(session.getSessionLength() > 0);
     }
+
+    public void testAverageGpaForPartTimeStudents() {
+        session.enroll(createFullTimeStudent());
+        Student partTimer1 = new Student("1");
+        partTimer1.addGrade(Student.Grade.A);
+        session.enroll(partTimer1);
+
+        session.enroll(createFullTimeStudent());
+        Student partTimer2 = new Student("2");
+        partTimer2.addGrade(Student.Grade.B);
+        session.enroll(partTimer2);
+
+        assertEquals(3.5, session.averageGpaForPartTimeStudents(), 0.05);
+    }
+
+    private Student createFullTimeStudent() {
+        Student student = new Student("a");
+        student.addCredits(Student.CREDITS_REQUIRED_FOR_FULL_TIME);
+        return student;
+    }
 }
