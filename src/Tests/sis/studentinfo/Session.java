@@ -1,10 +1,11 @@
 package Tests.sis.studentinfo;
 import java.util.*;
 
-abstract public class Session implements Comparable<Session> {
+abstract public class Session implements Comparable<Session>, Iterable<Student> {
     private static int count;
     private String department;
     private String number;
+    //private Vector<Student> students = new Vector<Student>(); + "forma antiga de declarar Lista com Vector"
     private List<Student> students = new ArrayList<Student>();
     private Date startDate;
     private int numberOfCredits;
@@ -70,6 +71,12 @@ abstract public class Session implements Comparable<Session> {
     double averageGpaForPartTimeStudents() {
         double total = 0.0;
         int count = 0;
+        // FORMA ANTIGA DO FOR UTILIZANDO ENUMERATION:
+        //for (Enumeration<Student> it = students.elements(); it.hasMoreElements(); {
+        //      Student student = it.nextElement();
+        // FORMA ANTIGA DE FAZER O LAÇO FOR-EACH (TROCAR A LINHA DO FOR ATIVA POR ESSAS DUAS COMENTADAS):
+        //for (Iterator<Student> it = students.iterator(); it.hasNext(); ) {
+        //      Student student = it.next();
         for (Student student : students) {
             if (student.isFullTime())
                 continue;
@@ -79,4 +86,9 @@ abstract public class Session implements Comparable<Session> {
         if (count == 0) return 0.0;
         return total / count;
     }
+
+    public Iterator<Student> iterator() {
+        return students.iterator();
+    }
+
 }

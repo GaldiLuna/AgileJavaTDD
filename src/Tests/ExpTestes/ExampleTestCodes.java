@@ -1,8 +1,13 @@
 package Tests.ExpTestes;
+import Tests.sis.studentinfo.Student;
 import junit.framework.TestCase;
 import org.junit.Test;
 import static org.junit.Assert.*;
+
+import java.security.PublicKey;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class ExampleTestCodes extends TestCase {
@@ -258,7 +263,86 @@ public class ExampleTestCodes extends TestCase {
             return "one";
         return "many";
     }
-    //TODA ESSA EXPRESSÃO ACIMA PODERIA SE RESUMIR A UMA ÚNICA LINHA
+    //TODA ESSA EXPRESSÃO DE OPERADOR TERNÁRIO ACIMA PODERIA SE RESUMIR A UMA ÚNICA LINHA
     String message2 = "the course has " + (sessions == 1 ? "one" : "many") + " sessions";
+
+    //O teste a seguir demonstra a "maneira antiga" de iterar por uma coleção,
+    // sem o laço for-each e sem tipos parametrizados.
+    public void testCasting() {
+        List students = new ArrayList();
+        students.add(new Student("a"));
+        students.add(new Student("b"));
+        List names = new ArrayList();
+        Iterator it = students.iterator();
+        while (it.hasNext()) {
+            Student student = (Student)it.next();
+            names.add(student.getLastName());
+        }
+        assertEquals("a", names.get(0));
+        assertEquals("b", names.get(1));
+    }
+
+    public void testUnboxing() {
+        int x = new Integer(5);
+        assertEquals(5, x);
+    }
+    public void testUnboxingMath() {
+        assertEquals(10, new Integer(2) * new Integer(5));
+    }
+
+    //0  1   2   3
+    //4  5   6   7
+    //8  9   10  11
+    public void testTwoDimensionalArrays() {
+        final int rows = 3;
+        final int cols = 4;
+        int count = 0;
+        int[][] matrix = new int[rows][cols];
+        for (int x = 0; x < rows; x++)
+            for (int y = 0; y < cols; y++)
+                matrix[x][y] = count++;
+        assertEquals(11, matrix[2][3]);
+        assertEquals(6, matrix[1][2]);
+    }
+
+    //0
+    //1  2
+    //3  4  5
+    public void testPartialDimensions() {  //DUAS FORMAS DIFERENTES DE ESCREVER A MESMA MATRIZ
+        final int rows = 3;
+
+        int[][] matrix = new int[rows][];
+        matrix[0] = new int[]{0};
+        matrix[1] = new int[]{1, 2};
+        matrix[2] = new int[]{3, 4, 5};
+        assertEquals(1, matrix[1][0]);
+        assertEquals(5, matrix[2][2]);
+
+        int[][] matrixx = {{0}, {1, 2}, {3, 4, 5}};
+        assertEquals(1, matrixx[1][0]);
+        assertEquals(5, matrixx[2][2]);
+    }
+
+    //Comparar os dois arrays com == resultará em false
+    public void testArrayEquality() {
+        int[] a = {1, 2, 3};
+        int[] b = {1, 2, 3};
+        assertFalse(a == b);
+    }
+
+    //Mesmo se você alocar ambos os arrays com exatamente as mesmas dimensões e
+    //preenchê-los com exatamente o mesmo conteúdo, a comparação retornará false
+    public void testArrayEquals() {
+        int[] a = {1, 2, 3};
+        int[] b = {1, 2, 3};
+        assertFalse(a.equals(b));
+    }
+
+    //Pode usar o metodo Arrays.equals para comparar o conteúdo, não o local de memória, de dois arrays
+    public void testArrayContent() {
+        int[] a = {1, 2, 3};
+        int[] b = {1, 2, 3};
+        assertTrue(Arrays.equals(a, b));
+    }
 
 }

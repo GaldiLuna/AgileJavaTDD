@@ -99,11 +99,6 @@ public class Student { //public class Student implements Comparable<Student>
         return results;
     }
 
-//    public Student(String name) {
-//        this.name = name;
-//        credits = 0;
-//    }
-
     public String getName() {
         return name;
     }
@@ -156,6 +151,18 @@ public class Student { //public class Student implements Comparable<Student>
 
     void setGradingStrategy(GradingStrategy gradingStrategy) {
         this.gradingStrategy = gradingStrategy;
+    }
+
+    private List<Integer> charges = new ArrayList<Integer>();
+
+    public void addCharge(int charge) {
+        charges.add(charge);
+    }
+    public int totalCharges() {
+        int total = 0;
+        for (int charge: charges)
+            total += charge;
+        return total;
     }
 
 }
