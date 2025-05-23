@@ -1,4 +1,5 @@
 package chess.pieces;
+import chess.Board;
 import org.junit.Test;
 import chess.pieces.Piece;
 
@@ -65,4 +66,18 @@ public class PieceTest extends junit.framework.TestCase {
         assertEquals(expectedMoves, moves); //Verifica se o movimento realizado foi igual ao que era esperado
     }
 
+    private Board board = new Board();
+
+    public void assertContains(List<String> actual, String... expected) {
+        assertTrue(actual.containsAll(Arrays.asList(expected)));
+    }
+
+    public void testKingMoveNotOnEdge() {
+        Piece piece = Piece.createBlackKing();
+        board.put("d3", piece);
+    }
+
 }
+
+//Continuar da questão 4 - dando erro no PUT
+//https://grok.com/share/c2hhcmQtMg%3D%3D_d80d33da-26f0-4b3f-a83e-d008805d6613

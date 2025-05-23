@@ -82,6 +82,10 @@ public class Student { //public class Student implements Comparable<Student>
         return results;
     }
 
+    private List<String> split0(String name) {
+        return Arrays.asList(name.split(" "));
+    }
+
     private List<String> split(String name) {
         List<String> results = new ArrayList<String>();
         StringBuffer word = new StringBuffer();
@@ -96,6 +100,13 @@ public class Student { //public class Student implements Comparable<Student>
         }
         if (word.length() > 0)
             results.add(word.toString());
+        return results;
+    }
+
+    private List<String> split2(String fullName) {
+        List<String> results = new ArrayList<String>();
+        for (String name : fullName.split(" "))
+            results.add(name);
         return results;
     }
 

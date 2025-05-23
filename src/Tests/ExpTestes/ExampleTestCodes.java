@@ -3,12 +3,8 @@ import Tests.sis.studentinfo.Student;
 import junit.framework.TestCase;
 import org.junit.Test;
 import static org.junit.Assert.*;
-
 import java.security.PublicKey;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class ExampleTestCodes extends TestCase {
 
@@ -343,6 +339,172 @@ public class ExampleTestCodes extends TestCase {
         int[] a = {1, 2, 3};
         int[] b = {1, 2, 3};
         assertTrue(Arrays.equals(a, b));
+    }
+
+    //FORMA ANTIGA DE TOKENIZAR UMA STRING
+    private List<String> split(String name) {
+        List<String> results = new ArrayList<String>();
+        StringTokenizer tokenizer = new StringTokenizer(name, " ");
+        while (tokenizer.hasMoreTokens())
+            results.add(tokenizer.nextToken());
+        return results;
+    }
+
+    public void testFactorialWhile() {
+        FactorialWhile factorial = new FactorialWhile();
+        assertEquals(1, factorial.compute(0));
+        assertEquals(1, factorial.compute(1));
+        assertEquals(2, factorial.compute(2));
+        assertEquals(6, factorial.compute(3));
+        assertEquals(24, factorial.compute(4));
+        assertEquals(120, factorial.compute(5));
+    }
+
+    static class FactorialWhile {
+        public long compute(int n) {
+            if (n < 0) throw new IllegalArgumentException("A entrada não pode ser negativa");
+            if (n == 0 || n == 1) return 1;
+            long result = 1;
+            int i = 1;
+            while (i <= n) {
+                result *= i;
+                i++;
+            }
+            return result;
+        }
+    }
+
+    public void testFactorialFor() {
+        FactorialFor factorial = new FactorialFor();
+        assertEquals(1, factorial.compute(0));
+        assertEquals(1, factorial.compute(1));
+        assertEquals(2, factorial.compute(2));
+        assertEquals(6, factorial.compute(3));
+        assertEquals(24, factorial.compute(4));
+        assertEquals(120, factorial.compute(5));
+    }
+
+    static class FactorialFor {
+        public long compute(int n) {
+            if (n < 0) throw new IllegalArgumentException("A entrada não pode ser negativa");
+            if (n == 0 || n == 1) return 1;
+            long result = 1;
+            for (int i = 1; i <= n; i++) {
+                result *= i;
+            }
+            return result;
+        }
+    }
+
+    public void testFactorialDoWhile() {
+        FactorialDoWhile factorial = new FactorialDoWhile();
+        assertEquals(1, factorial.compute(0));
+        assertEquals(1, factorial.compute(1));
+        assertEquals(2, factorial.compute(2));
+        assertEquals(6, factorial.compute(3));
+        assertEquals(24, factorial.compute(4));
+        assertEquals(120, factorial.compute(5));
+    }
+
+    static class FactorialDoWhile {
+        public long compute(int n) {
+            if (n < 0) throw new IllegalArgumentException("A entrada não pode ser negativa");
+            if (n == 0 || n == 1) return 1;
+            long result = 1;
+            int i = 1;
+            do {
+                result *= i;
+                i++;
+            } while (i <= n);
+            return result;
+        }
+    }
+
+    public void testFactorialWhileTrueBreak() {
+        FactorialWhileTrueBreak factorial = new FactorialWhileTrueBreak();
+        assertEquals(1, factorial.compute(0));
+        assertEquals(1, factorial.compute(1));
+        assertEquals(2, factorial.compute(2));
+        assertEquals(6, factorial.compute(3));
+        assertEquals(24, factorial.compute(4));
+        assertEquals(120, factorial.compute(5));
+    }
+
+    static class FactorialWhileTrueBreak {
+        public long compute(int n) {
+            if (n < 0) throw new IllegalArgumentException("A entrada não pode ser negativa");
+            if (n == 0 || n == 1) return 1;
+            long result = 1;
+            int i = 1;
+            while (true) {
+                if (i > n) break;
+                result *= i;
+                i++;
+            }
+            return result;
+        }
+    }
+
+    static class NumberString {
+        public String generateNumbers(int n) {
+            if (n < 1) return "";
+            StringBuilder result = new StringBuilder();
+            for (int i = 1; i <= n; i++) {
+                result.append(i);
+                if (i % 5 == 0) {
+                    result.append("*");
+                    if (i < n) result.append(" ");
+                    continue;
+                }
+                if (i < n) result.append(" ");
+            }
+            return result.toString();
+        }
+    }
+
+    public void testGenerateNumbers() {
+        NumberString ns = new NumberString();
+        assertEquals("1 2 3 4 5* 6 7 8 9 10* 11 12", ns.generateNumbers(12));
+        assertEquals("", ns.generateNumbers(0));
+        assertEquals("1", ns.generateNumbers(1));
+        assertEquals("1 2 3 4 5*", ns.generateNumbers(5));
+    }
+
+    static class NumberStringVector {
+        public Vector<String> splitNumbers(String input) {
+            Vector<String> result = new Vector<>();
+            for (String part : input.split(" ")) {
+                result.add(part);
+            }
+            return result;
+        }
+
+        public String reconstructFromVector(Vector<String> numbers) {
+            StringBuilder result = new StringBuilder();
+            Enumeration<String> enumeration = numbers.elements();
+            while (enumeration.hasMoreElements()) {
+                result.append(enumeration.nextElement());
+                if (enumeration.hasMoreElements()) {
+                    result.append(" ");
+                }
+            }
+            return result.toString();
+        }
+    }
+
+    public void testSplitNumbers() {
+        NumberStringVector nsv = new NumberStringVector();
+        Vector<String> result = nsv.splitNumbers("1 2 3 4 5* 6 7");
+        Vector<String> expected = new Vector<>();
+        expected.addAll(Arrays.asList("1", "2", "3", "4", "5*", "6", "7"));
+        assertEquals(expected, result);
+    }
+
+    public void testReconstructFromVector() {
+        NumberStringVector reconstruct = new NumberStringVector();
+        Vector<String> input = new Vector<>();
+        input.addAll(Arrays.asList("1", "2", "3", "4", "5*", "6", "7"));
+        assertEquals("1 2 3 4 5* 6 7", reconstruct.reconstructFromVector(input));
     }
 
 }
