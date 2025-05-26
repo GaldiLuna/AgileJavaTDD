@@ -35,6 +35,8 @@ public abstract class Piece {
     protected final Collor colors;
     protected final Type type;
     protected char representation;
+    protected String file; //e.g., "d"
+    protected String rank; //e.g., "3"
 
     protected Piece(Collor colors, Type type) {
         this.colors = colors;
@@ -47,7 +49,20 @@ public abstract class Piece {
         }
     }
 
+    public void setPosition(String position) {
+        this.file = position.substring(0, 1);
+        this.rank = position.substring(1);
+    }
+
     //GETTERS:
+    public String getFile() {
+        return file;
+    }
+
+    public String getRank() {
+        return rank;
+    }
+
     public Collor getColors() {
         return colors;
     }

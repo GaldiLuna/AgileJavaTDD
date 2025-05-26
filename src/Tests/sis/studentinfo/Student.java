@@ -45,15 +45,12 @@ public class Student { //public class Student implements Comparable<Student>
     
     private void setName(List<String> nameParts) {
         this.lastName = removeLast(nameParts);
-        //this.lastName = nameParts.removeLast();
         String name = removeLast(nameParts);
-        //String name = nameParts.removeLast();
         if (nameParts.isEmpty())
             this.firstName = name;
         else {
             this.middleName = name;
             this.firstName = removeLast(nameParts);
-            //this.firstName = nameParts.removeLast();
         }
     }
 
@@ -82,33 +79,33 @@ public class Student { //public class Student implements Comparable<Student>
         return results;
     }
 
-    private List<String> split0(String name) {
-        return Arrays.asList(name.split(" "));
-    }
-
     private List<String> split(String name) {
-        List<String> results = new ArrayList<String>();
-        StringBuffer word = new StringBuffer();
-        for (int index = 0; index < name.length(); index++) {
-            char ch = name.charAt(index);
-            if (!Character.isWhitespace(ch))
-                word.append(ch);
-            else if (word.length() > 0) {
-                results.add(word.toString());
-                word = new StringBuffer();
-            }
-        }
-        if (word.length() > 0)
-            results.add(word.toString());
-        return results;
+        return new ArrayList<>(Arrays.asList(name.split(" ")));
     }
 
-    private List<String> split2(String fullName) {
-        List<String> results = new ArrayList<String>();
-        for (String name : fullName.split(" "))
-            results.add(name);
-        return results;
-    }
+//    private List<String> split0(String name) {
+//        List<String> results = new ArrayList<String>();
+//        StringBuffer word = new StringBuffer();
+//        for (int index = 0; index < name.length(); index++) {
+//            char ch = name.charAt(index);
+//            if (!Character.isWhitespace(ch))
+//                word.append(ch);
+//            else if (word.length() > 0) {
+//                results.add(word.toString());
+//                word = new StringBuffer();
+//            }
+//        }
+//        if (word.length() > 0)
+//            results.add(word.toString());
+//        return results;
+//    }
+//
+//    private List<String> split1(String fullName) {
+//        List<String> results = new ArrayList<String>();
+//        for (String name : fullName.split(" "))
+//            results.add(name);
+//        return results;
+//    }
 
     public String getName() {
         return name;

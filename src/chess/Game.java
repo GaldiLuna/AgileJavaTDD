@@ -57,6 +57,25 @@ public class Game {
         return board;
     }
 
+    public void initializeAndPrint() {
+        board.placePiece(Piece.createBlackKing(), "d3");
+        board.placePiece(Piece.createWhiteQueen(), "e4");
+        for (Piece piece : board) {
+            System.out.println("Peça em " + piece.getFile() + piece.getRank() + ": " + piece.getRepresentation());
+        }
+        //Iterar diretamente pelo array bidimensional
+        Piece[][] squares = board.getSquares();
+        for (int rank = 0; rank < 8; rank++) {
+            for (int file = 0; file < 8; file++) {
+                Piece piece = squares[rank][file];
+                if (piece != null) {
+                    String position = "" + (char)('a' + file) + (8 - rank);
+                    System.out.println("Peça em " + position + ": " + piece.getRepresentation());
+                }
+            }
+        }
+    }
+
     public double calculateStrength(Piece.Collor colors) {
         double strength = 0.0;
         Map<Integer, Integer> pawnsPerFile = new HashMap<>();

@@ -3,6 +3,7 @@ import chess.Board;
 import org.junit.Test;
 import chess.pieces.Piece;
 
+import java.security.PublicKey;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -69,15 +70,21 @@ public class PieceTest extends junit.framework.TestCase {
     private Board board = new Board();
 
     public void assertContains(List<String> actual, String... expected) {
-        assertTrue(actual.containsAll(Arrays.asList(expected)));
+        assertTrue("Expected Moves " + Arrays.toString(expected) +
+                " but got " + actual, actual.containsAll(Arrays.asList(expected)));
     }
 
     public void testKingMoveNotOnEdge() {
         Piece piece = Piece.createBlackKing();
-        board.put("d3", piece);
+        board.placePiece(piece, "d3");
+        assertContains(piece.getPossibleMoves("d3"),
+                "c4", "d4", "e4", "c3", "e3", "c2", "d2", "e2");
+    }
+
+    public void testPawnMove() {
+        Piece pawn = Piece.createWhitePawn();
+        board.placePiece(pawn, "d2");
+        assertContains(pawn.getPossibleMoves("d2"), "d3", "d4");
     }
 
 }
-
-//Continuar da questão 4 - dando erro no PUT
-//https://grok.com/share/c2hhcmQtMg%3D%3D_d80d33da-26f0-4b3f-a83e-d008805d6613

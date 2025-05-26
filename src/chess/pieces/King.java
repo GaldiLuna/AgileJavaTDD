@@ -14,9 +14,9 @@ public class King extends Piece {
         int rank = 8 - (position.charAt(1) - '0');
 
         int[][] directions = {
-                {-1, -1}, {-1, 0}, {-1, 1},
-                {0, -1},           {0, 1},
-                {1, -1}, {1, 0}, {1, 1}
+                {-1, -1}, {-1, 0}, {-1, 1}, //DIAGONAL SUPERIOR ESQUERDA, CIMA, DIAGONAL SUPERIOR DIREITA
+                {0, -1},           {0, 1}, //ESQUERDA, POSIÇÃO DA PEÇA, DIREITA
+                {1, -1}, {1, 0}, {1, 1} //DIAGONAL INFERIOR ESQUERDA, BAIXO, DIAGONAL INFERIOR DIREITA
         };
 
         for (int[] dir : directions) {
