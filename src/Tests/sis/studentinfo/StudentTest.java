@@ -103,4 +103,14 @@ public class StudentTest extends TestCase {
         assertEquals(1099, student.totalCharges());
     }
 
+    public void testBadlyFormattedName() {
+        try {
+            new Student("a b c d");
+            fail("expected exception from 4-part name");
+        }
+        catch (StudentNameFormatException expectedException) { //Variável renomeada (antes: sucess)
+            assertEquals("Student name 'a b c d' contains more than 3 parts",expectedException.getMessage());
+        }
+    }
+
 }

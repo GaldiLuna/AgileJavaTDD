@@ -1,4 +1,6 @@
 package Tests.sis.studentinfo;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 
 abstract public class Session implements Comparable<Session>, Iterable<Student> {
@@ -9,6 +11,25 @@ abstract public class Session implements Comparable<Session>, Iterable<Student> 
     private List<Student> students = new ArrayList<Student>();
     private Date startDate;
     private int numberOfCredits;
+    private URL url;
+
+    public void setUrl(String urlString) throws SessionException {
+        try {
+            this.url = new URL(urlString);
+        }
+        catch (MalformedURLException e) {
+            log(e); //Registra a exceção original
+            throw new SessionException(e); //Lança uma nova SessionException
+        }
+    }
+    public URL getUrl() {
+        return url;
+    }
+
+    private void log(Exception e) {
+        //Código de logging. (por enquanto o metodo ficará vazio).
+        //A segunda metade da lição contem mais informações sobre logging.
+    }
 
     protected Session(String department, String number, Date date) {
         this.department = department;
