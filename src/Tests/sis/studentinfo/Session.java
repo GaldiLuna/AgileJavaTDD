@@ -18,7 +18,7 @@ abstract public class Session implements Comparable<Session>, Iterable<Student> 
             this.url = new URL(urlString);
         }
         catch (MalformedURLException e) {
-            log(e); //Registra a exceção original
+            //log(e); //Registra a exceção original
             throw new SessionException(e); //Lança uma nova SessionException
         }
     }
@@ -26,9 +26,9 @@ abstract public class Session implements Comparable<Session>, Iterable<Student> 
         return url;
     }
 
-    private void log(Exception e) {
-        e.printStackTrace();
-    }
+//    private void log(Exception e) {
+//        e.printStackTrace();
+//    }
 
     protected Session(String department, String number, Date date) {
         this.department = department;

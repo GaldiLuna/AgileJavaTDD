@@ -1,7 +1,10 @@
 package Tests.sis.studentinfo;
 import java.util.*;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 public class Student { //public class Student implements Comparable<Student>
+    final static Logger logger = Logger.getLogger(Student.class.getName());
     private String firstName = "";
     private String middleName = "";
     private String lastName;
@@ -42,13 +45,18 @@ public class Student { //public class Student implements Comparable<Student>
         this.name = fullName;
         credits = 0;
         List<String> nameParts = split(fullName);
-        //final int maximumNumberOfNameParts = 3;
         if (nameParts.size() > MAX_NAME_PARTS) {
             String message = String.format(Student.TOO_MANY_NAME_PARTS_MSG, fullName, MAX_NAME_PARTS);
+            Student.logger.info(message); //Chama o info logger estático
             throw new StudentNameFormatException(message); //Lançamento da exceção customizada
         }
         setName(nameParts);
     }
+
+//    private void log(String message) {
+//        Logger logger = Logger.getLogger(getClass().getName());
+//        logger.info(message);
+//    }
     
     private void setName(List<String> nameParts) {
         this.lastName = removeLast(nameParts);
@@ -143,12 +151,15 @@ public class Student { //public class Student implements Comparable<Student>
     }
 
     double getGpa() {
+        Student.logger.fine("begin getGpa " + System.currentTimeMillis());
         if (grades.isEmpty())
             return 0.0;
         double total = 0.0;
         for (Grade grade : grades)
             total += gradingStrategy.getGradePointsFor(grade);
-        return total / grades.size();
+        double result = total / grades.size();
+        Student.logger.fine("end getGpa " + System.currentTimeMillis());
+        return result;
     }
 
     int gradePointsFor(Grade grade) {

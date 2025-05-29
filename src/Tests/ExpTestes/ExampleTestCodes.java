@@ -5,6 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import java.security.PublicKey;
 import java.util.*;
+import java.util.logging.Logger;
 
 public class ExampleTestCodes extends TestCase {
 
@@ -539,5 +540,13 @@ public class ExampleTestCodes extends TestCase {
         }
     }
      */
+
+    public void testLoggingHierarchy() {
+        Logger logger = Logger.getLogger("Tests.sis.studentinfo.Student");
+        assertTrue(logger == Logger.getLogger("Tests.sis.studentinfo.Student"));
+        Logger parent = Logger.getLogger("Tests.sis.studentinfo");
+        assertEquals(parent, logger.getParent());
+        assertEquals(Logger.getLogger("Tests"), parent.getParent());
+    }
 
 }

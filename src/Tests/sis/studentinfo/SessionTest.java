@@ -1,5 +1,8 @@
 package Tests.sis.studentinfo;
 import junit.framework.TestCase;
+import java.util.logging.*;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.util.*;
 import static Tests.sis.studentinfo.DateUtil.createDate;
@@ -8,11 +11,33 @@ abstract public class SessionTest extends TestCase {
     private Session session;
     private Date startDate;
     public static final int CREDITS = 3;
+    //VARIÁVEIS PARA CAPTURAR A SAÍDA DO CONSOLE:
+    private ByteArrayOutputStream outContent;
+    private PrintStream originalOut;
+    private Logger logger;
+    private Handler handler;
+    private ByteArrayOutputStream logBuffer;
 
     public void setUp() {
         startDate = createDate(2003, 1, 6);
         session = createSession("ENGL", "101", startDate);
         session.setNumberOfCredits(CREDITS);
+
+        // --- ADICIONADO PARA CAPTURA DO LOG ---
+        logger = Logger.getLogger(Student.class.getName()); //Obtenha o logger do Student
+        logger.setLevel(Level.INFO); //Garanta que o logger está nível INFO ou mais baixo para capturar a mensagem INFO
+
+        logBuffer = new ByteArrayOutputStream();
+        handler = new StreamHandler(logBuffer, new java.util.logging.SimpleFormatter()); //Direciona para o buffer
+        logger.addHandler(handler); //Adiciona o handler ao logger
+        // --- Fim da adição ---
+    }
+
+    public void tearDown() {
+        // --- ADICIONADO PARA REMOVER O HANDLER---
+        logger.removeHandler(handler); // Importante para não vazar handlers entre testes
+        handler.close(); //Feche o handler para liberar recursos
+        // --- Fim da adição ---
     }
 
     abstract protected Session createSession(String department, String number, Date startDate);
@@ -107,6 +132,11 @@ abstract public class SessionTest extends TestCase {
         catch (SessionException expectedException) {
             Throwable cause = expectedException.getCause(); //Obtem a causa raiz
             assertEquals(MalformedURLException.class, cause.getClass()); //Verifica o tipo da causa
+        }
+        catch (Throwable e) {
+            System.err.println("DEBUG: EXCEÇÃO INESPERADA CAPTURADA EM testInvalidSessionUrl:");
+            e.printStackTrace();
+            fail("Erro inesperado: " + e.getMessage() + " - Tipo: " + e.getClass().getName());
         }
     }
 

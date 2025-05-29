@@ -1,8 +1,44 @@
 package Tests.sis.studentinfo;
+import Tests.sis.report.TestHandler;
 import junit.framework.TestCase;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.util.logging.Logger;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.StreamHandler;
 
 public class StudentTest extends TestCase {
     private static final double GRADE_TOLERANCE = 0.05;
+
+    // --- VARIÁVEIS PARA CAPTURAR O LOG ---
+    private Logger logger;
+    private Handler handler;
+    private ByteArrayOutputStream logBuffer;
+    // --- FIM DAS VARIÁVEIS DE LOG ---
+
+    public void setUp() {
+        // --- ADICIONADO PARA CAPTURA DO LOG ---
+        //Obtenha o logger da classe Student. O nome deve ser o mesmo que Student.getClass().getName()
+        logger = Logger.getLogger(Student.class.getName());
+        //Garanta que o logger está no nível INFO ou mais baixo para capturar a mensagem INFO
+        logger.setLevel(Level.INFO);
+
+        //Cria um buffer para capturar a saída do log
+        logBuffer = new ByteArrayOutputStream();
+        //Cria um StramHandler que direciona a saída para o buffer, usando um SimpleFormatter
+        handler = new StreamHandler(logBuffer, new java.util.logging.SimpleFormatter());
+        //Adiciona o handler ao logger
+        logger.addHandler(handler);
+        // --- Fim da adição de Log ---
+    }
+
+    public void tearDown() {
+        // --- ADICIONADO PARA REMOVER O HANDLER E LIMPAR ---
+        logger.removeHandler(handler); //Importante para não vazar handlers entre testes
+        handler.close(); //Feche o handler para liberar recursos
+        // --- Fim da adição ---
+    }
 
     public void testCreate() {
         final String firstStudentName = "Jane Doe";
@@ -51,7 +87,7 @@ public class StudentTest extends TestCase {
         statStudent.setState(Student.IN_STATE);
         assertTrue(statStudent.isInState());
         statStudent.setState("PE");
-        assertFalse(statStudent.isInState());;
+        assertFalse(statStudent.isInState());
     }
 
     private void assertGpa(Student student, double expectedGpa) {
@@ -104,17 +140,22 @@ public class StudentTest extends TestCase {
     }
 
     public void testBadlyFormattedName() {
+        Handler handler = new TestHandler(); //Atribui a uma referência Handler
+        Student.logger.addHandler(handler); //Usa a variável de classe logger de Student
+
         final String studentName = "a b c d";
         try {
             new Student(studentName);
             fail("expected exception from 4-part name");
         }
         catch (StudentNameFormatException expectedException) {
-            assertEquals(
-                String.format(Student.TOO_MANY_NAME_PARTS_MSG,
-                studentName, Student.MAX_NAME_PARTS),
-                expectedException.getMessage());
+            String message = String.format(Student.TOO_MANY_NAME_PARTS_MSG, studentName, Student.MAX_NAME_PARTS);
+            assertEquals(message, expectedException.getMessage());
+            assertEquals(message, ((TestHandler)handler).getMessage()); //Verifica se foi logado e faz um cast para TestHandler
         }
+    }
+    private boolean wasLogged(String message, TestHandler handler) {
+        return message.equals(handler.getMessage());
     }
 
 }
