@@ -507,4 +507,37 @@ public class ExampleTestCodes extends TestCase {
         assertEquals("1 2 3 4 5* 6 7", reconstruct.reconstructFromVector(input));
     }
 
+    /**
+     * OS 2 BLOCOS DE CÓDIGO ABAIXO SÃO APRA EXEMPLIFICAR A APLICAÇÃO DO FINALLY QUE É UTILIZADO
+     * PARA FECHAR CONEXÕES ABERTAS NO INÍCIO DE UM BLOCO DE CÓDIGO, USANDO AQUI UMA ABERTURA DE
+     * CONEXÃO COM O BANCO DE DADOS SQL, NO PRIMEIRO BLOCO TEMOS O USO DO TRY-CATCH SENDO O CATCH
+     * OPCIONAL PELO FATO DE TER O FINALLY INCLUÍDO, NO SEGUNDO BLOCO DE CÓDIGO TEMOS O EXEMPLO
+     * DE USO DO FINALLY SEM A PRESENÇA DO CATCH.
+
+    public static Student findByLastName(String lastName) throws RuntimeException {
+        java.sql.Connection dbConnection = null;
+        try {
+            dbConnection = getConnection();
+            return lookup(dbConnection, lastName);
+        }
+        catch (java.sql.SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        finally {
+            close(dbConnection);
+        }
+    }
+
+    public static Student findByLastName(String lastName) throws java.sql.SQLException {
+        java.sql.Connection dbConnection = null;
+        try {
+            dbConnection = getConnection();
+            return lookup(dbConnection, lastName);
+        }
+        finally {
+            close(dbConnection);
+        }
+    }
+     */
+
 }

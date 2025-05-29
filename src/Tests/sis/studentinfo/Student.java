@@ -12,6 +12,8 @@ public class Student { //public class Student implements Comparable<Student>
     private String state = "";
     private ArrayList<Grade> grades = new ArrayList<Grade>();
     private List<Student> students = new LinkedList<Student>();
+    static final String TOO_MANY_NAME_PARTS_MSG = "Student name '%s' contains more than %d parts";
+    static final int MAX_NAME_PARTS = 3;
     public enum Grade {
         A(4),
         B(3),
@@ -40,9 +42,9 @@ public class Student { //public class Student implements Comparable<Student>
         this.name = fullName;
         credits = 0;
         List<String> nameParts = split(fullName);
-        final int maximumNumberOfNameParts = 3;
-        if (nameParts.size() > maximumNumberOfNameParts) {
-            String message = "Student name '" + fullName + "' contains more than " + maximumNumberOfNameParts + " parts";
+        //final int maximumNumberOfNameParts = 3;
+        if (nameParts.size() > MAX_NAME_PARTS) {
+            String message = String.format(Student.TOO_MANY_NAME_PARTS_MSG, fullName, MAX_NAME_PARTS);
             throw new StudentNameFormatException(message); //Lançamento da exceção customizada
         }
         setName(nameParts);

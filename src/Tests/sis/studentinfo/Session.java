@@ -27,8 +27,7 @@ abstract public class Session implements Comparable<Session>, Iterable<Student> 
     }
 
     private void log(Exception e) {
-        //Código de logging. (por enquanto o metodo ficará vazio).
-        //A segunda metade da lição contem mais informações sobre logging.
+        e.printStackTrace();
     }
 
     protected Session(String department, String number, Date date) {
