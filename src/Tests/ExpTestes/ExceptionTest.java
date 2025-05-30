@@ -6,7 +6,10 @@ import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.*;
+import java.util.logging.Formatter;
 import java.util.logging.Handler;
+import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
@@ -25,6 +28,7 @@ public class ExceptionTest extends TestCase {
         logger = Logger.getLogger(MyClass.class.getName());
         logger.setUseParentHandlers(false); //Evitar que o log vá para o console padrão
         myLogHandler = new MyLogHandler();
+        myLogHandler.setFormatter(new CustomLogFormatter());
         logger.addHandler(myLogHandler);
     }
 
@@ -41,8 +45,8 @@ public class ExceptionTest extends TestCase {
 
         assertTrue(loggedMessage.contains("Test Exception"));
         // Agora, verificar a ordem. Isso é um pouco mais complexo sem um parser de stack trace.
-        // Vamos verificar se a linha que contém o nome do método que lançou a exceção (ex: blowsUp)
-        // aparece antes da linha que chama o método de log (logExceptionInReverse).
+        // Vamos verificar se a linha que contém o nome do metodo que lançou a exceção (ex: blowsUp)
+        // aparece antes da linha que chama o metodo de log (logExceptionInReverse).
         // Na ordem inversa, esperamos que a causa raiz (blowsUp) apareça por último no log.
 
         // Simulação de verificação da ordem:
@@ -81,6 +85,164 @@ public class ExceptionTest extends TestCase {
         assertTrue("Log entry for logExceptionInReverse should appear before blowsUp in reverse order",
                 firstStackTraceElementIndex != -1 && lastStackTraceElementIndex != -1 &&
                         firstStackTraceElementIndex < lastStackTraceElementIndex);
+
+        System.out.println("DEBUG - Log Invertido:\n" + loggedMessage);
+        System.out.println("DEBUG - Index logExceptionInverse: " + firstStackTraceElementIndex);
+        System.out.println("DEBUG - Index blowsUp: " + lastStackTraceElementIndex);
+    }
+
+    public void testCountingLogHandlerCountsSeverities() {
+        CountingLogHandler handler = new CountingLogHandler();
+        Logger testLogger = Logger.getLogger("testCounting");
+        testLogger.setUseParentHandlers(false);
+        testLogger.addHandler(handler);
+        testLogger.setLevel(Level.ALL);
+
+        testLogger.log(Level.INFO, "Info message 1");
+        testLogger.log(Level.WARNING, "Warning message 1");
+        testLogger.log(Level.INFO, "Info message 2");
+        testLogger.log(Level.SEVERE, "Severe message 1");
+        testLogger.log(Level.FINE, "Fine message 1");
+
+        assertEquals(2, handler.getCount(Level.INFO));
+        assertEquals(1, handler.getCount(Level.WARNING));
+        assertEquals(1, handler.getCount(Level.SEVERE));
+        assertEquals(1, handler.getCount(Level.FINE));
+        assertEquals(0, handler.getCount(Level.CONFIG)); //Nível não logado
+    }
+
+    public void testCustomFormatterWithoutCountingHandler() {
+        CustomLogFormatter formatter = new CustomLogFormatter();
+        LogRecord record = new LogRecord(Level.WARNING, "watch out");
+        //Para garantir um output consistente, podemos setar um tempo fixo para o record
+        record.setMillis(1678886400000L); // 15 Mar 2023 00:00:00 GMT
+
+        String formatted = formatter.format(record);
+        //O formato esperado é "LEVEL: message"
+        assertEquals("WARNING: watch out\n", formatted);
+    }
+
+    public void testCustomFormatterWithCountingHandler() {
+        CountingLogHandler handler = new CountingLogHandler();
+        CustomLogFormatter formatter = new CustomLogFormatter(handler);
+        Logger testLogger = Logger.getLogger("testCountingFormatted");
+        testLogger.setUseParentHandlers(false);
+        testLogger.addHandler(handler);
+
+        testLogger.log(Level.WARNING, "watch out"); //Primeira mensagem WARNING
+        testLogger.log(Level.INFO, "info message");
+        testLogger.log(Level.WARNING, "another warning"); //Segunda mensagem WARNING
+
+        String output = handler.getFormattedOutput();
+
+        //Atribua a classe anônima a uma variável com o tipo da sua nova interface
+        Handler tempHandlerForTest = new Handler() {
+            private StringBuilder capturedOutput = new StringBuilder();
+
+            @Override
+            public void publish(LogRecord record) {
+                capturedOutput.append(formatter.format(record));
+            }
+
+            @Override
+            public void flush() {
+
+            }
+
+            @Override
+            public void close() throws SecurityException {
+
+            }
+
+            public String getCapturedOutput() {
+                return capturedOutput.toString();
+            }
+        };
+// --- EXLUIR BLOCO COMENTADO ABAIXO --- EXCLUIR BLOCO COMENTADO ABAIXO ---
+//        CapturableOutput tempHandler = new Handler() implements CapturableOutput {
+//            private StringBuilder capturedOutput = new StringBuilder();
+//
+//            @Override
+//            public void publish(LogRecord record) {
+//                capturedOutput.append(formatter.format(record));
+//            }
+//
+//            @Override
+//            public void flush() { }
+//
+//            @Override
+//            public void close() throws SecurityException { }
+//
+//            public String getCapturedOutput() {
+//                return capturedOutput.toString();
+//            }
+//        };
+
+//        testLogger.addHandler(new Handler() {
+//            private StringBuilder capturedOutput = new StringBuilder();
+//
+//            @Override
+//            public void publish(LogRecord record) {
+//                capturedOutput.append(formatter.format(record));
+//            }
+//
+//            @Override
+//            public void flush() { }
+//
+//            @Override
+//            public void close() throws SecurityException { }
+//
+//            public String getCapturedOutput() {
+//                return capturedOutput.toString();
+//            }
+//        });
+
+//        final Handler anonymousHandler = new Handler() {
+//            private StringBuilder capturedOutput = new StringBuilder();
+//
+//            @Override
+//            public void publish(LogRecord record) {
+//                capturedOutput.append(formatter.format(record));
+//            }
+//
+//            @Override
+//            public void flush() {
+//
+//            }
+//
+//            @Override
+//            public void close() throws SecurityException {
+//
+//            }
+//
+//            //Metodo customizado
+//            public String getCapturedOutput() {
+//                return capturedOutput.toString();
+//            }
+//        };
+//
+//        //Adicione o Handler ao logger
+//        testLogger.addHandler((Handler) tempHandler); //CUIDADO: aqui você pode precisar de um cast para Handler se a interface não extender Handler
+//
+//        testLogger.log(Level.WARNING, "watch out"); //Primeira mensagem WARNING
+//        testLogger.log(Level.INFO, "info message");
+//        testLogger.log(Level.WARNING, "another warning"); //Segunda mensagem WARNING
+//
+//        //Agora chame o metodo diretamente da variável tempHandler
+//        String output = tempHandler.getCapturedOutput();
+//
+//        //Capturar a saída do handler temporário
+//        Handler tempHandler = testLogger.getHandlers()[0];
+//        String output = ((Handler) tempHandler).getCapturedOutput();
+
+        //O que esperamos na primeira WARNING:
+        assertTrue(output.contains("WARNING: watch out (WARNING total = 1)\n"));
+        //O que esperamos na segunda WARNING:
+        assertTrue(output.contains("WARNING: another warning (WARNING total = 2)\n"));
+        assertTrue(output.contains("INFO: info message (INFO total = 1)\n"));
+
+        //Limpar o logger
+        testLogger.removeHandler(handler);
     }
 
     public void testBlowsUp() {
@@ -122,6 +284,32 @@ public class ExceptionTest extends TestCase {
         } catch (RuntimeException e) {
             fail("Caught RuntimeException instead of SimpleException"); //Para garantir que pegamos a exceção específica
         }
+    }
+
+    public void testCountingLogHandlerUsesCustomFormatterAndStoresOutput() {
+        CountingLogHandler handler = new CountingLogHandler();
+        Logger testLogger = Logger.getLogger("testCountingDefaultFormatter");
+        testLogger.setUseParentHandlers(false);
+        testLogger.addHandler(handler);
+
+        testLogger.log(Level.INFO, "Info message one");
+        testLogger.log(Level.WARNING, "Warning message one");
+
+        String output = handler.getFormattedOutput();
+
+        //Verifica o formato e a contagem
+        assertTrue(output.contains("INFO: Info message one (INFO total = 1)\n"));
+        assertTrue(output.contains("WARNING: Warning message one (WARNING total = 1)\n"));
+
+        //Verifica se a contagem interna do handler está correta
+        assertEquals(1, handler.getCount(Level.INFO));
+        assertEquals(1, handler.getCount(Level.WARNING));
+
+        //Testar a limpeza do output
+        handler.clearFormattedOutput();
+        assertEquals("", handler.getFormattedOutput());
+
+        testLogger.removeHandler(handler);
     }
 
     public void testExceptionOrder1() {
@@ -330,6 +518,23 @@ class MyClass {
         throw new Exception("blah");
     }
 
+    void logExceptionInReverse(Logger logger, Exception e) {
+        //Logar a mensagem de exceção
+        logger.log(Level.SEVERE, "Exception: " + e.getMessage());
+
+        //Obter os elementos do stack trace
+        StackTraceElement[] stackTrace = e.getStackTrace();
+        List<StackTraceElement> list = Arrays.asList(stackTrace);
+
+        //Inverter a ordem
+        Collections.reverse(list);
+
+        //Logar os elementos do stack trace invertidos
+        for (StackTraceElement element : list) {
+            logger.log(Level.SEVERE, "\tat " + element.toString());
+        }
+    }
+
 }
 
 class SimpleException extends RuntimeException {
@@ -366,4 +571,79 @@ class MyLogHandler extends Handler {
     public void clear() {
         output.setLength(0); //Limpa o StringBuilder
     }
+}
+
+class CountingLogHandler extends Handler {
+    private Map<Level, Integer> counts = new HashMap<>();
+    private StringBuilder formattedOutput = new StringBuilder(); //Adicionado para armazenar output formatado
+
+    public void publish(LogRecord record) {
+        //Descarta a mensagem, mas incrementa a contagem
+        Level level = record.getLevel();
+        counts.put(level, counts.getOrDefault(level, 0) + 1);
+
+        //Armazena a saída formatada
+        formattedOutput.append(getFormatter().format(record));
+    }
+
+    public void flush() {
+        //Nada a fazer
+    }
+
+    public void close() {
+        counts.clear(); //Limpa as contagens ao fechar
+    }
+
+    public int getCount(Level level) {
+        return counts.getOrDefault(level, 0);
+    }
+
+    public Map<Level, Integer> getCounts() {
+        return new HashMap<>(counts); //Retorna uma cópia para segurança
+    }
+
+    public CountingLogHandler() {
+        //Define o formatador padrão para CustomLogFormatter, passando a si mesmo
+        setFormatter(new CustomLogFormatter(this));
+    }
+
+    public String getFormattedOutput() {
+        return formattedOutput.toString();
+    }
+
+    public void clearFormattedOutput() {
+        formattedOutput.setLength(0);
+    }
+
+    public void getCapturedOutput() {
+        //Preencher???
+    }
+}
+
+class CustomLogFormatter extends Formatter {
+    private CountingLogHandler countingLogHandler;
+
+    public CustomLogFormatter() {
+        this(null);
+    }
+
+    public CustomLogFormatter(CountingLogHandler handler) {
+        this.countingLogHandler = handler;
+    }
+
+    public String format(LogRecord record) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(record.getLevel().getName()).append(": ").append(record.getMessage());
+
+        if (countingLogHandler != null) {
+            int count = countingLogHandler.getCount(record.getLevel());
+            sb.append(" (").append(record.getLevel().getName()).append(" total = ").append(count).append(")");
+        }
+        sb.append("\n");
+        return sb.toString();
+    }
+}
+
+interface CapturableOutput {
+    String getCapturedOutput();
 }

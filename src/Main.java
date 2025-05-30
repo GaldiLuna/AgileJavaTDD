@@ -1,3 +1,8 @@
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
@@ -11,5 +16,17 @@ public class Main {
             // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
             System.out.println("i = " + i);
         }
+
+        try {
+            LogManager.getLogManager().readConfiguration(new FileInputStream("logging.properties"));
+        } catch (IOException e) {
+            System.err.println("Could not load logging.properties file.");
+            e.printStackTrace();
+        }
+
+        Logger logger = Logger.getLogger("myApp");
+        logger.setUseParentHandlers(false); //Evita handlers padrão duplicados
+        logger.info("This is an info message.");
+        logger.warning("This is a warning message.");
     }
 }
