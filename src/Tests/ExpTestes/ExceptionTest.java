@@ -20,6 +20,7 @@ public class ExceptionTest extends TestCase {
     private Logger logger;
     private MyLogHandler myLogHandler; //Para capturar logs
 
+    @Override
     public void setUp() {
         myClass = new MyClass();
         // Redirecionar System.err para capturar a saída de logs (se o log estiver indo para stderr)
@@ -28,67 +29,129 @@ public class ExceptionTest extends TestCase {
         logger = Logger.getLogger(MyClass.class.getName());
         logger.setUseParentHandlers(false); //Evitar que o log vá para o console padrão
         myLogHandler = new MyLogHandler();
+        // O CustomLogFormatter agora pode ser instanciado sem passar o handler para casos onde a contagem não é necessária.
+        // Para este teste de log invertido, a contagem não é relevante, apenas o formato.
         myLogHandler.setFormatter(new CustomLogFormatter());
         logger.addHandler(myLogHandler);
+        // Limpar o handler antes de cada teste para garantir isolamento
+        myLogHandler.clear();
     }
 
-    public void restoreStreams() {
+    @Override
+    public void tearDown() { //Para limpar recursos após cada teste
         System.setErr(originalErr); //Restaurar System.err
+        //Remova o handler que foi adicionado em setUp
         logger.removeHandler(myLogHandler);
     }
 
+    //Comentado por não estar mais sendo necessário, trabalho de limpeza feito aqui agora está em tearDown()
+//    public void restoreStreams() {
+//        System.setErr(originalErr); //Restaurar System.err
+//        logger.removeHandler(myLogHandler);
+//    }
+
     public void testReverseStackTraceLogging() {
-        Exception e = new RuntimeException("Test Exception");
-        myClass.logExceptionInReverse(logger, e);
+        // Para testar a ordem inversa, precisamos de uma exceção que tenha um stack trace real.
+        // Vamos simular uma chamada que geraria um stack trace mais profundo.
+        // MyClass.rethrows() já gera uma exceção com causa, o que é bom para testar stack traces.
+        try {
+            myClass.rethrows(); // Lança RuntimeException que envolve SimpleException
+            fail("Expected RuntimeException was not thrown by rethrows()");
+        } catch (RuntimeException e) {
+            myClass.logExceptionInReverse(logger, e);
 
-        String loggedMessage = myLogHandler.getLoggedOutput(); //Obtém a saída de captura
+            String loggedMessage = myLogHandler.getLoggedOutput();
 
-        assertTrue(loggedMessage.contains("Test Exception"));
+            //Verificações básicas de conteúdo
+            assertTrue(loggedMessage.contains("Wrapped Exception!"));
+            assertTrue(loggedMessage.contains("Somebody should catch this!")); //Mensagem da causa raiz
+
+            // Verificar a ordem dos elementos no stack trace invertido
+            // No stack trace invertido, o elemento que causou a exceção original (blowsUp) deve aparecer por último.
+            // O elemento que chamou o metodo de log (rethrows, que é onde a exceção é pega e relançada)
+            // deve aparecer mais cedo no log invertido.
+
+            // Para simplificar a verificação, podemos procurar por substrings que representam as chamadas de método.
+            // A ordem esperada no log *invertido* é:
+            // ... at Tests.ExpTestes.MyClass.rethrows(ExceptionTest.java:XXX)
+            // ... at Tests.ExpTestes.MyClass.blowsUp(ExceptionTest.java:YYY)
+
+            // A linha "at MyClass.rethrows" deve vir antes de "at MyClass.blowsUp" no log invertido.
+            // Porque 'rethrows' é o metodo que capturou e relançou a exceção, então sua entrada estará mais "próxima"
+            // do log. 'blowsUp' é a causa original, então estará no final do stack invertido.
+
+            String[] lines = loggedMessage.split("\\n");
+            int rethrowsIndex = -1;
+            int blowsUpIndex = -1;
+
+            for (int i = 0; i < lines.length; i++) {
+                if (lines[i].contains("at Tests.ExpTestes.MyClass.rethrows(")) {
+                    rethrowsIndex = i;
+                }
+                if (lines[i].contains("at Tests.ExpTestes.MyClass.blowsUp(")) {
+                    blowsUpIndex = i;
+                }
+            }
+
+            assertTrue("Expected 'rethrows' and     blowsUp' entries in log", rethrowsIndex != -1 && blowsUpIndex != -1);
+            assertTrue("Log entry for 'rethrows' should appear before 'blowsUp' in reverse order", rethrowsIndex < blowsUpIndex);
+
+            System.out.println("DEBUG - Log Invertido:\n" + loggedMessage);
+            System.out.println("DEBUG - Index rethrows: " + rethrowsIndex);
+            System.out.println("DEBUG - Index blows: " + blowsUpIndex);
+        }
+
+//        Exception e = new RuntimeException("Test Exception");
+//        myClass.logExceptionInReverse(logger, e);
+//
+//        String loggedMessage = myLogHandler.getLoggedOutput(); //Obtém a saída de captura
+//
+//        assertTrue(loggedMessage.contains("Test Exception"));
         // Agora, verificar a ordem. Isso é um pouco mais complexo sem um parser de stack trace.
         // Vamos verificar se a linha que contém o nome do metodo que lançou a exceção (ex: blowsUp)
         // aparece antes da linha que chama o metodo de log (logExceptionInReverse).
         // Na ordem inversa, esperamos que a causa raiz (blowsUp) apareça por último no log.
-
+//
         // Simulação de verificação da ordem:
         // Exemplo de stack trace invertido:
         // ... at mypackage.MyClass.logExceptionInReverse(MyClass.java:XX)
         // ... at mypackage.MyClass.rethrows(MyClass.java:YY)
         // ... at mypackage.MyClass.blowsUp(MyClass.java:ZZ)
         // Root Cause: Test Exception (ou whatever was at the top of the original stack)
-
+//
         // Para simplificar a verificação do teste, vamos procurar por marcadores de "reverse"
         // que o formatter customizado possa adicionar, ou, mais realisticamente,
         // dividir o log por linhas e verificar a ordem de partes importantes do stack trace.
-
-        String[] lines = loggedMessage.split("\\n");
+//
+//        String[] lines = loggedMessage.split("\\n");
         // Encontra o index da mensagem da exceção e o index da primeira linha do stack trace
         // e o index da última linha (causa raiz)
-        int exceptionMessageIndex = -1;
-        int lastStackTraceElementIndex = -1; //O topo do stack trace original (bottom in reverse)
-        int firstStackTraceElementIndex = -1; //O final do stack trace original (top in reverse)
-
-        for (int i=0; i < lines.length; i++) {
-            if (lines[i].contains("Test Exception")) {
-                exceptionMessageIndex = i;
-            }
+//        int exceptionMessageIndex = -1;
+//        int lastStackTraceElementIndex = -1; //O topo do stack trace original (bottom in reverse)
+//        int firstStackTraceElementIndex = -1; //O final do stack trace original (top in reverse)
+//
+//        for (int i=0; i < lines.length; i++) {
+//            if (lines[i].contains("Test Exception")) {
+//                exceptionMessageIndex = i;
+//            }
             // Supondo que a linha que lançou a exceção em blowsUp() seja a "raiz" que queremos no final.
             // Para este teste, vamos assumir que o ponto de falha é o "blowsUp".
-            if (lines[i].contains("at MyClass.blowsUp(")) { // Ajustar conforme a implementação real
-                lastStackTraceElementIndex = i; // Essa deveria ser a última linha no log invertido
-            }
-            if (lines[i].contains("at MyClass.logExceptionInReverse(")) {
-                firstStackTraceElementIndex = i; // Essa deveria ser a primeira linha relevante no log invertido
-            }
-        }
+//            if (lines[i].contains("at MyClass.blowsUp(")) { // Ajustar conforme a implementação real
+//                lastStackTraceElementIndex = i; // Essa deveria ser a última linha no log invertido
+//            }
+//            if (lines[i].contains("at MyClass.logExceptionInReverse(")) {
+//                firstStackTraceElementIndex = i; // Essa deveria ser a primeira linha relevante no log invertido
+//            }
+//        }
         // No log invertido, esperamos que o elemento mais próximo do ponto de chamada (logExceptionInReverse)
         // venha primeiro, e o elemento que causou a exceção (blowsUp) venha por último.
-        assertTrue("Log entry for logExceptionInReverse should appear before blowsUp in reverse order",
-                firstStackTraceElementIndex != -1 && lastStackTraceElementIndex != -1 &&
-                        firstStackTraceElementIndex < lastStackTraceElementIndex);
-
-        System.out.println("DEBUG - Log Invertido:\n" + loggedMessage);
-        System.out.println("DEBUG - Index logExceptionInverse: " + firstStackTraceElementIndex);
-        System.out.println("DEBUG - Index blowsUp: " + lastStackTraceElementIndex);
+//        assertTrue("Log entry for logExceptionInReverse should appear before blowsUp in reverse order",
+//                firstStackTraceElementIndex != -1 && lastStackTraceElementIndex != -1 &&
+//                        firstStackTraceElementIndex < lastStackTraceElementIndex);
+//
+//        System.out.println("DEBUG - Log Invertido:\n" + loggedMessage);
+//        System.out.println("DEBUG - Index logExceptionInverse: " + firstStackTraceElementIndex);
+//        System.out.println("DEBUG - Index blowsUp: " + lastStackTraceElementIndex);
     }
 
     public void testCountingLogHandlerCountsSeverities() {
@@ -109,6 +172,8 @@ public class ExceptionTest extends TestCase {
         assertEquals(1, handler.getCount(Level.SEVERE));
         assertEquals(1, handler.getCount(Level.FINE));
         assertEquals(0, handler.getCount(Level.CONFIG)); //Nível não logado
+
+        testLogger.removeHandler(handler); //Limpar o handler após o teste
     }
 
     public void testCustomFormatterWithoutCountingHandler() {
@@ -124,10 +189,11 @@ public class ExceptionTest extends TestCase {
 
     public void testCustomFormatterWithCountingHandler() {
         CountingLogHandler handler = new CountingLogHandler();
-        CustomLogFormatter formatter = new CustomLogFormatter(handler);
+        //CustomLogFormatter formatter = new CustomLogFormatter(handler);
         Logger testLogger = Logger.getLogger("testCountingFormatted");
         testLogger.setUseParentHandlers(false);
         testLogger.addHandler(handler);
+        testLogger.setLevel(Level.ALL); //Certifique-se que todos os níveis estão habilitados
 
         testLogger.log(Level.WARNING, "watch out"); //Primeira mensagem WARNING
         testLogger.log(Level.INFO, "info message");
@@ -136,28 +202,28 @@ public class ExceptionTest extends TestCase {
         String output = handler.getFormattedOutput();
 
         //Atribua a classe anônima a uma variável com o tipo da sua nova interface
-        Handler tempHandlerForTest = new Handler() {
-            private StringBuilder capturedOutput = new StringBuilder();
-
-            @Override
-            public void publish(LogRecord record) {
-                capturedOutput.append(formatter.format(record));
-            }
-
-            @Override
-            public void flush() {
-
-            }
-
-            @Override
-            public void close() throws SecurityException {
-
-            }
-
-            public String getCapturedOutput() {
-                return capturedOutput.toString();
-            }
-        };
+//        Handler tempHandlerForTest = new Handler() {
+//            private StringBuilder capturedOutput = new StringBuilder();
+//
+//            @Override
+//            public void publish(LogRecord record) {
+//                capturedOutput.append(formatter.format(record));
+//            }
+//
+//            @Override
+//            public void flush() {
+//
+//            }
+//
+//            @Override
+//            public void close() throws SecurityException {
+//
+//            }
+//
+//            public String getCapturedOutput() {
+//                return capturedOutput.toString();
+//            }
+//        };
 // --- EXLUIR BLOCO COMENTADO ABAIXO --- EXCLUIR BLOCO COMENTADO ABAIXO ---
 //        CapturableOutput tempHandler = new Handler() implements CapturableOutput {
 //            private StringBuilder capturedOutput = new StringBuilder();
@@ -196,7 +262,7 @@ public class ExceptionTest extends TestCase {
 //                return capturedOutput.toString();
 //            }
 //        });
-
+//
 //        final Handler anonymousHandler = new Handler() {
 //            private StringBuilder capturedOutput = new StringBuilder();
 //
@@ -246,10 +312,18 @@ public class ExceptionTest extends TestCase {
     }
 
     public void testBlowsUp() {
-        myClass.blowsUp(); //Isso deve lançar uma exceção e falhar no teste
+        //Esse teste agora espera que uma exceção seja lançada e
+        //a captura, garantindo que não falhe sem uma verificação.
+        try {
+            myClass.blowsUp(); //Isso deve lançar uma exceção e falhar no teste
+            fail("Expected SimpleException was not thrown");
+        } catch (SimpleException e) {
+            //Sucessp: a exceção esperada foi capturada.
+            assertEquals("Somebody should catch this!", e.getMessage());
+        }
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = SimpleException.class)
     public void testBlowsUpExpectsException() {
         myClass.blowsUp();
     }
@@ -258,8 +332,10 @@ public class ExceptionTest extends TestCase {
         try {
             myClass.blowsUp();
             fail("Expected RuntimeException was not thrown"); //Garante que uma exceção foi lançada
-        } catch (RuntimeException e) {
+        } catch (SimpleException e) {
             assertEquals("Somebody should catch this!", e.getMessage());
+        } catch (RuntimeException e) {
+            fail("Caught RuntimeException instead of SimpleException"); // Para garantir que pegamos a exceção específica
         }
     }
 
@@ -270,7 +346,7 @@ public class ExceptionTest extends TestCase {
         } catch (RuntimeException e) {
             assertEquals("Wrapped Exception!", e.getMessage());
             assertNotNull(e.getCause());
-            assertTrue(e.getCause() instanceof RuntimeException);
+            assertTrue(e.getCause() instanceof SimpleException);
             assertEquals("Somebody should catch this!", e.getCause().getMessage());
         }
     }
@@ -291,6 +367,7 @@ public class ExceptionTest extends TestCase {
         Logger testLogger = Logger.getLogger("testCountingDefaultFormatter");
         testLogger.setUseParentHandlers(false);
         testLogger.addHandler(handler);
+        testLogger.setLevel(Level.ALL); // Certifique-se de que todos os níveis estão habilitados
 
         testLogger.log(Level.INFO, "Info message one");
         testLogger.log(Level.WARNING, "Warning message one");
@@ -311,6 +388,10 @@ public class ExceptionTest extends TestCase {
 
         testLogger.removeHandler(handler);
     }
+
+    // --- TESTES DE ORDEM DE ERROS/EXCEÇÕES ---
+    // A lógica é: se a exceção for capturada pelo bloco catch "correto", o teste PASSA.
+    // Se for capturada por um bloco catch "errado" ou não for capturada, o teste FALHA.
 
     public void testExceptionOrder1() {
         try {
@@ -474,6 +555,9 @@ public class ExceptionTest extends TestCase {
         }
         catch (Throwable success) { // Captura RuntimeException
         }finally {
+            // O 'return' em finally pode mascarar falhas se uma exceção não for capturada.
+            // Em testes, geralmente é melhor evitar 'return' no finally a menos que seja intencional para um caso de teste específico.
+            // Para este exercício, vamos manter, mas em cenários reais, cuidado.
             return; // Pode mascarar falhas.
         }
     }
@@ -498,6 +582,8 @@ public class ExceptionTest extends TestCase {
         }
     }
 
+    // --- FIM DOS TESTES DE ORDEM DE ERROS/EXCEÇÕES ---
+
 }
 
 // --- Classes auxiliares para os métodos ---
@@ -509,7 +595,7 @@ class MyClass {
     void rethrows() {
         try {
             blowsUp(); //Lança SimpleException
-        } catch (RuntimeException e) { //Captura SimpleException com o polimorfismo
+        } catch (SimpleException e) {
             throw new RuntimeException("Wrapped Exception!", e); //Lança RuntimeException com SimpleException como causa
         }
     }
@@ -552,14 +638,17 @@ class Dyer {
 class MyLogHandler extends Handler {
     private StringBuilder output = new StringBuilder();
 
+    @Override
     public void publish(LogRecord record) {
         output.append(getFormatter().format(record));
     }
 
+    @Override
     public void flush() {
         //Nada a fazer
     }
 
+    @Override
     public void close() throws SecurityException {
         //Nada a fazer
     }
@@ -577,6 +666,7 @@ class CountingLogHandler extends Handler {
     private Map<Level, Integer> counts = new HashMap<>();
     private StringBuilder formattedOutput = new StringBuilder(); //Adicionado para armazenar output formatado
 
+    @Override
     public void publish(LogRecord record) {
         //Descarta a mensagem, mas incrementa a contagem
         Level level = record.getLevel();
@@ -586,12 +676,15 @@ class CountingLogHandler extends Handler {
         formattedOutput.append(getFormatter().format(record));
     }
 
+   @Override
     public void flush() {
         //Nada a fazer
     }
 
+    @Override
     public void close() {
         counts.clear(); //Limpa as contagens ao fechar
+        formattedOutput.setLength(0); // Limpar também o output formatado ao fechar
     }
 
     public int getCount(Level level) {
@@ -624,18 +717,22 @@ class CustomLogFormatter extends Formatter {
     private CountingLogHandler countingLogHandler;
 
     public CustomLogFormatter() {
-        this(null);
+        this(null); // Construtor sem handler, para casos onde a contagem não é necessária
     }
 
     public CustomLogFormatter(CountingLogHandler handler) {
         this.countingLogHandler = handler;
     }
 
+    @Override
     public String format(LogRecord record) {
         StringBuilder sb = new StringBuilder();
         sb.append(record.getLevel().getName()).append(": ").append(record.getMessage());
 
         if (countingLogHandler != null) {
+            // No momento da formatação, o handler já publicou o record, então a contagem já foi incrementada.
+            // Se você quiser a contagem *antes* deste log específico, seria mais complexo.
+            // Para a lógica atual, pegar o count aqui reflete o total *após* este log.
             int count = countingLogHandler.getCount(record.getLevel());
             sb.append(" (").append(record.getLevel().getName()).append(" total = ").append(count).append(")");
         }
@@ -644,6 +741,7 @@ class CustomLogFormatter extends Formatter {
     }
 }
 
-interface CapturableOutput {
-    String getCapturedOutput();
-}
+//A interface foi comentada por não ser mais necessária (mantida apenas pelo histŕorico de uso)
+//interface CapturableOutput {
+//    String getCapturedOutput();
+//}
