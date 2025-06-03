@@ -3,20 +3,22 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
-public class Student { //public class Student implements Comparable<Student>
+public class Student {   //public class Student implements Comparable<Student>
     final static Logger logger = Logger.getLogger(Student.class.getName());
     private String firstName = "";
     private String middleName = "";
     private String lastName;
     private String name;
     private int credits;
+    private String id;
     static final int CREDITS_REQUIRED_FOR_FULL_TIME = 12;
     static final String IN_STATE = "AL";
     private String state = "";
     private ArrayList<Grade> grades = new ArrayList<Grade>();
-    private List<Student> students = new LinkedList<Student>();
+    //private List<Student> students = new LinkedList<Student>();
     static final String TOO_MANY_NAME_PARTS_MSG = "Student name '%s' contains more than %d parts";
     static final int MAX_NAME_PARTS = 3;
+
     public enum Grade {
         A(4),
         B(3),
@@ -34,14 +36,9 @@ public class Student { //public class Student implements Comparable<Student>
             return points;
         }
     }
-    
-    public String getFirstName() { return firstName; }
 
-    public String getMiddleName() { return middleName; }
-    
-    public String getLastName() { return lastName; }
-    
-    public Student(String fullName) {
+    public Student(String id, String fullName) {
+        this.id = id;
         this.name = fullName;
         credits = 0;
         List<String> nameParts = split(fullName);
@@ -51,6 +48,30 @@ public class Student { //public class Student implements Comparable<Student>
             throw new StudentNameFormatException(message); //Lançamento da exceção customizada
         }
         setName(nameParts);
+    }
+
+    public Student(String fullName) {
+        this("", fullName); //Chama o novo construtor com um ID vazio
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
 //    private void log(String message) {

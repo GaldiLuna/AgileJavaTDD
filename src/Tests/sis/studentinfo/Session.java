@@ -5,8 +5,9 @@ import java.util.*;
 
 abstract public class Session implements Comparable<Session>, Iterable<Student> {
     private static int count;
-    private String department;
-    private String number;
+    private Course course;
+//    private String department;
+//    private String number;
     //private Vector<Student> students = new Vector<Student>(); + "forma antiga de declarar Lista com Vector"
     private List<Student> students = new ArrayList<Student>();
     private Date startDate;
@@ -30,10 +31,17 @@ abstract public class Session implements Comparable<Session>, Iterable<Student> 
 //        e.printStackTrace();
 //    }
 
-    protected Session(String department, String number, Date date) {
-        this.department = department;
-        this.number = number;
-        this.startDate = date;
+//    protected Session(String department, String number, Date date) {
+//        this.department = department;
+//        this.number = number;
+//        this.startDate = date;
+//    }
+
+    protected Session(Course course, Date startDate) {
+        this.course = course;
+//        this.department = course.getDepartment();
+//        this.number = course.getNumber();
+        this.startDate = startDate;
     }
 
     public int compareTo(Session that) {
@@ -47,12 +55,14 @@ abstract public class Session implements Comparable<Session>, Iterable<Student> 
         this.numberOfCredits = numberOfCredits;
     }
 
+    //public String getDepartment() {return department;}
     public String getDepartment() {
-        return department;
+        return course.getDepartment();
     }
 
+    //public String getNumber() {return number;}
     public String getNumber() {
-        return number;
+        return course.getNumber();
     }
 
     int getNumberOfStudents() {

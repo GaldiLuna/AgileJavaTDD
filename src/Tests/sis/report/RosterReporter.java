@@ -9,9 +9,9 @@ public class RosterReporter {
     static final String ROSTER_REPORT_FOOTER =
             NEWLINE + "# students = ";
 
-    public CourseSession session;
+    public Session session;
 
-    RosterReporter(CourseSession session) {
+    RosterReporter(Session session) {
         this.session = session;
     }
 

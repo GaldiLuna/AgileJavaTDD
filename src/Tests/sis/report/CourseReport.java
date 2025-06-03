@@ -4,16 +4,16 @@ import Tests.sis.studentinfo.*;
 import static Tests.sis.report.ReportConstant.NEWLINE;
 
 public class CourseReport {
-    private ArrayList<CourseSession> sessions = new ArrayList<CourseSession>();
+    private ArrayList<Session> sessions = new ArrayList<Session>();
 
-    public void add(CourseSession session) {
+    public void add(Session session) {
         sessions.add(session);
     }
 
     public String text() {
         //Collections.sort(sessions);
         StringBuilder builder = new StringBuilder();
-        for (CourseSession session : sessions)
+        for (Session session : sessions)
             builder.append(
                 session.getDepartment() + " " +
                 session.getNumber() + NEWLINE);

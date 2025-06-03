@@ -18,9 +18,9 @@ abstract public class SessionTest extends TestCase {
     private Handler handler;
     private ByteArrayOutputStream logBuffer;
 
-    public void setUp() {
-        startDate = createDate(2003, 1, 6);
-        session = createSession("ENGL", "101", startDate);
+    protected void setUp() {
+        startDate = new Date();
+        session = createSession(new Course("ENGL", "101"), startDate);
         session.setNumberOfCredits(CREDITS);
 
         // --- ADICIONADO PARA CAPTURA DO LOG ---
@@ -40,7 +40,7 @@ abstract public class SessionTest extends TestCase {
         // --- Fim da adição ---
     }
 
-    abstract protected Session createSession(String department, String number, Date startDate);
+    abstract protected Session createSession(Course course, Date startDate);
 
     public void testCreate() {
         assertEquals("ENGL", session.getDepartment());
@@ -66,20 +66,20 @@ abstract public class SessionTest extends TestCase {
 
     public void testComparable() {
         final Date date = new Date();
-        Session sessionA = createSession("CMSC", "101", date);
-        Session sessionB = createSession("ENGL", "101", date);
+        Session sessionA = createSession(new Course("CMSC", "101"), date);
+        Session sessionB = createSession(new Course("ENGL", "101"), date);
         assertTrue(sessionA.compareTo(sessionB) < 0);
         assertTrue(sessionB.compareTo(sessionA) > 0);
-        Session sessionC = createSession("CMSC", "101", date);
+        Session sessionC = createSession(new Course("CMSC", "101"), date);
         assertEquals(0, sessionA.compareTo(sessionC));
-        Session sessionD = createSession("CMSC", "220", date);
+        Session sessionD = createSession(new Course("CMSC", "220"), date);
         assertTrue(sessionC.compareTo(sessionD) < 0);
         assertTrue(sessionD.compareTo(sessionC) > 0);
     }
 
     public void testSessionLength( ){
         Date date = new Date();
-        Session session = createSession("ANY", "999", date);
+        Session session = createSession(new Course("ANY", "999"), date);
         assertTrue(session.getSessionLength() > 0);
     }
 
