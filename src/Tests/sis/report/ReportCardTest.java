@@ -22,14 +22,9 @@ public class ReportCardTest extends TestCase {
     }
 
     public void testKeys() {
-        Set<Student.Grade> expectedGrades = new HashSet<Student.Grade>();
-        expectedGrades.add(Student.Grade.A);
-        expectedGrades.add(Student.Grade.B);
-        expectedGrades.add(Student.Grade.C);
-        expectedGrades.add(Student.Grade.D);
-        expectedGrades.add(Student.Grade.F);
+        Set<Student.Grade> expectedGrades = EnumSet.allOf(Student.Grade.class);
+        Set<Student.Grade> grades = EnumSet.noneOf(Student.Grade.class);
 
-        Set<Student.Grade> grades = new HashSet<Student.Grade>();
         for (Student.Grade grade: card.getMessages().keySet())
             grades.add(grade);
 

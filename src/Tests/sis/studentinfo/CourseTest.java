@@ -86,4 +86,9 @@ public class CourseTest extends TestCase {
         final long arbitraryThreshold = 200; //Limite arbitrário de 200ms
         assertTrue("tempo decorrido = " + elapsed, elapsed < arbitraryThreshold);
     }
+
+    public void testToString() {
+        Course course = new Course("ENGL", "301");
+        assertEquals("ENGL 301", course.toString());
+    }
 }

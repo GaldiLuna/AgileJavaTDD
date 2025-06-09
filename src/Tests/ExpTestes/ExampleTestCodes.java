@@ -1,9 +1,7 @@
 package Tests.ExpTestes;
 import Tests.sis.studentinfo.Student;
 import junit.framework.TestCase;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import java.security.PublicKey;
+
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -547,6 +545,119 @@ public class ExampleTestCodes extends TestCase {
         Logger parent = Logger.getLogger("Tests.sis.studentinfo");
         assertEquals(parent, logger.getParent());
         assertEquals(Logger.getLogger("Tests"), parent.getParent());
+    }
+
+    static class WordCount {
+        private final String text;
+
+        public WordCount(String text) {
+            this.text = text;
+        }
+
+        /**
+         * Analisa o texto, conta a frequência das palavras e retorna um Set formatado.
+         * @return Um Set de Strings com cada palavra e sua frequência.
+         */
+        public Set<String> getWordFrequencies() {
+            //Mapa para armazenar a palavra (em minúsculas) e sua frequência
+            Map<String, Integer> wordFrequencies = new HashMap<>();
+
+            //1. Converte tudi para minúsculas para ignorar o case
+            //2. Usa split com a regex \W+ para dividir por qualquer caractere que não seja uma letra ou número
+            String[] words = text.toLowerCase().split("\\W+");
+
+            //Itera sobre as palavras extraídas
+            for (String word : words) {
+                if (!word.isEmpty()) {
+                    //Pega a contagem atual (ou 0 se for a primeira vez) e incrementa
+                    int count = wordFrequencies.getOrDefault(word, 0);
+                    wordFrequencies.put(word, count + 1);
+                }
+            }
+
+            //Cria o Set de resultado para formatar a saída
+            Set<String> resultSet = new HashSet<>();
+            for (Map.Entry<String, Integer> entry : wordFrequencies.entrySet()) {
+                resultSet.add(entry.getKey() + ": " + entry.getValue());
+            }
+
+            return resultSet;
+        }
+
+        public static void main(String[] args) {
+            //Texto extraído das duas primeiras frases do exercício
+            String inputText = "Create a String literal using the first two sentences of this exercise. You will create a " +
+                                "WordCount class to parse through the text and count the number of instances of each word.";
+
+            WordCount wordCounter = new WordCount(inputText);
+            Set<String> frequencies = wordCounter.getWordFrequencies();
+
+            //Imprime o resultado
+            System.out.println("Frequência de cada palavra:");
+            for (String frequency : frequencies) {
+                System.out.println(frequency);
+            }
+        }
+    }
+
+    static class Name {
+        private final String name;
+
+        public Name(String name) {
+            this.name = name;
+        }
+
+        //Apenas o metodo equals foi implementado, como pedido.
+        @Override
+        public boolean equals(Object o) {
+            //1. Verifica se é a mesma instância
+            if (this == o) return true;
+            //2. Verifica se o objeto é nulo ou de classe diferente
+            if (o == null || getClass() != o.getClass()) return false;
+            //3. Faz o cast e compara o campo relevante
+            Name otherName = (Name) o;
+            return Objects.equals(this.name, otherName.name);
+        }
+
+        //O metodo hashCode NÃO é implementado na primeira etapa logo abaixo.
+        //A classe usará a implementação padrão de Object.
+
+        //Na segunda etapa temos a solução implementando o hashCode
+        //O hashCode é baseado no mesmo campo usado no equals
+        @Override
+        public int hashCode() {
+            return Objects.hash(name);
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println("--- Teste do Exercício 3 ---");
+
+        Set<Name> nameSet1 = new HashSet<>();
+        nameSet1.add(new Name("Foo"));
+        nameSet1.add(new Name("Bar"));
+
+        //Embora 'new Name("Foo)' seja .equals() ao que está no set, seus hashCodes são diferentes e o teste falha.
+        boolean containsNewInstance = nameSet1.contains((new Name("Foo")));
+        System.out.println("O Set contém new Name(\"Foo\")? " + containsNewInstance); //Imprime: FALSE
+
+        //O set contém a referência EXATA ao objeto e o teste agora passa.
+        Name foo = new Name("Foo");
+        nameSet1.add(foo);
+        boolean containsSameInstance = nameSet1.contains(foo);
+        System.out.println("O Set contém a instância 'foo'? " + containsSameInstance); //Imprime: TRUE
+
+        System.out.println("\n ------------------------------------------------------------ \n");
+
+        System.out.println("--- Teste do Exercício 4 (com a classe Name corrigida) ---");
+
+        Set<Name> nameSet2 = new HashSet<>();
+        nameSet2.add(new Name("Foo"));
+        nameSet2.add(new Name("Bar"));
+
+        //Como 'hashCode' e 'equals' estão consistentes, o HashSet encontra o objeto corretamente.
+        boolean containsOtherInstance = nameSet2.contains(new Name("Foo"));
+        System.out.println("O Set contém new Name(\"Foo\")? " + containsOtherInstance); //Imprime: TRUE
     }
 
 }
