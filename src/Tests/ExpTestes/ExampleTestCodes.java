@@ -631,7 +631,7 @@ public class ExampleTestCodes extends TestCase {
     }
 
     public static void main(String[] args) {
-        System.out.println("--- Teste do Exercício 3 ---");
+        System.out.println("\n--- Teste do Exercício 3 ---");
 
         Set<Name> nameSet1 = new HashSet<>();
         nameSet1.add(new Name("Foo"));
@@ -647,7 +647,7 @@ public class ExampleTestCodes extends TestCase {
         boolean containsSameInstance = nameSet1.contains(foo);
         System.out.println("O Set contém a instância 'foo'? " + containsSameInstance); //Imprime: TRUE
 
-        System.out.println("\n ------------------------------------------------------------ \n");
+        System.out.println("\n -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- \n");
 
         System.out.println("--- Teste do Exercício 4 (com a classe Name corrigida) ---");
 
@@ -658,6 +658,54 @@ public class ExampleTestCodes extends TestCase {
         //Como 'hashCode' e 'equals' estão consistentes, o HashSet encontra o objeto corretamente.
         boolean containsOtherInstance = nameSet2.contains(new Name("Foo"));
         System.out.println("O Set contém new Name(\"Foo\")? " + containsOtherInstance); //Imprime: TRUE
+    }
+
+    public void testInfinity() {
+        final float tolerance = 0.5f;
+        final float x = 1f;
+
+        assertEquals(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY * 100, tolerance);
+        assertEquals(Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY * -1, tolerance);
+
+        assertEquals(Float.POSITIVE_INFINITY, x / 0f, tolerance);
+        assertEquals(Float.NEGATIVE_INFINITY, x / -0f, tolerance);
+
+        assertTrue(Float.isNaN(x % 0f));
+
+        assertEquals(0f, x / Float.POSITIVE_INFINITY, tolerance);
+        assertEquals(-0f, x / Float.NEGATIVE_INFINITY, tolerance);
+
+        assertEquals(x, x % Float.POSITIVE_INFINITY, tolerance);
+
+        assertTrue(Float.isNaN(0f / 0f));
+        assertTrue(Float.isNaN(0f % 0f));
+
+        assertEquals(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY / x, tolerance);
+        assertEquals(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY / x, tolerance);
+
+        assertTrue(Float.isNaN(Float.POSITIVE_INFINITY % x));
+        assertTrue(Float.isNaN(Float.POSITIVE_INFINITY / Float.POSITIVE_INFINITY));
+        assertTrue(Float.isNaN(Float.POSITIVE_INFINITY % Float.POSITIVE_INFINITY));
+        assertTrue(Float.isNaN(Float.POSITIVE_INFINITY / Float.NEGATIVE_INFINITY));
+        assertTrue(Float.isNaN(Float.POSITIVE_INFINITY % Float.NEGATIVE_INFINITY));
+        assertTrue(Float.isNaN(Float.NEGATIVE_INFINITY / Float.POSITIVE_INFINITY));
+        assertTrue(Float.isNaN(Float.NEGATIVE_INFINITY % Float.POSITIVE_INFINITY));
+        assertTrue(Float.isNaN(Float.NEGATIVE_INFINITY / Float.NEGATIVE_INFINITY));
+        assertTrue(Float.isNaN(Float.NEGATIVE_INFINITY % Float.NEGATIVE_INFINITY));
+    }
+
+    public void testMaxValues() {
+        int i = Integer.MAX_VALUE;
+        assertEquals(Integer.MAX_VALUE + 1, i + 1);
+        System.out.println("Valor máximo de um int: " + Integer.MAX_VALUE);
+        System.out.println("INT Overflow: " + (Integer.MAX_VALUE + 1)); // Resulta em Integer.MIN_VALUE
+
+        byte b1 = Byte.MAX_VALUE;
+        assertEquals(Byte.MAX_VALUE + 1, b1 + 1);
+        System.out.println("Valor máximo de um byte: " + Byte.MAX_VALUE);
+        byte b2 = b1 += 1;
+        assertEquals(Byte.MIN_VALUE - 1, b2 - 1);
+        System.out.println("Byte Overflow: " + b2); // Resulta em Byte.MIN_VALUE
     }
 
 }

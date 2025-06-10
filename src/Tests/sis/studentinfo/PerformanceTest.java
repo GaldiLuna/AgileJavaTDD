@@ -34,4 +34,16 @@ public class PerformanceTest extends TestCase {
         performance.setScores(100, 90);
         assertEquals(95.0, performance.average(), tolerance);
     }
+
+    public void testAverageForNoScores() {
+        Performance performance = new Performance();
+        assertEquals(0.0, performance.average());
+        //A linha abaixo seria usada para retornar NaN na execução do teste de um metodo estático para Float ou Double
+        //assertTrue(Double.isNaN(performance.average()));
+
+        //Qualquer comparação booleana com NaN sempre resulta em false, como demonstram estes testes de linguagem
+        assertFalse(Double.NaN > 0.0);
+        assertFalse(Double.NaN < 1.0);
+        assertFalse(Double.NaN == 1.0);
+    }
 }
