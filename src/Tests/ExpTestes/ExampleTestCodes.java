@@ -708,4 +708,69 @@ public class ExampleTestCodes extends TestCase {
         System.out.println("Byte Overflow: " + b2); // Resulta em Byte.MIN_VALUE
     }
 
+    public void testTabelaVerdadeOrientadaATestes() {
+        //Operador and -> &
+        assertEquals(0, 0 & 0);
+        assertEquals(0, 0 & 1);
+        assertEquals(0, 1 & 0);
+        assertEquals(1, 1 & 1);
+
+        //Operador or -> |
+        assertEquals(0, 0 | 0);
+        assertEquals(1, 0 | 1);
+        assertEquals(1, 1 | 0);
+        assertEquals(1, 1 | 1);
+
+        //Operador xor -> ^
+        assertEquals(0, 0 ^ 0);
+        assertEquals(1, 0 ^ 1);
+        assertEquals(1, 1 ^ 0);
+        assertEquals(0, 1 ^ 1);
+
+        //Operador de negação lógica -> ~
+        int x = 0x7FFFFFF1;
+        // 0111_1111_1111_1111_1111_1111_1111_0001
+        assertEquals(0x8000000E, ~x);
+        // 1000_0000_0000_0000_0000_0000_0000_1110
+
+        //O operador xor tem a capacidade única de ser reversível.
+        int z = 5;       // 101
+        int y = 7;       // 111
+        int zPrime = z ^ y; // 010
+        assertEquals(2, zPrime);
+        assertEquals(z, zPrime ^ y);
+    }
+
+    public void testParity() {
+        //verificação de paridade - paridade par ou paridade ímpar - usando XOR
+        assertEquals(0, xorAll(0, 1, 0, 1)); // paridade par
+        assertEquals(1, xorAll(0, 1, 1, 1)); // paridade ímpar
+    }
+
+    private int xorAll(int first, int... rest) {
+        int parity = first;
+        for (int num: rest)
+            parity ^= num;
+        return parity;
+    }
+
+    public void testBitShifting() {
+        //Deslocamento de bits para esquerda, os bits mais à esquerda são perdidos.
+        // Os bits mais à direita são preenchidos com zeros.
+        assertEquals(10, 5 << 1);     //      101 = 5
+        assertEquals(40, 5 << 2);     //     1010 = 10
+        assertEquals(20, 5 << 3);     //    10100 = 20
+        assertEquals(40, 5 << 4);     //   101000 = 40
+        assertEquals(-20, -10 << 1);    // ... 1110 1100 = -20
+
+//TESTAR AS RESPOSTAS DO CÓDIGO ACIMA
+//        System.out.println(assertEquals(10, 5 << 1));
+//        System.out.println();
+//        System.out.println();
+//        System.out.println();
+//        System.out.println();
+//        System.out.println();
+//        System.out.println();
+    }
+
 }
