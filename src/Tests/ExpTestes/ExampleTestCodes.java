@@ -1,7 +1,7 @@
 package Tests.ExpTestes;
 import Tests.sis.studentinfo.Student;
 import junit.framework.TestCase;
-
+import static java.lang.Math.*;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -757,20 +757,105 @@ public class ExampleTestCodes extends TestCase {
     public void testBitShifting() {
         //Deslocamento de bits para esquerda, os bits mais à esquerda são perdidos.
         // Os bits mais à direita são preenchidos com zeros.
-        assertEquals(10, 5 << 1);     //      101 = 5
-        assertEquals(40, 5 << 2);     //     1010 = 10
-        assertEquals(20, 5 << 3);     //    10100 = 20
-        assertEquals(40, 5 << 4);     //   101000 = 40
-        assertEquals(-20, -10 << 1);    // ... 1110 1100 = -20
+                                                     //      101 = 5
+        assertEquals(10, 5 << 1);     //     1010 = 10
+        assertEquals(20, 5 << 2);     //    10100 = 20
+        assertEquals(40, 5 << 3);     //   101000 = 40
+        assertEquals(80, 5 << 4);     //   1010000 = 80
 
-//TESTAR AS RESPOSTAS DO CÓDIGO ACIMA
-//        System.out.println(assertEquals(10, 5 << 1));
-//        System.out.println();
-//        System.out.println();
-//        System.out.println();
-//        System.out.println();
-//        System.out.println();
-//        System.out.println();
+        assertEquals(20, 40 >> 1);    //    10100 = 20
+        assertEquals(10, 40 >> 2);    //     1010 = 10
+        assertEquals(10, 40 >> 3);    //      101 = 5
+
+                                                    // ... 1111 0110 = -10
+        assertEquals(-20, -10 << 1); // ... 1110 1100 = -20
+        assertEquals(-5, -10 >> 1); // ... 1111 1011 = -5
+
+    }
+
+    public void testImprimirBinario() {
+        //Metodo feito para verificar os binários do metodo logo acima ^^^
+        int eA = 5 << 1;
+        int eB = 5 << 2;
+        int eC = 5 << 3;
+        int eD = 5 << 4;
+
+        int dA = 80 >> 1;
+        int dB = 80 >> 2;
+        int dC = 80 >> 3;
+
+        int n1 = -10 << 1;
+        int n2 = -10 >> 1;
+
+        String binarioA = Integer.toBinaryString(eA);
+        String binarioB = Integer.toBinaryString(eB);
+        String binarioC = Integer.toBinaryString(eC);
+        String binarioD = Integer.toBinaryString(eD);
+
+        String binarioF = Integer.toBinaryString(dA);
+        String binarioG = Integer.toBinaryString(dB);
+        String binarioH = Integer.toBinaryString(dC);
+
+        String binarioN1 = Integer.toBinaryString(n1);
+        String binarioN2 = Integer.toBinaryString(n2);
+
+        System.out.println("O número: " + eA + " é representado pelo binário: " + binarioA);
+        System.out.println("O número: " + eB + " é representado pelo binário: " + binarioB);
+        System.out.println("O número: " + eC + " é representado pelo binário: " + binarioC);
+        System.out.println("O número: " + eD + " é representado pelo binário: " + binarioD);
+
+        System.out.println("O número: " + dA + " é representado pelo binário: " + binarioF);
+        System.out.println("O número: " + dB + " é representado pelo binário: " + binarioG);
+        System.out.println("O número: " + dC + " é representado pelo binário: " + binarioH);
+
+        System.out.println("O negativo: " + n1 + " é representado pelo binário: " + binarioN1);
+        System.out.println("O negativo: " + n2 + " é representado pelo binário: " + binarioN2);
+    }
+
+    static class Math {
+        public static double hypotenuse(double a, double b) {
+            return sqrt(pow(a, 2.0) + pow(b, 2.0));
+        }
+    }
+
+    public void testHipotenusa( ){
+        final double TOLERANCE = 0.05;
+
+        assertEquals(5.0, Math.hypotenuse(3.0, 4.0), TOLERANCE);
+    }
+
+    public void testConversor() {
+        assertEquals("101", Integer.toBinaryString(5)); // Converte 5 para binário
+        assertEquals("32", Integer.toHexString(50));    // Converte 50 para hexadecimal
+        assertEquals("21", Integer.toOctalString(17));  // Converte 17 para octal
+        assertEquals("1022", Integer.toString(35, 3)); // Converte 35 para base 3
+        assertEquals(253, (int) Integer.decode("0xFD"));   // Hexadecimal (prefixo 0x)
+        assertEquals(253, (int) Integer.decode("0XFD"));   // Hexadecimal (prefixo 0X)
+        assertEquals(253, (int) Integer.decode("#FD"));    // Hexadecimal (prefixo #)
+        assertEquals(15, (int) Integer.decode("017"));     // Octal (prefixo 0)
+        assertEquals(10, (int) Integer.decode("10"));      // Decimal
+        assertEquals(-253, (int) Integer.decode("-0xFD"));  // Hexadecimal negativo
+        assertEquals(-253, (int) Integer.decode("-0XFD")); // Hexadecimal negativo
+        assertEquals(-253, (int) Integer.decode("-#FD"));  // Hexadecimal negativo
+        assertEquals(-15, (int) Integer.decode("-017"));   // Octal negativo
+        assertEquals(-10, (int) Integer.decode("-10"));    // Decimal negativo
+    }
+
+    public void testCoinsFlips() {
+        final long seed = 100L;
+        final int total = 10;
+
+        Random random1 = new Random(seed);
+        List<Boolean> flips1 = new ArrayList<Boolean>();
+        for (int i = 0; i < total; i++)
+            flips1.add(random1.nextBoolean());
+
+        Random random2 = new Random(seed);
+        List<Boolean> flips2 = new ArrayList<Boolean>();
+        for (int j = 0; j < total; j++)
+            flips2.add(random2.nextBoolean());
+
+        assertEquals(flips1, flips2);
     }
 
 }
