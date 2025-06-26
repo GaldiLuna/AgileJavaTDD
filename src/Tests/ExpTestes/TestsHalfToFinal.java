@@ -3,9 +3,7 @@ package Tests.ExpTestes;
 import junit.framework.TestCase;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class TestsHalfToFinal extends TestCase {
 
@@ -508,28 +506,338 @@ public class TestsHalfToFinal extends TestCase {
     }
 
     class RandomNumberGenerator {
-        public int generateRandomIntFrom1To50() {
+        public static int generateRandomIntFrom1To50() {
             // Math.random() retorna um double entre 0.0 (inclusive) e 1.0 (exclusive)
             // Para um intervalo [1, 50]:
             // (Math.random() * (max - min + 1)) + min
             // (Math.random() * (50 - 1 + 1)) + 1
             // (Math.random() * 50) + 1
             return (int) (Math.random() * 50) + 1;
-
-            private RandomNumberGenerator generator;
-            private static final int NUM_ITERATIONS = 100000; //Um grande número de iterações para testes estatísticos
-
-            @Override
-            protected void setUp() throws Exception {
-                super.setUp();
-                generator = new RandomNumberGenerator();
-            }
-
-            public void testRandomNumberGenerator() {
-                //CONTINUAR EM CASA
-            }
         }
 
+    }
+
+    private RandomNumberGenerator generator;
+    private static final int NUM_ITERATIONS = 100000; //Um grande número de iterações para testes estatísticos
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        generator = new RandomNumberGenerator();
+    }
+
+    public void testRandomNumberGenerator() {
+        //CONTINUAR EM CASA - OK!
+    }
+
+    public void testGeneratedNumberIsWithinRange(){
+        for (int i = 0; i < NUM_ITERATIONS; i++) {
+            int randomNumber = generator.generateRandomIntFrom1To50();
+            assertTrue("O número gerado deve ser  >= 1", randomNumber >= 1);
+            assertTrue("O número gerado deve ser <= 50", randomNumber <= 50);
+        }
+    }
+
+    public void testAllNumbersArePossiblyGenerated() {
+        // Este teste verifica se todos os números no intervalo [1, 50] são gerados
+        // ATENÇÃO: Mesmo com 100.000 iterações, não há 100% de garantia.
+        // É um teste de probabilidade.
+        Set<Integer> uniqueNumbersGenerated = new HashSet<>();
+        for (int i = 0; i < NUM_ITERATIONS; i++) {
+            uniqueNumbersGenerated.add(RandomNumberGenerator.generateRandomIntFrom1To50());
+        }
+        assertEquals("Todos os 50 números devem ser gerados ao longo de muitas iterações",
+                50, uniqueNumbersGenerated.size());
+    }
+    // Um teste mais avançado verificaria a distribuição, mas exigiria bibliotecas estatísticas.
+    // Este exemplo é para ilustrar os conceitos.
+
+
+    private static final int LIST_SIZE = 100;
+    private static final int NUM_SWAPS = 100;
+
+    //Classe para embaralhar a lista
+    public static class ListSwapper {
+        private Random random;
+
+        //Construtor para permitir injetar um Random para testabilidade (mocking implícito)
+        public ListSwapper(Random random) {
+            this.random = random;
+        }
+
+        public List<Integer> createInitialList() {
+            List<Integer> list = new ArrayList<>();
+            for (int i = 1; i <= LIST_SIZE; i++) {
+                list.add(i);
+            }
+            return list;
+        }
+
+        //Realiza uma única troca de elementos
+        public void swapRandomElements(List<Integer> list) {
+            if (list == null || list.size() < 2) {
+                return; //Não é possível trocar se a lista tem menos de 2 elementos
+            }
+            int index1 = random.nextInt(list.size());
+            int index2 = random.nextInt(list.size());
+
+            //Garante que os índices sejam diferentes para garantir uma "troca" real,
+            // a menos que o problema permita trocar um elemento consigo mesmo.
+            // Para "dois números foram trocados", eles precisam ser diferentes.
+            if (list.size() > 1) {
+                while (index1 == index2 && list.size() > 1) {
+                    index2 = random.nextInt(list.size());
+                }
+            } else { //Se a lista tem 0 ou 1 elemento, não há troca a ser feita.
+                return;
+            }
+
+            //Troca os elementos
+            Collections.swap(list, index1, index2);
+        }
+
+        //Troca elementos da lista N vezes
+        public void performMultipleSwaps(List<Integer> list, int numberOfSwaps) {
+            for (int i = 0; i < numberOfSwaps; i++) {
+                swapRandomElements(list);
+            }
+        }
+    }
+
+    // --- Testes ---
+    public void testListSwapper() {
+        //Usamos um Random com seed para que o teste seja reproduzível
+        Random seedRandom = new Random(123L);
+        ListSwapper swapper = new ListSwapper(seedRandom);
+
+        List<Integer> list = swapper.createInitialList();
+        assertEquals("O tamanho inicial da lista deve ser " + LIST_SIZE, LIST_SIZE, list.size());
+
+        //Cria uma cópia da lista original para comparação (se necessário)
+        List<Integer> originalListCopy = new ArrayList<>(list);
+
+        //Realiza as trocas
+        swapper.performMultipleSwaps(list, NUM_SWAPS);
+
+        //Verificação 1: O tamanho da lista deve permanecer o mesmo
+        assertEquals("O tamanho da lista deve permanecer o mesmo após as trocas", LIST_SIZE, list.size());
+
+        // Verificação 2: Para cada chamada ao swapper, dois números foram trocados.
+        // Isso é mais fácil de verificar se fizermos o mocking do Random ou
+        // se a lógica de swap garante que os índices são diferentes.
+        // A implementação de 'swapRandomElements' já tenta garantir índices diferentes.
+        // Uma forma de verificar isso em alto nível é garantir que a lista não é mais a original (se houver trocas).
+        // A probabilidade de uma lista de 100 elementos não mudar em 100 trocas aleatórias é extremamente baixa.
+        // No entanto, para provar "dois números foram trocados COM CADA CHAMADA", precisaríamos de mocking.
+        // Sem mocking, podemos apenas verificar que a lista foi *alterada* da original.
+        assertFalse("A lista deve ter sido alterada da original após as trocas", list.equals(originalListCopy));
+
+        // Verificação 3: (Extra e mais robusta, se o mocking for permitido):
+        // Para provar "dois números foram trocados com cada chamada",
+        // precisaríamos de um MockRandom que retornasse valores previsíveis
+        // e então verificar as posições exatas dos elementos.
+        // Sem mocking, é difícil provar cada swap individualmente, mas
+        // podemos garantir que a soma dos elementos (ou a contagem de elementos únicos)
+        // permanece a mesma, o que indica que nenhum elemento foi perdido ou duplicado.
+        long sumOriginal = originalListCopy.stream().mapToLong(Integer::intValue).sum();
+        long sumShuffled = list.stream().mapToLong(Integer::intValue).sum();
+        assertEquals("A soma dos elementos deve permanecer a mesma (nenhum elemento perdido/duplicado)",
+                sumOriginal, sumShuffled);
+
+        // Verificação 4: Garante que os elementos são os mesmos (apenas a ordem mudou)
+        // Verifica se todos os elementos originais ainda estão presentes
+        // (apenas em uma ordem diferente, o que é garantido se as somas são iguais e o tamanho é o mesmo).
+        // Se quisermos ser mais rigorosos, podemos classificar e comparar.
+        Collections.sort(list);
+        Collections.sort(originalListCopy);
+        assertEquals("Os elementos devem ser os mesmos, apenas em ordem diferente", originalListCopy, list);
+    }
+
+    public void testRandomSeedDifference() {
+        //Gerador 1: Com uma semente fixa (reproduzível)
+        Random randomComSeed = new Random(1L); //Semente fixa como 1 (long)
+        double primeiroDoubleComSeed = randomComSeed.nextDouble();
+
+        //Gerador 2: Sem semente (usa o relógio do sistema, não reproduzível)
+        Random randomSemSeed = new Random(); //Usa o System.nanoTime() ou similar
+        double primeiroDoubleSemSeed = randomSemSeed.nextDouble();
+
+        // A probabilidade de randomSemSeed produzir o mesmo primeiroDouble que randomComSeed é extremamente baixa,
+        // mas não impossível se o System.nanoTime() em tempo de execução for o mesmo que a semente 1L.
+        // No entanto, para fins práticos e de teste, eles serão diferentes.
+        assertFalse("O primeiro double de Random com semente 1 e Random sem semente devem ser diferentes",
+                primeiroDoubleComSeed == primeiroDoubleSemSeed);
+
+        // Para provar ABSOLUTAMENTE que isso é verdade (ou seja, que a semente padrão é *quase* garantidamente diferente da semente 1):
+        // Não é possível fazer um teste unitário que "absolutamente prove" isso de forma determinística
+        // porque Random() sem seed depende do relógio do sistema no momento da execução.
+        // O teste acima faz uma asserção de desigualdade que *quase sempre* será verdadeira na prática.
+
+        // Para uma prova mais "absoluta" em um contexto de teste, você pode:
+        // 1. Injetar (mockar) o relógio do sistema para o Random sem semente, mas isso exigiria
+        //    mudar o comportamento interno da classe Random, o que não é ideal.
+        // 2. Aceitar que a demonstração acima é suficiente para fins práticos.
+        // 3. Gerar muitos números de ambos e verificar que as sequências divergem.
+
+        // Exemplo de como as sequências divergiriam:
+        Random randomComSeed2 = new Random(1L);
+        Random randomComSeed3 = new Random(1L);
+        assertEquals("Geradores com a mesma semente produzem a mesma sequência",
+                randomComSeed2.nextDouble(), randomComSeed3.nextDouble(), 0.0);
+        assertEquals("Geradores com a mesma semente produzem a mesma sequência na segunda chamada",
+                randomComSeed2.nextDouble(), randomComSeed3.nextDouble(), 0.0);
+
+        //Imprimir para ver os valores reais
+        System.out.println("Primeiro double com semente 1: " + primeiroDoubleComSeed);
+        System.out.println("Primeiro double sem semente: " + primeiroDoubleSemSeed);
+        //System.out.println("\n");
+        System.out.println("Segundo double com semente 1: " + randomComSeed2);
+        System.out.println("Terceiro double com semente 1: " + randomComSeed3);
+    }
+
+    public void testSwapWithXOR() {
+        int a = 5; //Binário 0101
+        int b = 10; //Binário 1010
+        System.out.println("O valor de A é = " + a + " e O valor de B é = " + b);
+
+        //Passo 1: a = a ^ b
+        a = a ^ b; //a = 0101 ^ 1010 = 1111 (15 em decimal)
+                   //a agora contém XOR de a e b originais
+
+        //Passo 2: b = a ^ b
+        b = a ^ b; //b = (0101 ^ 1010) ^ 1010
+                   //b = 0101 ^ (1010 ^ 1010)
+                   //b = 0101 ^ 0000 = 0101 (5 em decimal)
+                   //b agora contém o valor original de a
+
+        //Passo 3: a = a ^ b
+        a = a ^ b; //a = (0101 ^ 1010) ^ 0101
+                   //a = 1010 ^ (0101 ^ 0101)
+                   //a = 1010 ^ 0000 = 1010 (10 em decimal)
+
+        assertEquals("O valor de a deve ser 10", 10, a);
+        assertEquals("O valor de b deve ser 5", 5, b);
+        System.out.println("O valor de A é = " + a + " e O valor de B é = " + b);
+
+        //Teste com números negativos
+        int c = -3; //Binário: ...11111101
+        int d = 7; //Binário: ...00000111
+        System.out.println("O valor de C é = " + c + " e O valor de D é = " + d);
+
+        c = c ^ d;
+        d = c ^ d;
+        c = c ^ d;
+
+        assertEquals("O valor de c deve ser 7", 7, c);
+        assertEquals("O valor de d deve ser -3", -3, d);
+        System.out.println("O valor de C é = " + c + " e O valor de D é = " + d);
+
+        //Teste com zero
+        int e = 0;
+        int f = 100;
+        System.out.println("O valor de E é = " + e + " e O valor de F é = " + f);
+
+        e = e ^ f;
+        f = e ^ f;
+        e = e ^ f;
+
+        assertEquals("O valor de e deve ser 100", 100, e);
+        assertEquals("O valor de f deve ser 0", 0 , f);
+        System.out.println("O valor de E é = " + e + " e O valor de F é = " + f);
+    }
+
+    public void testNumberOfBitsForIntegralTypes() {
+        // --- Usando constantes das classes wrapper (abordagem mais direta) ---
+        assertEquals("char: " + Character.SIZE + " bits", 16, Character.SIZE);
+        assertEquals("byte: " + Byte.SIZE + " bits", 8, Byte.SIZE);
+        assertEquals("short: " + Short.SIZE + " bits", 16, Short.SIZE);
+        assertEquals("int: " + Integer.SIZE + " bits", 32, Integer.SIZE);
+        assertEquals("long: " + Long.SIZE + " bits", 64, Long.SIZE);
+
+        System.out.println("--- Usando constantes SIZE das classes wrapper ---");
+        System.out.println("char: " + Character.SIZE + " bits");
+        System.out.println("byte: " + Byte.SIZE + " bits");
+        System.out.println("short: " + Short.SIZE + " bits");
+        System.out.println("int: " + Integer.SIZE + " bits");
+        System.out.println("long: " + Long.SIZE + " bits");
+        System.out.println("-------------------------------------------------");
+
+        // --- Usando operadores de deslocamento (para tipos com sinal) ---
+        // Para tipos com sinal, a ideia é encontrar a menor potência de 2 que pode representar
+        // o maior valor positivo (2^n - 1) e o menor valor negativo (-2^n).
+        // Isso é o mesmo que encontrar o número de bits 'n' tal que 2^(n-1) - 1 é o MAX_VALUE.
+        // Ou, de forma mais simples, o número de bits 'n' é tal que 1 << (n-1) dá o MSB do maior valor negativo.
+
+        // Para 'int' (32 bits):
+        int intBits = 0;
+        int testInt = 1;
+        while (testInt != 0) {// Enquanto o bit mais significativo não for 0 (no caso de um número negativo, quando a representação se torna 0)
+            testInt <<= 1; //Desloca para a esquerda
+            intBits++;
+        }
+        // Isso conta os bits "úteis" para o valor máximo, mas não inclui o sinal facilmente.
+        // Uma forma mais robusta e direta é usar o MAX_VALUE e log base 2, ou a constante SIZE.
+
+        // Abordagem usando MAX_VALUE e um loop com deslocamento (para demonstrar o conceito de 'n' bits)
+        // Isso é mais conceitual para "bits necessários para o valor", e não o tamanho total do tipo.
+        System.out.println("--- Demonstrando com loop de deslocamento e MAX_VALUE (conceitual) ---");
+
+        // byte (8 bits): Max value 127 (01111111)
+        byte byteMaxValue = Byte.MAX_VALUE;
+        int bitsForByteValue = 0;
+        int tempByte = byteMaxValue;
+        while (tempByte > 0) {
+            tempByte >>= 1; //Desloca para a direita
+            bitsForByteValue++;
+        }
+        //Adiciona 1 para o bit de sinal
+        assertEquals("byte (por valor): " + (bitsForByteValue + 1) + " bits", 8, bitsForByteValue + 1);
+        System.out.println("byte (pelo valor max, positivo): " + (bitsForByteValue + 1) + " bits (incluindo o sinal)");
+
+        //short (16 bits): Max value 32767
+        short shortMaxValue = Short.MAX_VALUE;
+        int bitsForShortValue = 0;
+        int tempShort = shortMaxValue;
+        while (tempShort > 0) {
+            tempShort >>= 1;
+            bitsForShortValue++;
+        }
+        assertEquals("short (por valor): " + (bitsForShortValue + 1) + " bits", 16, bitsForShortValue + 1);
+        System.out.println("short (pelo valor max, positivo): " + (bitsForShortValue + 1) + " bits (incluindo o sinal)");
+
+        // int (32 bits): Max value 2147483647
+        int intMaxValue = Integer.MAX_VALUE;
+        int bitsForIntValue = 0;
+        int tempInt = intMaxValue;
+        while (tempInt > 0) {
+            tempInt >>>= 1; //Usar >>> para evitar problemas com números negativos se a lógica for diferente
+            bitsForIntValue++;
+        }
+        assertEquals("int (por valor): " + (bitsForIntValue + 1) + " bits", 32, bitsForIntValue + 1);
+        System.out.println("int (pelo valor max, positivo): " + (bitsForIntValue + 1) + " bits (incluindo o sinal)");
+
+        // long (64 bits): Max value
+        long longMaxValue = Long.MAX_VALUE;
+        int bitsForLongValue = 0;
+        long tempLong = longMaxValue;
+        while (tempLong > 0) {
+            tempLong >>>= 1;
+            bitsForLongValue++;
+        }
+        assertEquals("long (por valor): " + (bitsForLongValue + 1) + " bits", 64, bitsForLongValue + 1);
+        System.out.println("long (pelo valor max, positivo): " + (bitsForLongValue + 1) + " bits (incluindo o sinal)");
+
+        // char (sem sinal, 16 bits): Max value 65535
+        char charMaxValue = Character.MAX_VALUE;
+        int bitsForCharValue = 0;
+        char tempChar = charMaxValue;
+        while (tempChar > 0) {// char é tratado como int para operações, mas seu range é sem sinal
+            tempChar >>= 1; // Usar >> pois o char é unsigned nesse contexto de bits
+            bitsForCharValue++;
+        }
+        assertEquals("char (pelo valor max, sem sinal): " + bitsForCharValue + " bits", 16, bitsForCharValue);
+        System.out.println("char (pelo valor max, sem sinal): " + bitsForCharValue + " bits");
+        System.out.println("-------------------------------------------------");
     }
 
 }

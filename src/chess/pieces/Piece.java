@@ -41,12 +41,33 @@ public abstract class Piece {
     protected Piece(Collor colors, Type type) {
         this.colors = colors;
         this.type = type;
-        this.representation = colors == Collor.WHITE ? type.getRepresentation() : Character.toUpperCase(type.getRepresentation());
-        if (colors == Collor.WHITE) {
-            whitePieceCount++;
-        } else {
-            blackPieceCount++;
+
+//        this.representation = colors == Collor.WHITE ? type.getRepresentation() : Character.toUpperCase(type.getRepresentation());
+//        if (colors == Collor.WHITE) {
+//            whitePieceCount++;
+//        } else {
+//            blackPieceCount++;
+//        }
+
+        // A representação agora é sempre baseada no tipo e cor
+        this.representation = (colors == Collor.WHITE && type != Type.NO_PIECE) ? type.getRepresentation() : Character.toUpperCase(type.getRepresentation());
+        // Contagem de peças apenas para peças que não são NO_PIECE
+        if (type != Type.NO_PIECE) {
+            if (colors == Collor.WHITE) {
+                whitePieceCount++;
+            } else {
+                blackPieceCount++;
+            }
         }
+    }
+
+    // Construtor para NO_PIECE (não precisa de cor, mas o enum Collor é final)
+    // Uma alternativa seria ter NO_PIECE sem cor, mas isso complica um pouco o enum Collor.
+    // Para simplificar, vou permitir NO_PIECE ter uma cor, que será ignorada.
+    protected Piece() { // Construtor específico para NoPiece
+        this.colors = Collor.WHITE; // Pode ser qualquer cor, pois será ignorada para NO_PIECE
+        this.type = Type.NO_PIECE;
+        this.representation = Type.NO_PIECE.getRepresentation();
     }
 
     public void setPosition(String position) {
@@ -84,6 +105,11 @@ public abstract class Piece {
         return colors == Collor.BLACK;
     }
 
+    // Novo metodo para verificar se é uma peça vazia
+    public boolean isNoPiece() {
+        return type == Type.NO_PIECE;
+    }
+
     //CONTADORES ESTÁTICOS:
     public static int getWhitePieceCount() {
         return whitePieceCount;
@@ -101,6 +127,9 @@ public abstract class Piece {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
+        // Importante: NoPiece é uma classe concreta, então getClass() é útil.
+        // Se todas as peças fossem abstratas e tivessem subclasses,
+        // Piece.class.isAssignableFrom(obj.getClass()) seria mais flexível.
         if (obj == null || getClass() != obj.getClass()) return false;
         Piece piece = (Piece) obj;
         return colors == piece.colors && type == piece.type;
@@ -116,6 +145,8 @@ public abstract class Piece {
     public abstract List<String> getPossibleMoves(String position);
 
     //MÉTODOS DE FÁBRICA DAS PEÇAS.
+    public static Piece createNoPiece() { return new NoPiece(); }
+
     public static Piece createWhitePawn() { return new Pawn(Collor.WHITE); }
     public static Piece createBlackPawn() { return new Pawn(Collor.BLACK); }
 
