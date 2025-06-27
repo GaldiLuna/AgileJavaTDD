@@ -1,18 +1,27 @@
 package Tests.sis.report;
+
+import java.util.*;
 import Tests.sis.studentinfo.*;
 import static Tests.sis.report.ReportConstant.NEWLINE;
+import java.io.*;
 
 public class RosterReporter {
     static final String NEWLINE = System.getProperty("line.separator");
-    static final String ROSTER_REPORT_HEADER =
-            "Student" + NEWLINE + "-" + NEWLINE;
-    static final String ROSTER_REPORT_FOOTER =
-            NEWLINE + "# students = ";
+    static final String ROSTER_REPORT_HEADER = "Student%n-%n";
+    static final String ROSTER_REPORT_FOOTER = "%n# students = %d%n";
 
     public Session session;
+    private Writer writer;
 
     RosterReporter(Session session) {
         this.session = session;
+    }
+
+    void writeReport(Writer writer) throws IOException {
+        this.writer = writer;
+        writeHeader();
+        writeBody();
+        writeFooter();
     }
 
     public String getReport() {
@@ -34,19 +43,18 @@ public class RosterReporter {
 
     }
 
-    void writeHeader(StringBuilder buffer) {
-        buffer.append(ROSTER_REPORT_HEADER);
+    private void writeHeader() throws IOException {
+        writer.write(String.format(ROSTER_REPORT_HEADER));
     }
 
-    void writeBody(StringBuilder buffer) {
+    private void writeBody() throws IOException {
         for (Student student : session.getAllStudents()) {
-            buffer.append(student.getName());
-            buffer.append(NEWLINE);
+            writer.write(String.format(student.getName() + "%n"));
         }
 
     }
 
-    void writeFooter (StringBuilder buffer) {
-        buffer.append(ROSTER_REPORT_FOOTER + session.getAllStudents().size() + NEWLINE);
+    private void writeFooter () throws IOException {
+        writer.write(String.format(ROSTER_REPORT_FOOTER, session.getAllStudents().size()));
     }
 }
