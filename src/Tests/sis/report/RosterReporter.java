@@ -57,4 +57,14 @@ public class RosterReporter {
     private void writeFooter () throws IOException {
         writer.write(String.format(ROSTER_REPORT_FOOTER, session.getAllStudents().size()));
     }
+
+    void writeReport(String filename) throws IOException {
+        Writer bufferedWriter = new BufferedWriter(new FileWriter(filename));
+        try {
+            writeReport(bufferedWriter);
+        }
+        finally {
+            bufferedWriter.close();
+        }
+    }
 }
