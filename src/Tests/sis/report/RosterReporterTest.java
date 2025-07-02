@@ -48,16 +48,29 @@ public class RosterReporterTest extends TestCase {
 
     public void testFiledReport() throws IOException {
         final String filename = "testFiledReport.txt";
-        new RosterReporter(session).writeReport(filename);
+        try {
+            delete(filename);
 
-        StringBuffer buffer = new StringBuffer();
-        String line;
-        BufferedReader reader = new BufferedReader(new FileReader(filename));
-        while ((line = reader.readLine()) != null)
-            buffer.append(String.format(line + "%n"));
-        reader.close();
+            new RosterReporter(session).writeReport(filename);
 
-        assertReportContents(buffer.toString());
+            StringBuffer buffer = new StringBuffer();
+            String line;
+            BufferedReader reader = new BufferedReader(new FileReader(filename));
+            while ((line = reader.readLine()) != null)
+                buffer.append(String.format(line + "%n"));
+            reader.close();
+
+            assertReportContents(buffer.toString());
+        }
+        finally {
+            delete(filename);
+        }
+    }
+
+    private void delete(String filename) {
+        File file = new File(filename);
+        if (file.exists())
+            assertTrue("unable to delete " + filename, file.delete());
     }
 
 }

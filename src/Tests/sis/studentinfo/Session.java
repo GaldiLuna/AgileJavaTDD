@@ -1,15 +1,20 @@
 package Tests.sis.studentinfo;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
-abstract public class Session implements Comparable<Session>, Iterable<Student> {
+abstract public class Session implements Comparable<Session>, Iterable<Student>, java.io.Serializable {
     private static int count;
     private Course course;
-//    private String department;
-//    private String number;
+
+    public static final long serialVersionUID = 1L;
+    private String name;
+
     //private Vector<Student> students = new Vector<Student>(); + "forma antiga de declarar Lista com Vector"
-    private List<Student> students = new ArrayList<Student>();
+    private transient List<Student> students = new ArrayList<Student>();
     private Date startDate;
     private int numberOfCredits;
     private URL url;
@@ -69,6 +74,10 @@ abstract public class Session implements Comparable<Session>, Iterable<Student> 
         return students.size();
     }
 
+    public int getNumberOfCredits() {
+        return numberOfCredits;
+    }
+
     public void enroll(Student student) {
         student.addCredits(numberOfCredits);
         students.add(student);
@@ -120,5 +129,26 @@ abstract public class Session implements Comparable<Session>, Iterable<Student> 
     public Iterator<Student> iterator() {
         return students.iterator();
     }
+
+    public static Student findByLastName(String lastName) {
+        return new Student(lastName);
+    }
+
+    private void writeObject(ObjectOutputStream output) throws IOException {
+        output.defaultWriteObject();
+        output.writeInt(students.size());
+        for (Student student: students)
+            output.writeObject(student.getLastName());
+    }
+
+//    private void readObject(ObjectInputStream input) throws IOException {
+//        input.defaultReadObject();
+//        students = new ArrayList<Student>();
+//        int size = input.readInt();
+//        for (int i = 0; i < size; i++) {
+//            String lastName = (String)input.readObject();
+//            students.add(Student.findByLastName(lastName));
+//        }
+//    }
 
 }

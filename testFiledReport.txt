@@ -1,6 +1,0 @@
-Student
--
-A
-B
-
-# students = 2
