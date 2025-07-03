@@ -1,17 +1,22 @@
 package Tests.sis.studentinfo;
 
-import junit.framework.TestCase;
+import junit.framework.*;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
+
 
 public class StudentDirectoryTest extends TestCase {
     private StudentDirectory dir;
     //private Map<String, Student> students = new HashMap<String, Student>();
 
-    protected  void setUp() {
+    protected  void setUp() throws IOException {
         dir = new StudentDirectory();
+    }
+
+    protected void tearDown() throws IOException {
+        dir.close();
+        dir.remove();
     }
 
 //    public void add(Student student) {
@@ -21,6 +26,18 @@ public class StudentDirectoryTest extends TestCase {
 //    public Student findById(String id) {
 //        return students.get(id);
 //    }
+
+    public void testRandomAccess() throws IOException {
+        final int numberOfStudents = 10;
+        for (int i = 0; i < numberOfStudents; i++)
+            addStudent(dir, i);
+
+        dir.close();
+
+        dir = new StudentDirectory();
+        for (int i = 0; i < numberOfStudents; i++)
+            verifyStudentLookUp(dir, i);
+    }
 
     public void testStoreAndRetrieve() throws IOException {
         final int numberOfStudents = 10;

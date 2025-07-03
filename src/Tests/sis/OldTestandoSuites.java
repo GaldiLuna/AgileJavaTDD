@@ -1,9 +1,7 @@
 package Tests.sis;
-import Tests.sis.report.*;
-import junit.framework.Test;
 import junit.framework.TestSuite;
 
-public class TodosTestes {
+public class OldTestandoSuites {
     public static TestSuite suite() {
         TestSuite suite = new TestSuite();
         suite.addTest(Tests.sis.report.Testes.suite());

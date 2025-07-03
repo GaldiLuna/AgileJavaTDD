@@ -1,10 +1,11 @@
 import chess.BoardTest;
 import chess.CharacterTest;
 import chess.pieces.PieceTest;
-import junit.framework.TestSuite;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
+
+//TESTES DO XADREZ
 
 @RunWith(Suite.class)
 @SuiteClasses({
@@ -13,7 +14,7 @@ import org.junit.runners.Suite.SuiteClasses;
     CharacterTest.class
 })
 
-public class TestsSuite{
+public class TestsXadrezSuite {
 
 }
 

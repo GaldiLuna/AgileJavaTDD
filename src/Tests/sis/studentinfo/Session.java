@@ -130,9 +130,9 @@ abstract public class Session implements Comparable<Session>, Iterable<Student>,
         return students.iterator();
     }
 
-    public static Student findByLastName(String lastName) {
-        return new Student(lastName);
-    }
+//    public static Student findByLastName(String lastName) {
+//        return new Student(lastName);
+//    }
 
     private void writeObject(ObjectOutputStream output) throws IOException {
         output.defaultWriteObject();
@@ -141,14 +141,14 @@ abstract public class Session implements Comparable<Session>, Iterable<Student>,
             output.writeObject(student.getLastName());
     }
 
-//    private void readObject(ObjectInputStream input) throws IOException {
-//        input.defaultReadObject();
-//        students = new ArrayList<Student>();
-//        int size = input.readInt();
-//        for (int i = 0; i < size; i++) {
-//            String lastName = (String)input.readObject();
-//            students.add(Student.findByLastName(lastName));
-//        }
-//    }
+    private void readObject(ObjectInputStream input) throws Exception {
+        input.defaultReadObject();
+        students = new ArrayList<Student>();
+        int size = input.readInt();
+        for (int i = 0; i < size; i++) {
+            String lastName = (String)input.readObject();
+            students.add(Student.findByLastName(lastName));
+        }
+    }
 
 }
