@@ -1,10 +1,15 @@
 package chess;
+
 import chess.pieces.Piece;
 import chess.pieces.NoPiece;
 import util.StringUtil;
 import java.util.*;
 
-public class Board implements Iterable<Piece> {
+import java.io.*;
+
+import java.io.Serializable;
+
+public class Board implements Iterable<Piece>, Serializable {
     private Piece[][] board = new Piece[8][8];
     //private Map<String, Piece> board = new HashMap<>();
     private int pieceCount = 0;
@@ -94,4 +99,72 @@ public class Board implements Iterable<Piece> {
         }
         return pieces.iterator();
     }
+
+    // -*-*-*- OPÇÃO PARA SALVAR COMO ARQUIVO SERIALIZADO
+
+    /**
+     * Salva o estado atual do tabuleiro em um arquivo usando serialização de objeto.
+     * @param //filename O nome do arquivo para salvar.
+     * @throws //IOException Se ocorrer um erro de I/O.
+     */
+
+    public void saveAsObject(String filename) throws IOException {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filename))) {
+            out.writeObject(this);
+        }
+    }
+
+    /**
+     * Carrega um tabuleiro de um arquivo previamente salvo com saveAsObject.
+     * @param //filename O nome do arquivo para carregar.
+     * @return Uma nova instância de Board com o estado carregado.
+     * @throws //IOException Se ocorrer um erro de I/O.
+     * @throws //ClassNotFoundException Se a classe Board não for encontrada.
+     */
+
+    public static Board loadFromObject(String filename) throws IOException, ClassNotFoundException {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filename))) {
+            return (Board) in.readObject();
+        }
+    }
+
+    // -*-*-*- OPÇÃO PARA SALVAR COMO TEXTO COMUM
+
+    /**
+     * Salva a representação textual do tabuleiro em um arquivo.
+     * @param //filename O nome do arquivo para salvar.
+     * @throws //IOException Se ocorrer um erro de I/O.
+     */
+
+    public void saveAsText(String filename) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            writer.write(this.printAll());
+        }
+    }
+
+    /**
+     * Carrega um tabuleiro a partir de sua representação textual.
+     * @param //filename O nome do arquivo para carregar.
+     * @return Uma nova instância de Board com o estado carregado.
+     * @throws //IOException Se ocorrer um erro de I/O.
+     */
+
+    public static Board loadFromText(String filename) throws IOException {
+        Board board = new Board(); // Começa com um tabuleiro vazio
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            for (int rank = 0; rank < 8; rank++) {
+                String line = reader.readLine();
+                if (line == null || line.length() < 8) {
+                    throw new IOException("Formato de arquivo inválido: linha " + (rank + 1));
+                }
+                for (int file = 0; file < 8; file++) {
+                    char representation = line.charAt(file);
+                    Piece piece = Piece.createFromRepresentation(representation);
+                    board.putPiece(piece, file, rank);
+                }
+            }
+        }
+        return board;
+    }
+
 }

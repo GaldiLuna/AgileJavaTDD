@@ -1,4 +1,6 @@
 package Tests;
+import Tests.sis.db.DataFileTest;
+import Tests.sis.db.KeyFileTest;
 import Tests.sis.report.*;
 import Tests.sis.studentinfo.*;
 import util.*;
@@ -12,10 +14,10 @@ public class StudentsAllTests {
         suite.addTestSuite(TestStringUtil.class);
         suite.addTestSuite(ParityCheckerTest.class);
         suite.addTestSuite(PasswordGeneratorTest.class);
-        //suite.addTestSuite(StudentTest.class); //NECESSÁRIO FAZER CORREÇÃO
+        suite.addTestSuite(StudentTest.class);
         suite.addTestSuite(CourseTest.class);
         suite.addTestSuite(CourseSessionTest.class);
-        //suite.addTestSuite(CourseReportTest.class); //NECESSÁRIO FAZER CORREÇÃO
+        suite.addTestSuite(CourseReportTest.class);
         suite.addTestSuite(ReportCardTest.class);
         suite.addTestSuite(RosterReporterTest.class);
         suite.addTestSuite(StudentDirectoryTest.class);
@@ -28,6 +30,9 @@ public class StudentsAllTests {
         suite.addTestSuite(ScorerTest.class);
         suite.addTestSuite(SerializationTest.class);
         suite.addTestSuite(StudentUITest.class);
+        suite.addTestSuite(DataFileTest.class);
+        suite.addTestSuite(KeyFileTest.class);
+        suite.addTestSuite(IOUtilTest.class);
         //suite.addTestSuite(SessionTest.class); //Classe abstrata não pode ser chamada na suite.
         return suite;
     }

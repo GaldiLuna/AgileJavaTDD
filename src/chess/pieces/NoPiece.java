@@ -3,6 +3,8 @@ package chess.pieces;
 import java.util.Collections;
 import java.util.List;
 
+import java.io.Serializable;
+
 public class NoPiece extends Piece {
 
     public NoPiece() {

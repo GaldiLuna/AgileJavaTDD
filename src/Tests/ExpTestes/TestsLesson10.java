@@ -5,7 +5,7 @@ import junit.framework.TestCase;
 import java.math.BigDecimal;
 import java.util.*;
 
-public class TestsHalfToFinal extends TestCase {
+public class TestsLesson10 extends TestCase {
 
     /**
      *

@@ -3,6 +3,8 @@ package chess.pieces;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.io.Serializable;
+
 public class Knight extends Piece {
     public Knight(Collor colors) {
         super(colors, Type.KNIGHT);

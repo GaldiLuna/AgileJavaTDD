@@ -8,7 +8,7 @@ import java.util.*;
 public class KeyFileTest extends TestCase {
     private static final String FILENAME = "keyfiletest.idx";
     private static final String KEY = "key";
-    private static final String POSITION = 1;
+    private static final long POSITION = 1;
     private static final int LENGTH = 100;
 
     private KeyFile keyFile;

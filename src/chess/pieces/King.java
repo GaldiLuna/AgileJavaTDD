@@ -2,6 +2,8 @@ package chess.pieces;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.io.Serializable;
+
 public class King extends Piece {
     public King(Collor colors) {
         super(colors, Type.KING);

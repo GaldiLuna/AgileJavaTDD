@@ -164,13 +164,15 @@ public class StudentTest extends TestCase {
                 Student.Flag.ON_CAMPUS,
                 Student.Flag.TAX_EXEMPT,
                 Student.Flag.MINOR);
+                //Student.Flag.TROUBLEMAKER);
 
         assertTrue(student.isOn(Student.Flag.ON_CAMPUS));
         assertTrue(student.isOn(Student.Flag.TAX_EXEMPT));
         assertTrue(student.isOn(Student.Flag.MINOR));
 
         assertFalse(student.isOff(Student.Flag.ON_CAMPUS));
-        assertFalse(student.isOff(Student.Flag.TROUBLEMAKER));
+        //assertFalse(student.isOff(Student.Flag.TROUBLEMAKER));
+        assertTrue(student.isOff(Student.Flag.TROUBLEMAKER));
 
         student.unset(Student.Flag.ON_CAMPUS);
         assertTrue(student.isOff(Student.Flag.ON_CAMPUS));

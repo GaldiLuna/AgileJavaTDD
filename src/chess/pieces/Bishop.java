@@ -3,6 +3,8 @@ package chess.pieces;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.io.Serializable;
+
 public class Bishop extends Piece {
     public Bishop(Collor colors) {
         super(colors, Type.BISHOP);

@@ -1,9 +1,14 @@
 package Tests.sis.studentinfo;
-import java.util.*;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 
-public class Student {   //public class Student implements Comparable<Student>
+import java.util.*;
+import java.util.logging.*;
+import java.util.logging.Level;
+import java.io.Serializable;
+
+public class Student implements Serializable {   //public class Student implements Comparable<Student>
+
+    private static final long serialVersionUID = 1L; //AJUDA O JAVA A GERENCIAR VERSÕES
+
     final static Logger logger = Logger.getLogger(Student.class.getName());
     private String firstName = "";
     private String middleName = "";

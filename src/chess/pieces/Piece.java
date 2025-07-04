@@ -1,12 +1,15 @@
 package chess.pieces;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import java.io.Serializable;
 
 /**
  * Representa um peão no jogo de Xadrez.
  */
 
-public abstract class Piece {
+public abstract class Piece implements Serializable {
     public enum Collor {WHITE, BLACK}
 
     public enum Type {
@@ -164,5 +167,23 @@ public abstract class Piece {
 
     public static Piece createWhiteKing() { return new King(Collor.WHITE); }
     public static Piece createBlackKing() { return new King(Collor.BLACK);}
+
+    public static Piece createFromRepresentation(char representation) {
+        switch (representation) {
+            case 'R' : return createBlackRook();
+            case 'N' : return createBlackKnight();
+            case 'B' : return createBlackBishop();
+            case 'Q' : return createBlackQueen();
+            case 'K' : return createBlackKing();
+            case 'P' : return createBlackPawn();
+            case 'r' : return createWhiteRook();
+            case 'n' : return createWhiteKnight();
+            case 'b' : return createWhiteBishop();
+            case 'q' : return createWhiteQueen();
+            case 'k' : return createWhiteKing();
+            case 'p' : return createWhitePawn();
+            default: return createNoPiece();
+        }
+    }
 
 }

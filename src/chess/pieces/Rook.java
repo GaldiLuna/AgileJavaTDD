@@ -1,6 +1,9 @@
 package chess.pieces;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import java.io.Serializable;
 
 public class Rook extends Piece {
     public Rook(Collor colors) {

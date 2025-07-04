@@ -7,7 +7,7 @@ public class IOUtilTest extends TestCase {
     static final String FILENAME1 = "IOUtilTest1.txt";
     static final String FILENAME2 = "IOUtilTest2.txt";
 
-    public void testDeleteSingleFile() {
+    public void testDeleteSingleFile() throws IOException {
         create(FILENAME1);
         assertTrue(IOUtil.delete(FILENAME1));
         TestUtil.assertGone(FILENAME1);
