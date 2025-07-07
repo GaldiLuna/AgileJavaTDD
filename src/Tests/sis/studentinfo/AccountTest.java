@@ -1,9 +1,24 @@
 package Tests.sis.studentinfo;
+import Tests.sis.studentinfo.com.jimbob.ach.*;
 
 import junit.framework.*;
+import org.junit.Assert;
+
 import java.math.BigDecimal;
+import java.util.*;
 
 public class AccountTest extends TestCase {
+    static final String ABA = "102000012";
+    static final String ACCOUNT_NUMBER = "194431518811";
+    private Account account;
+
+    protected void setUp() {
+        account = new Account();
+        account.setBankAba(ABA);
+        account.setBankAccountNumber(ACCOUNT_NUMBER);
+        account.setBankAccountType(Account.BankAccountType.CHECKING);
+    }
+
     public void testTransactions() {
         Account account = new Account();
         account.credit(new BigDecimal("0.10"));
@@ -37,5 +52,46 @@ public class AccountTest extends TestCase {
         assertEquals(7, 3 * 4 - 5);
         assertEquals(-11, 4 - 5 * 3);
         assertEquals(-3, 3 * (4 - 5));
+    }
+
+    public void testTRansferFromBank() {
+        Ach mockAch = new AchMock() {
+            public AchResponse issueDebit(AchCredentials credentials, AchTransactionData data) {
+                org.junit.Assert.assertTrue(data.account.equals(AccountTest.ACCOUNT_NUMBER));
+                Assert.assertTrue(data.aba.equals(AccountTest.ABA));
+                AchResponse response = new AchResponse();
+                response.timestamp = new Date();
+                response.traceCode = "1";
+                response.status = AchStatus.SUCCESS;
+                return response;
+            }
+        };
+
+        //account.setAch(new com.jimbob.ach.JimBobAch()); //uh-oh
+        account.setAch(createMockAch(AchStatus.SUCCESS));
+        final BigDecimal amount = new BigDecimal("50.00");
+        account.transferFromBank(amount);
+        assertEquals(amount, account.getBalance());
+    }
+
+    public void testFailedTransferFromBank() {
+        account.setAch(createMockAch(AchStatus.FAILURE));
+        final BigDecimal amount = new BigDecimal("50.00");
+        account.transferFromBank(amount);
+        assertEquals(new BigDecimal("0.00"), account.getBalance());
+    }
+
+    private Ach createMockAch(final AchStatus status) {
+        return new AchMock() {
+            public AchResponse issueDebit(AchCredentials credentials, AchTransactionData data) {
+                Assert.assertTrue(data.account.equals(AccountTest.ACCOUNT_NUMBER));
+                Assert.assertTrue(data.aba.equals(AccountTest.ABA));
+                AchResponse response = new AchResponse();
+                response.timestamp = new Date();
+                response.traceCode = "1";
+                response.status = status; //Aqui está o problema de não compilar
+                return response;
+            }
+        };
     }
 }

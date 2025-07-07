@@ -1,3 +1,5 @@
+package Tests.sis.testing;
+
 import chess.BoardTest;
 import chess.CharacterTest;
 import chess.pieces.PieceTest;

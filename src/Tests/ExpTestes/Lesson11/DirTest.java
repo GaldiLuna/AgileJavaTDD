@@ -20,8 +20,6 @@ public class DirTest extends TestCase {
         testDir = new Dir(TEST_DIR_PATH);
         // Garante que qualquer resquício de execuções anteriores seja limpo
         recursiveDelete(new File(TEST_DIR_PATH));
-        // Cria o diretório para os testes
-        testDir.ensureExists();
     }
 
     /**
@@ -39,6 +37,7 @@ public class DirTest extends TestCase {
      */
 
     public void testGetAttributesStillWorks() {
+        testDir.ensureExists(); //Pré-condição do teste
         Dir.Attributes attributes = testDir.getAttributes();
         assertNotNull(attributes);
         assertFalse(attributes.isReadOnly());

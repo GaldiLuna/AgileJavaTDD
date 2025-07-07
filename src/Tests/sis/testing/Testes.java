@@ -1,4 +1,5 @@
-package Tests.sis.report;
+package Tests.sis.testing;
+import Tests.sis.report.RosterReporterTest;
 import junit.framework.TestSuite;
 
 public class Testes {
