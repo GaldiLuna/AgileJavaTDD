@@ -55,9 +55,9 @@ public class AccountTest extends TestCase {
     }
 
     public void testTRansferFromBank() {
-        Ach mockAch = new AchMock() {
+        Ach achMock = new AchMock() {
             public AchResponse issueDebit(AchCredentials credentials, AchTransactionData data) {
-                org.junit.Assert.assertTrue(data.account.equals(AccountTest.ACCOUNT_NUMBER));
+                Assert.assertTrue(data.account.equals(AccountTest.ACCOUNT_NUMBER));
                 Assert.assertTrue(data.aba.equals(AccountTest.ABA));
                 AchResponse response = new AchResponse();
                 response.timestamp = new Date();
@@ -65,6 +65,26 @@ public class AccountTest extends TestCase {
                 response.status = AchStatus.SUCCESS;
                 return response;
             }
+
+//            @Override
+//            public AchResponse markTransactionAsNSF(AchCredentials credentials, AchTransactionData data, String traceCode) {
+//                return null;
+//            }
+//
+//            @Override
+//            public AchResponse issueCredit(AchCredentials credentials, AchTransactionData data) {
+//                return null;
+//            }
+//
+//            @Override
+//            public AchResponse voidSameDayTransaction(AchCredentials credentials, AchTransactionData data, String traceCode) {
+//                return null;
+//            }
+//
+//            @Override
+//            public AchResponse queryTransactionStatus(AchCredentials credentials, AchTransactionData data, String traceCode) {
+//                return null;
+//            }
         };
 
         //account.setAch(new com.jimbob.ach.JimBobAch()); //uh-oh

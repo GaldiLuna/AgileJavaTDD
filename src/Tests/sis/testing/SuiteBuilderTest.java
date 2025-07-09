@@ -1,5 +1,9 @@
 package Tests.sis.testing;
 
+import java.io.File;
+import java.lang.reflect.Modifier;
+import java.net.URL;
+import java.net.URLClassLoader;
 import junit.framework.*;
 import java.util.*;
 
@@ -16,13 +20,13 @@ public class SuiteBuilderTest extends TestCase {
         SuiteBuilder builder = new SuiteBuilder() {
             public List<String> gatherTestClassNames() {
                 List<String> classNames = new ArrayList<String>();
-                classNames.add("testing.SuiteBuilderTest");
+                classNames.add("Tests.sis.testing.SuiteBuilderTest");
                 return classNames;
             }
         };
         TestSuite suite = builder.suite();
         assertEquals(1, suite.testCount());
-        assertTrue(contains(suite, testing.SuiteBuilderTest.class));
+        assertTrue(contains(suite, Tests.sis.testing.SuiteBuilderTest.class));
     }
 
     public boolean contains(TestSuite suite, Class testClass) {
