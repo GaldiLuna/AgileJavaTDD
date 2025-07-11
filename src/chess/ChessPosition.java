@@ -14,7 +14,7 @@ public class ChessPosition {
             throw new IllegalArgumentException("Formato de posição inválido: " + position);
         }
         this.file = Character.toLowerCase(position.charAt(0));
-        this.rank = Character.parseInt(String.valueOf(position.charAt(1)));
+        this.rank = Integer.parseInt(String.valueOf(position.charAt(1)));
 
         if (this.file < 'a' || this.file > 'h' || this.rank < 1 || this.rank > 8) {
             throw new IllegalArgumentException("Posição fora dos limites do tabuleiro: " + position);
