@@ -1,4 +1,5 @@
 package Tests.sis.search;
+import util.*;
 
 import junit.framework.TestCase;
 import util.TestUtil;
@@ -15,7 +16,7 @@ public class SearchTest extends TestCase {
             "Java via test-driven development.<br />",
             "</body></html>"
     };
-    public static final String FILE = "/temp/testFileSearch.html";
+    public static final String FILE = "/var/tmp/testFileSearch.html";
     public static final String URL2 = "file:" + FILE;
 
     public void testCreate() throws IOException {

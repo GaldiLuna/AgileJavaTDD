@@ -86,4 +86,27 @@ public class Account implements Accountable {
     void setAch(Ach ach) {
         this.ach = ach;
     }
+
+    public synchronized void withdraw(BigDecimal amount) {
+        if (amount.compareTo(balance) > 0)
+            return;
+        //try-catch abaixo para forçar um erro inserindo uma pausa na execução do withdraw
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException e) {}
+        balance = balance.subtract(amount);
+
+        /**
+         * Uma implementação equivalente à usada acima (sem a pausa) é essa mostrada abaixo:
+         *
+         * public void withdraw(BigDecimal amount) {
+         *             synchronized (this) {
+         *                 if (amount.compareTo(balance) > 0)
+         *                     return;
+         *                 balance = balance.subtract(amount);
+         *             }
+         *         }
+         */
+
+    }
 }
