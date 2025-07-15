@@ -123,7 +123,7 @@ public class AccountTest extends TestCase {
 
     public void testWithdrawInsufficientFunds() {
         account.credit(new BigDecimal("100.00"));
-        account.withdraw(new BigDecimal("140,00"));
+        account.withdraw(new BigDecimal("140.00"));
         assertEquals(new BigDecimal("100.00"), account.getBalance());
     }
 }

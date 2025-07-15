@@ -16,6 +16,7 @@ public class Clock implements Runnable {
     }
 
     public void run() {
+        Thread.currentThread().setPriority(Thread.NORM_PRIORITY - 1); //Define a prioridade da Thread atual
         long lastTime = System.currentTimeMillis();
         while (run) {
             try {
