@@ -18,7 +18,7 @@ public class MultiHashMapTest extends TestCase {
         events = new MultiHashMap<Date, String>();
     }
 
-    protected void testCreate() {
+    public void testCreate() {
         assertEquals(0, events.size());
     }
 

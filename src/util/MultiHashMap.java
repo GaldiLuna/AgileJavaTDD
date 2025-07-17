@@ -1,9 +1,6 @@
 package util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MultiHashMap<K, V> {
     private Map<K, List<V>> map = new HashMap<K, List<V>>();
@@ -23,6 +20,10 @@ public class MultiHashMap<K, V> {
 
     public List<V> get(K key) {
         return map.get(key);
+    }
+
+    protected Set<Map.Entry<K, List<V>>> entrySet() {
+        return map.entrySet();
     }
 }
 

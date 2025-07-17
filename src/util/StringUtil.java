@@ -1,5 +1,8 @@
 package util;
 
+import java.util.List;
+import java.math.*;
+
 /**
  * Atualize qualquer código que usava NEWLINE diretamente para referenciar StringUtil.NEWLINE.
  * Substitua concatenações manuais de \n por chamadas a StringUtil.appendNewLine.
@@ -29,5 +32,22 @@ public class StringUtil {
             if (string.regionMatches(ignoreCase, i, substring, 0, length))
                 occurrences++;
         return occurrences;
+    }
+
+    public static String concatenate(List<?> list) {
+        StringBuilder builder = new StringBuilder();
+        for (Object element: list)
+            builder.append(String.format("%s%n", element));
+        return builder.toString();
+    }
+
+    public static String concatenateNumbers(List<? extends Number> list, int decimalPlaces) { //Wildicard '?' com limite superior
+        String decimalFormat = "%." + decimalPlaces + "f";
+        StringBuilder builder = new StringBuilder();
+        for (Number element: list) { //Elementos podem ser tratados como Number
+            double value = element.doubleValue();
+            builder.append(String.format(decimalFormat + "%n", value));
+        }
+        return builder.toString();
     }
 }
