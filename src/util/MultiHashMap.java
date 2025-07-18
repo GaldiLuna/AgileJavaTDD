@@ -25,6 +25,30 @@ public class MultiHashMap<K, V> {
     protected Set<Map.Entry<K, List<V>>> entrySet() {
         return map.entrySet();
     }
+
+    public Set<K> keys() {
+        return map.keySet();
+    }
+
+    public interface Filter<T> {
+        boolean apply(T item);
+    }
+
+    public static <K, V> void filter(
+            final MultiHashMap<K, ? super  V> target, //Wildicard com limite inferior para o 'target'
+            final MultiHashMap<K, V> source,
+            final Filter<? super V> filter) { //Wildicard com limite inferior para o 'filter'
+        for (K key : source.keys()) { //Supondo que source.keys() exista
+            final List<V> values = source.get(key);
+            for (V value : values)
+                if (filter.apply(value))
+                    target.put(key, value);
+        }
+    }
+
+    public Class<V> getKeyType() {
+        return V.class; //Isso não funcionará!
+    }
 }
 
 //ISSO NÃO É COMO O JAVA TRADUZ GENÉRICOS:

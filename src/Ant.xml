@@ -1,0 +1,9 @@
+<target name="build" depends="init" description="build all">
+    <javac
+            srcdir="${src.dir}" destdir="${build.dir}"
+            source="1.5"
+            deprecation="on" debug="on" optimize="off" includes="**">
+        <classpath refid="classpath" />
+        <compilerarg value="-Xlint:unchecked"/>
+    </javac>
+</target>
