@@ -4,6 +4,11 @@ import java.util.*;
 
 public class MultiHashMap<K, V> {
     private Map<K, List<V>> map = new HashMap<K, List<V>>();
+//    private final Class<V> valueType; //Campo para armazenar o tipo
+//
+//    public MultiHashMap(Class<V> valueType) {
+//        this.valueType = valueType;
+//    }
 
     public  int size() {
         return map.size();
@@ -40,15 +45,23 @@ public class MultiHashMap<K, V> {
             final Filter<? super V> filter) { //Wildicard com limite inferior para o 'filter'
         for (K key : source.keys()) { //Supondo que source.keys() exista
             final List<V> values = source.get(key);
-            for (V value : values)
-                if (filter.apply(value))
-                    target.put(key, value);
+            if (values != null) {
+                for (V value : values)
+                    if (filter.apply(value))
+                        target.put(key, value);
+            }
         }
     }
 
-    public Class<V> getKeyType() {
-        return V.class; //Isso não funcionará!
-    }
+//    public Class<V> getKeyType() {
+//        return V.class; //Exemplo de metodo que não funcionará devido ao apagamento!
+//    }
+
+    // Agora este metodo funcionaria, mas você precisaria de uma chave
+    // correspondente para K também, se fosse o caso.
+//    public Class<V> getValueType() {
+//        return valueType;
+//    }
 }
 
 //ISSO NÃO É COMO O JAVA TRADUZ GENÉRICOS:
