@@ -7,7 +7,16 @@ public class TestRunnerUI {
     private TestRunner runner;
 
     public static void main(String[] args) throws Exception {
-        TestRunnerUI ui = new TestRunnerUI(args[0]);
+        String testClassName;
+        if (args.length > 0) {
+            testClassName = args[0];
+        } else {
+            // Se nenhum argumento for passado, usa um nome de classe padrão para teste
+            System.out.println("No test class argument provided. Running TestRunnerTest by default.");
+            testClassName = "Tests.sis.testing.TestRunnerTest"; //Nome da classe teste padrão
+        }
+
+        TestRunnerUI ui = new TestRunnerUI(testClassName);
         ui.run();
         System.exit(ui.getNumberOfFailedTests());
     }
@@ -36,7 +45,8 @@ public class TestRunnerUI {
         System.out.println("\nIgnored Methods");
         for (Map.Entry<Method, Ignore> entry: runner.getIgnoredMethods().entrySet()) {
             Ignore ignore = entry.getValue();
-            System.out.println(entry.getKey() + ": " + ignore.value());
+            System.out.printf("%s: %s (by %s)\n", entry.getKey(), Arrays.toString(ignore.reasons()), ignore.initials());
+            //Linha acima imprime formatado, imprime array de razões e imprime as iniciais
         }
     }
 }

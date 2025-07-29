@@ -10,15 +10,26 @@ public class TestRunner {
     private int failed = 0;
     private Set<Method> testMethods = null;
     private Map<Method, Ignore> ignoredMethods = null;
+    public static final String DEFAULT_IGNORE_REASON = "temporarily commenting out";
 
     public static void main(String[] args) throws Exception {
+        String testClassName;
+        if (args.length > 0) {
+            testClassName = args[0];
+        } else {
+            // Se nenhum argumento for passado, usa um nome de classe padrão para teste
+            System.out.println("No test class argument provided. Running TestRunnerTest by default.");
+            testClassName = "Tests.sis.testing.TestRunnerTest"; //Nome da classe teste padrão
+        }
+
         // Usa o TestRunner baseado em texto em vez do swingui
         // Isso executa o metodo suite() automaticamente
-        junit.textui.TestRunner.run(suite());
+//        junit.textui.TestRunner.run(suite());
+//        //Linha acima comentada para evitar testes longos e excessivos enquanto desenvolvo a lição 15.
 
         //new junit.swingui.TestRunner().run(TestRunner.class); //linha sugerida pelo livro comentada pela IA
 
-        TestRunner runner = new TestRunner(args[0]);
+        TestRunner runner = new TestRunner(testClassName);
         runner.run();
         System.out.println("passed: " + runner.passed() + " failed: " + runner.failed());
         if (runner.failed() > 0)

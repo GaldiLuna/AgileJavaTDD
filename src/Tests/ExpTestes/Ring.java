@@ -34,9 +34,11 @@ public class Ring<T> implements Iterable<T> {
 
     //Adiciona um elemento após o elemento atual
     public void add(T element) {
-        if (element == null) {
-            throw new IllegalArgumentException("Element cannot be null");
-        }
+        assert element != null : "Ring.add: Elemento não pode ser nulo (pré-condição falhou)";
+
+//        if (element == null) {
+//            throw new IllegalArgumentException("Element cannot be null");
+//        }
 
         Node<T> newNode = new Node<>(element);
 

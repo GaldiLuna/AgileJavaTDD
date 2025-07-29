@@ -3,6 +3,7 @@ package Tests.ExpTestes;
 import junit.framework.TestCase;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.lang.AssertionError;
 
 public class RingTest extends TestCase {
 
@@ -189,5 +190,28 @@ public class RingTest extends TestCase {
         integerRing.removeCurrent();
         assertEquals(2, integerRing.size());
         assertEquals(Integer.valueOf(20), integerRing.getCurrent());
+    }
+
+    public void testAddNullThrowsAssertionError() {
+        // Habilita as asserções APENAS para este metodo de teste,
+        // mas é mais comum habilitar via VM Options para t0do o ambiente de teste.
+        // System.setProperty("java.enable.assertions", "true"); // Não recomendado aqui.
+
+        try {
+            // Tenta adicionar um elemento nulo, o que deve disparar a asserção
+            stringRing.add(null);
+            // Se a linha acima não lançar AssertionError, o teste falha
+            fail("Esperava que adicionar null lançasse um AssertionError, mas não lançou");
+        } catch (AssertionError e) {
+            // SUCCESSO: A AssertionError foi capturada como esperado.
+            // Opcional: Você pode verificar a mensagem da asserção se quiser.
+            assertTrue("A mensagem da asserção deveria conter 'não pode ser nulo'", e.getMessage().contains("não pode ser nulo"));
+        } catch (Exception e) {
+            // Captura qualquer outra exceção inesperada
+            fail("Esperava AssertionError, mas lançou outro tipo de exceção: " + e.getClass().getName());
+        } finally {
+            // Garante que o estado das asserções seja revertido se for alterado via System.setProperty
+            System.setProperty("java.enable.assertions", "false"); // Não necessário se habilitado via VM Options
+        }
     }
 }

@@ -1,0 +1,1 @@
+@TestPackage(isPerformance=true) package Tests.sis.testing;
