@@ -13,16 +13,16 @@ public class ExampleDumpClasse {
         this.secret = secret;
     }
 
-    //Getters e Setters
-    public String getName() {
-        return name;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getSecret() {
-        return secret;
-    }
+//    //Getters e Setters
+//    public String getName() {
+//        return name;
+//    }
+//
+//    public int getId() {
+//        return id;
+//    }
+//
+//    public String getSecret() {
+//        return secret;
+//    }
 }
