@@ -1,15 +1,15 @@
 package Tests.sis.testing.compatibilidade;
 
+//CLASSE COMENTADA POR CONTA DE CONFLITO COM O JAVAC PARA COMPILAR
+
 import org.junit.Ignore;
 
 import java.lang.reflect.Method;
 import java.lang.annotation.AnnotationFormatError; //Para capturar o erro
 import java.lang.reflect.InvocationTargetException;
 
-//@Ignore("Classe ignorada por motivos de manutenção")
 //public class CompatibilidadeTeste {
 //
-//    @Ignore("Método ignorado por motivos de manutenção")
 //    public static void main(String[] args) throws Exception {
 //        //Habilita asserções para este teste
 //        assert true;
@@ -54,7 +54,7 @@ import java.lang.reflect.InvocationTargetException;
 //                    assert e instanceof IncompatibleClassChangeError || e instanceof AnnotationFormatError : "Esperado erro ao acessar membro com anotação antiga";
 //                }
 //            } else {
-//                System.out.println("Anotação MinhaAnotacao não encontrada no método. Isso pode indicar um problema de retenção.");
+//                System.out.println("Anotação MinhaAnotacao não encontrada no metodo. Isso pode indicar um problema de retenção.");
 //            }
 //        } catch (AnnotationFormatError e) {
 //            System.err.println("SUCCESS: Erro esperado de formato de anotação (AnnotationFormatError): " + e.getMessage());
@@ -131,7 +131,7 @@ import java.lang.reflect.InvocationTargetException;
  *                     assert t instanceof IncompatibleClassChangeError || t instanceof AnnotationFormatError : "Esperado erro ao acessar novo membro com anotação antiga";
  *                 }
  *             } else {
- *                 System.out.println("Anotação MinhaAnotacao não encontrada no método. Isso indica um problema de retenção ou incompatibilidade inicial.");
+ *                 System.out.println("Anotação MinhaAnotacao não encontrada no metodo. Isso indica um problema de retenção ou incompatibilidade inicial.");
  *             }
  *         } catch (Throwable t) { // Captura qualquer erro inesperado aqui
  *             System.err.println("Outro tipo de erro inesperado ocorreu: " + t.getClass().getName() + " - " + t.getMessage());
