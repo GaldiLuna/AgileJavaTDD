@@ -1,4 +1,5 @@
 package Tests.sis.ui;
+import Tests.sis.studentinfo.*;
 
 import junit.framework.*;
 import javax.swing.*;
@@ -46,5 +47,16 @@ public class SisTest extends TestCase {
             if (name.equals(component.getName()))
                 return component;
         return null;
+    }
+
+    public void testAddCourse() {
+        CoursesPanel panel = (CoursesPanel)Util.getComponent(frame, CoursesPanel.NAME);
+        panel.setText(CoursesPanel.DEPARTMENT_FIELD_NAME, "MATH");
+        panel.setText(CoursesPanel.NUMBER_FIELD_NAME, "300");
+        JButton button = panel.getButton(CoursesPanel.ADD_BUTTON_NAME);
+        button.doClick();
+        Course course = panel.getCourse(0);
+        assertEquals("MATH", course.getDepartment());
+        assertEquals("300", course.getNumber());
     }
 }
