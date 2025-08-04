@@ -28,7 +28,7 @@ public class UtilTest extends TestCase {
         Component component = new JLabel("x");
         component.setName(name);
         JPanel subpanel = new JPanel();
-        subpanel.add(subpanel);
+        subpanel.add(component);
         panel.add(subpanel);
         assertEquals(component, Util.getComponent(panel, name));
     }

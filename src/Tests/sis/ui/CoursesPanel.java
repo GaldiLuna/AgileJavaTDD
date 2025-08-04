@@ -2,15 +2,16 @@ package Tests.sis.ui;
 import Tests.sis.studentinfo.*;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 
 public class CoursesPanel extends JPanel {
+    static final char ADD_BUTTON_MNEMONIC = 'A';
     static final String NAME = "coursesPanel";
     static final String COURSES_LABEL_TEXT = "Courses";
     static final String COURSES_LABEL_NAME = "coursesLabel";
-//    static final String LABEL_TEXT = "Courses";
-//    static final String LABEL_NAME = "coursesLabel";
     static final String COURSES_LIST_NAME = "coursesList";
     static final String ADD_BUTTON_TEXT = "Add";
     static final String ADD_BUTTON_NAME = "addButton";
@@ -24,8 +25,81 @@ public class CoursesPanel extends JPanel {
     private JButton addButton;
     private DefaultListModel coursesModel = new DefaultListModel();
 
-    public static void main(String[] args) {
-        show(new CoursesPanel());
+    public CoursesPanel() {
+        setName(NAME);
+        createLayout();
+    }
+
+    private void createLayout() {
+        //JLabel coursesLabel = createLabel(COURSES_LABEL_NAME, COURSES_LABEL_TEXT);
+        JList coursesList = createList(COURSES_LIST_NAME, coursesModel);
+        JScrollPane coursesScroll = new JScrollPane(coursesList);
+        coursesScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+        setLayout(new BorderLayout());
+        final int pad = 6;
+        Border emptyBorder = BorderFactory.createEmptyBorder(pad, pad, pad, pad);
+        Border bevelBorder = BorderFactory.createBevelBorder(BevelBorder.RAISED);
+        Border titleBorder = BorderFactory.createTitledBorder(bevelBorder, COURSES_LABEL_TEXT);
+
+        //add(coursesLabel, BorderLayout.NORTH);
+        add(coursesScroll, BorderLayout.CENTER);
+        add(createBottomPanel(), BorderLayout.SOUTH);
+    }
+
+    JPanel createBottomPanel() {
+        addButton = createButton(ADD_BUTTON_NAME, ADD_BUTTON_TEXT);
+        addButton.setMnemonic(ADD_BUTTON_MNEMONIC);
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+        panel.add(Box.createRigidArea(new Dimension(0, 6)));
+        addButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(addButton);
+        panel.add(Box.createRigidArea(new Dimension(0, 6)));
+        panel.add(createFieldsPanel());
+        panel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+        return panel;
+    }
+
+    JPanel createFieldsPanel() {
+        GridBagLayout layout = new GridBagLayout();
+        JPanel panel = new JPanel(layout);
+        int columns = 20;
+
+        addField(panel, layout, 0,
+                DEPARTMENT_LABEL_NAME, DEPARTMENT_LABEL_TEXT,
+                DEPARTMENT_FIELD_NAME, columns);
+        addField(panel, layout, 1,
+                NUMBER_LABEL_NAME, NUMBER_LABEL_TEXT,
+                NUMBER_FIELD_NAME, columns);
+
+        return panel;
+    }
+
+    private void addField(JPanel panel, GridBagLayout layout, int row,
+                          String labelName, String labelText, String fieldName, int fieldColumns) {
+
+        JLabel label = createLabel(labelName, labelText);
+        JTextField field = createField(fieldName, fieldColumns);
+        Insets insets = new Insets(3, 3, 3, 3); //top-left-bottom-right
+
+        layout.setConstraints(label,
+                new GridBagConstraints(
+                        0, row,                    // x, y
+                        1, 1,                  // gridwidth, gridheight
+                        40, 1,                  // weightx, weighty
+                        GridBagConstraints.LINE_END,    //anchor
+                        GridBagConstraints.NONE,        // fill
+                        insets, 0, 0));     // padx, ipady
+
+        layout.setConstraints(field,
+                new GridBagConstraints(1, row, 2, 1, 60, 1,
+                        GridBagConstraints.CENTER,
+                        GridBagConstraints.HORIZONTAL,
+                        insets, 0, 0));
+
+        panel.add(label);
+        panel.add(field);
     }
 
     private static void show(JPanel panel) {
@@ -36,45 +110,16 @@ public class CoursesPanel extends JPanel {
         frame.setVisible(true);
     }
 
-    public CoursesPanel() {
-        setName(NAME);
-        createLayout();
-    }
-
-    private void createLayout() {
-        JLabel coursesLabel = createLabel(COURSES_LABEL_NAME, COURSES_LABEL_TEXT);
-        JList coursesList = createList(COURSES_LIST_NAME, coursesModel);
-
-        addButton = createButton(ADD_BUTTON_NAME, ADD_BUTTON_TEXT);
-        int columns = 20;
-
-        JLabel departmentLabel = createLabel(DEPARTMENT_LABEL_NAME, DEPARTMENT_LABEL_TEXT);
-        JTextField departmentField = createField(DEPARTMENT_FIELD_NAME, columns);
-        JLabel numberLabel = createLabel(NUMBER_LABEL_NAME, NUMBER_LABEL_TEXT);
-        JTextField numberField = createField(NUMBER_FIELD_NAME, columns);
-//        JLabel coursesLabel = createLabel(COURSES_LABEL_NAME, COURSES_LABEL_TEXT);
-//        JList coursesList = createList(COURSES_LIST_NAME, coursesModel);
-
-        addButton = createButton(ADD_BUTTON_NAME, ADD_BUTTON_TEXT);
-
-        int rows = 4;
-        int cols = 2;
-        setLayout(new GridLayout(rows, cols));
-        setLayout(new BorderLayout());
-
-        add(coursesLabel, BorderLayout.NORTH);
-        add(coursesList, BorderLayout.CENTER);
-        add(createBottomPanel(), BorderLayout.SOUTH);
-        add(addButton);
-        add(new JPanel());
-        add(departmentLabel);
-        add(departmentField);
-        add(numberLabel);
-        add(numberField);
+    public static void main(String[] args) {
+        show(new CoursesPanel());
     }
 
     void addCourseAddListener(ActionListener listener) {
         addButton.addActionListener(listener);
+    }
+
+    void addFieldListener(String name, KeyListener listener) {
+        getField(name).addKeyListener(listener);
     }
 
     private JLabel createLabel(String name, String text) {
@@ -134,57 +179,7 @@ public class CoursesPanel extends JPanel {
         getField(textFieldName).setText(text);
     }
 
-    JPanel createBottomPanel() {
-        addButton = createButton(ADD_BUTTON_NAME, ADD_BUTTON_TEXT);
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-        panel.add(Box.createRigidArea(new Dimension(0, 6)));
-        addButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(addButton);
-        panel.add(Box.createRigidArea(new Dimension(0, 6)));
-        panel.add(createFieldsPanel());
-        panel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
-        return panel;
+    void setEnabled(String name, boolean state) {
+        getButton(name).setEnabled(state);
     }
-
-    JPanel createFieldsPanel() {
-        GridBagLayout layout = new GridBagLayout();
-        JPanel panel = new JPanel(layout);
-        int columns = 20;
-
-        addField(panel, layout, 0,
-                DEPARTMENT_LABEL_NAME, DEPARTMENT_LABEL_TEXT,
-                DEPARTMENT_FIELD_NAME, columns);
-        addField(panel, layout, 1,
-                NUMBER_LABEL_NAME, NUMBER_LABEL_TEXT,
-                NUMBER_FIELD_NAME, columns);
-
-        return panel;
-    }
-
-    private void addField(JPanel panel, GridBagLayout layout, int row,
-                          String labelName, String labelText, String fieldName, int fieldColumns) {
-
-        JLabel label = createLabel(labelName, labelText);
-        JTextField field = createField(fieldName, fieldColumns);
-        Insets insets = new Insets(3, 3, 3, 3); //top-left-bottom-right
-
-        layout.setConstraints(label,
-                new GridBagConstraints(
-                        0, row,                // x, y
-                        1, 1,              // gridwidth, gridheight
-                        40, 1,              // weightx, weighty
-                        LINE_END,                   //anchor
-                        NONE,                       // fill
-                        insets, 0, 0)); // padx, ipady
-
-        layout.setConstraints(field,
-                new GridBagConstraints(1, row, 2, 1, 60, 1,
-                        CENTER, HORIZONTAL,
-                        insets, 0, 0));
-
-        panel.add(label);
-        panel.add(field);
-    }
-
 }
