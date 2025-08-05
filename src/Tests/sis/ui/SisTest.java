@@ -2,10 +2,15 @@ package Tests.sis.ui;
 import Tests.sis.studentinfo.*;
 import util.*;
 
+import Tests.sis.ui.FieldCatalog.*;
+
 import junit.framework.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.InputEvent;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.DocumentFilter;
+import javax.swing.SwingUtilities;
 
 public class SisTest extends TestCase {
     private Sis sis;
@@ -39,7 +44,7 @@ public class SisTest extends TestCase {
 
     private void verifyFilter(CoursesPanel panel) {
         DocumentFilter filter =
-                getFilter(panel, CoursesPanel.DEPARTMENT_FIELD_NAME);
+                getFilter(panel, FieldCatalog.DEPARTMENT_FIELD_NAME);
         assertTrue(filter.getClass() == UpcaseFilter.class);
     }
 
@@ -74,13 +79,19 @@ public class SisTest extends TestCase {
         return null;
     }
 
-    public void testAddCourse() {
+    public void testAddCourse() throws Exception {
         CoursesPanel panel = (CoursesPanel)Util.getComponent(frame, CoursesPanel.NAME);
-        panel.setText(CoursesPanel.DEPARTMENT_FIELD_NAME, "MATH");
-        panel.setText(CoursesPanel.NUMBER_FIELD_NAME, "300");
+        panel.setText(FieldCatalog.DEPARTMENT_FIELD_NAME, "MATH");
+        panel.setText(FieldCatalog.NUMBER_FIELD_NAME, "300");
 
         JButton button = panel.getButton(CoursesPanel.ADD_BUTTON_NAME);
-        button.doClick();
+
+        SwingUtilities.invokeAndWait(new Runnable() {
+            @Override
+            public void run() {
+                button.doClick();
+            }
+        });
 
         Course course = panel.getCourse(0);
         assertEquals("MATH", course.getDepartment());
@@ -91,10 +102,35 @@ public class SisTest extends TestCase {
         sis.show();
         JButton button = panel.getButton(CoursesPanel.ADD_BUTTON_NAME);
         assertFalse(button.isEnabled());
-        selectField(CoursesPanel.DEPARTMENT_FIELD_NAME);
+
+        // Abordagem alternativa: usar o Robot e esperar um pouco
+        Thread.sleep(100); // Dar tempo para a tela renderizar
+
+        selectField(FieldCatalog.DEPARTMENT_FIELD_NAME);
         type('A');
-        selectField(CoursesPanel.NUMBER_FIELD_NAME);
+        robot.waitForIdle(); // Esperar os eventos do Robot
+        Thread.sleep(100); // Pausa adicional para garantir que a UI se atualize
+
+        selectField(FieldCatalog.NUMBER_FIELD_NAME);
         type('1');
+        robot.waitForIdle();
+        Thread.sleep(100);
+
+//        SwingUtilities.invokeAndWait(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    selectField(FieldCatalog.DEPARTMENT_FIELD_NAME);
+//                    type('A');
+//                    selectField(FieldCatalog.NUMBER_FIELD_NAME);
+//                    type('1');
+//                } catch (Exception e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        });
+
+        //robot.waitForIdle();
         assertTrue(button.isEnabled());
     }
 
@@ -114,18 +150,19 @@ public class SisTest extends TestCase {
     public void testSetAddButtonState() throws Exception {
         JButton button = panel.getButton(CoursesPanel.ADD_BUTTON_NAME);
         assertFalse(button.isEnabled());
-        panel.setText(CoursesPanel.DEPARTMENT_FIELD_NAME, "a");
+        panel.setText(FieldCatalog.DEPARTMENT_FIELD_NAME, "a");
         sis.setAddButtonState();
         assertFalse(button.isEnabled());
-        panel.setText(CoursesPanel.NUMBER_FIELD_NAME, "1");
+        panel.setText(FieldCatalog.NUMBER_FIELD_NAME, "1");
         sis.setAddButtonState();
         assertTrue(button.isEnabled());
-        panel.setText(CoursesPanel.DEPARTMENT_FIELD_NAME, " ");
+        panel.setText(FieldCatalog.DEPARTMENT_FIELD_NAME, " ");
         sis.setAddButtonState();
         assertFalse(button.isEnabled());
-        panel.setText(CoursesPanel.DEPARTMENT_FIELD_NAME, "a");
-        panel.setText(CoursesPanel.NUMBER_FIELD_NAME, " ");
+        panel.setText(FieldCatalog.DEPARTMENT_FIELD_NAME, "a");
+        panel.setText(FieldCatalog.NUMBER_FIELD_NAME, " ");
         sis.setAddButtonState();
         assertFalse(button.isEnabled());
     }
+
 }

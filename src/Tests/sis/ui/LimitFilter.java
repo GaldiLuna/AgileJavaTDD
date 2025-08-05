@@ -9,6 +9,11 @@ public class LimitFilter extends DocumentFilter {
         this.limit = limit;
     }
 
+    public int getLimit() {
+        return limit;
+    }
+
+    @Override
     public void insertString(
             DocumentFilter.FilterBypass bypass,
             int offset,
@@ -17,14 +22,14 @@ public class LimitFilter extends DocumentFilter {
         replace(bypass, offset, 0, str, attrSet);
     }
 
+    @Override
     public void replace(
             DocumentFilter.FilterBypass bypass,
             int offset,
             int length,
             String str,
             AttributeSet attrSet) throws BadLocationException {
-        int newLength =
-                bypass.getDocument().getLength() - length + str.length();
+        int newLength = bypass.getDocument().getLength() - length + (str != null ? str.length() : 0);
         if (newLength > limit)
             throw new BadLocationException(
                     "New characters exceeds max size of document", offset);

@@ -1,14 +1,17 @@
 package Tests.sis.ui;
 
-import Tests.sis.studentinfo.*;
+import Tests.sis.studentinfo.Course;
 
 public class CourseDisplayAdapter extends Course {
-    CourseDisplayAdapter(Course course) {
+    private Course course;
+
+    public CourseDisplayAdapter(Course course) {
         super(course.getDepartment(), course.getNumber());
+        this.course = course;
     }
 
     @Override
     public String toString() {
-        return String.format("%s-%s", getDepartment(), getNumber());
+        return course.getDepartment() + "-" + course.getNumber();
     }
 }

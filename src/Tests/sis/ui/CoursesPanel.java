@@ -1,5 +1,6 @@
 package Tests.sis.ui;
 import Tests.sis.studentinfo.*;
+import static Tests.sis.ui.FieldCatalog.*;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -15,12 +16,6 @@ public class CoursesPanel extends JPanel {
     static final String COURSES_LIST_NAME = "coursesList";
     static final String ADD_BUTTON_TEXT = "Add";
     static final String ADD_BUTTON_NAME = "addButton";
-    static final String DEPARTMENT_FIELD_NAME = "deptField";
-    static final String NUMBER_FIELD_NAME = "numberField";
-    static final String DEPARTMENT_LABEL_NAME = "deptLabel";
-    static final String NUMBER_LABEL_NAME = "numberLabel";
-    static final String DEPARTMENT_LABEL_TEXT = "Department";
-    static final String NUMBER_LABEL_TEXT = "Number";
 
     private JButton addButton;
     private DefaultListModel coursesModel = new DefaultListModel();
@@ -64,23 +59,47 @@ public class CoursesPanel extends JPanel {
     JPanel createFieldsPanel() {
         GridBagLayout layout = new GridBagLayout();
         JPanel panel = new JPanel(layout);
-        int columns = 20;
-
-        addField(panel, layout, 0,
-                DEPARTMENT_LABEL_NAME, DEPARTMENT_LABEL_TEXT,
-                DEPARTMENT_FIELD_NAME, columns);
-        addField(panel, layout, 1,
-                NUMBER_LABEL_NAME, NUMBER_LABEL_TEXT,
-                NUMBER_FIELD_NAME, columns);
-
+        int i = 0;
+        FieldCatalog catalog = new FieldCatalog();
+        for (String fieldName: getFieldNames()) {
+            Field fieldSpec = catalog.get(fieldName);
+            addField(panel, layout, i++,
+                    createLabel(fieldSpec),
+                    TextFieldFactory.create(fieldSpec));
+        }
         return panel;
+
+//        int columns = 20;
+//        addField(panel, layout, 0,
+//                DEPARTMENT_LABEL_NAME, DEPARTMENT_LABEL_TEXT,
+//                DEPARTMENT_FIELD_NAME, columns);
+//        addField(panel, layout, 1,
+//                NUMBER_LABEL_NAME, NUMBER_LABEL_TEXT,
+//                NUMBER_FIELD_NAME, columns);
+//
+//        Format format = new SimpleDateFormat("MM/dd/yy");
+//        JFormattedTextField dateField = new JFormattedTextField(format);
+//        dateField.setValue(new Date());
+//        dateField.setColumns(columns);
+//        dateField.setName(EFFECTIVE_DATE_FIELD_NAME);
+//        addField(panel, layout, 2,
+//                EFFECTIVE_DATE_LABEL_NAME, EFFECTIVE_DATE_LABEL_TEXT,
+//                dateField);
+//
+//        return panel;
+    }
+
+    private String[] getFieldNames() {
+        return new String[]{ FieldCatalog.DEPARTMENT_FIELD_NAME,
+                             FieldCatalog.NUMBER_FIELD_NAME,
+                             FieldCatalog.EFFECTIVE_DATE_FIELD_NAME };
     }
 
     private void addField(JPanel panel, GridBagLayout layout, int row,
-                          String labelName, String labelText, String fieldName, int fieldColumns) {
+                          JLabel label, JTextField field) {
 
-        JLabel label = createLabel(labelName, labelText);
-        JTextField field = createField(fieldName, fieldColumns);
+//        JLabel label = createLabel(labelName, labelText);
+//        JTextField field = createField(fieldName, fieldColumns);
         Insets insets = new Insets(3, 3, 3, 3); //top-left-bottom-right
 
         layout.setConstraints(label,
@@ -122,9 +141,9 @@ public class CoursesPanel extends JPanel {
         getField(name).addKeyListener(listener);
     }
 
-    private JLabel createLabel(String name, String text) {
-        JLabel label = new JLabel(text);
-        label.setName(name);
+    private JLabel createLabel(Field fieldSpec) {
+        JLabel label = new JLabel(fieldSpec.getLabel());
+        label.setName(fieldSpec.getLabelName());
         return label;
     }
 
