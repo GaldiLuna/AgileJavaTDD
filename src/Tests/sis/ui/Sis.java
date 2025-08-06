@@ -93,8 +93,8 @@ public class Sis {
         return value.trim().equals("");
     }
 
-    void addCourseAddListener(ActionListener listener) {
-        addButton.addActionListener(listener);
-    }
+//    void addCourseAddListener(ActionListener listener) {
+//        addButton.addActionListener(listener);
+//    }
 
 }

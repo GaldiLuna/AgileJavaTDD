@@ -22,6 +22,7 @@ public class CoursesPanelTest extends TestCase {
 
     public void testCreate() {
         assertEmptyList(COURSES_LIST_NAME);
+        assertEmptyTable(COURSES_TABLE_NAME);
         assertButtonText(ADD_BUTTON_NAME, ADD_BUTTON_TEXT);
         String[] fields = { FieldCatalog.DEPARTMENT_FIELD_NAME,
                             FieldCatalog.NUMBER_FIELD_NAME,
@@ -64,6 +65,11 @@ public class CoursesPanelTest extends TestCase {
         assertEquals(0, list.getModel().getSize());
     }
 
+    private void assertEmptyTable(String name) {
+        JTable table = panel.getTable(name);
+        assertEquals(0, table.getModel().getRowCount());
+    }
+
     private void assertButtonText(String name, String text) {
         JButton button = panel.getButton(name);
         assertEquals(text, button.getText());
@@ -98,9 +104,13 @@ public class CoursesPanelTest extends TestCase {
     public void testAddCourse() {
         Course course = new Course("ENGL", "101");
         panel.addCourse(course);
-        JList list = panel.getList(COURSES_LIST_NAME);
-        ListModel model = list.getModel();
-        assertEquals("ENGL-101", model.getElementAt(0).toString());
+        JTable table = panel.getTable(COURSES_TABLE_NAME);
+        CoursesTableModel model = (CoursesTableModel)table.getModel();
+        assertSame(course, model.get(0));
+
+//        JList list = panel.getList(COURSES_LIST_NAME);
+//        ListModel model = list.getModel();
+//        assertEquals("ENGL-101", model.getElementAt(0).toString());
     }
 
     public void testEnableDisable() {

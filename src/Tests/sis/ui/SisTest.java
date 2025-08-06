@@ -23,6 +23,17 @@ public class SisTest extends TestCase {
         frame = sis.getFrame();
         panel = (CoursesPanel)Util.getComponent(frame, CoursesPanel.NAME);
         robot = new Robot();
+        // Limpar a lista no setUp para garantir um estado limpo para CADA teste
+        if (panel != null) {
+            panel.clearCourses();
+        }
+    }
+
+    protected void tearDown()throws Exception {
+        if (sis != null) {
+            sis.close();
+        }
+        super.tearDown();
     }
 
     public void testCreate() {
@@ -67,10 +78,6 @@ public class SisTest extends TestCase {
         assertTrue(frame.isVisible());
     }
 
-    protected void tearDown() {
-        sis.close();
-    }
-
     private Component getComponent(JFrame frame, String name) {
         Container container = frame.getContentPane();
         for (Component component: container.getComponents())
@@ -100,38 +107,44 @@ public class SisTest extends TestCase {
 
     public void testKeyListeners() throws Exception {
         sis.show();
+        // Pausa para dar tempo à janela para renderizar e ganhar foco
+        Thread.sleep(1000);
+
         JButton button = panel.getButton(CoursesPanel.ADD_BUTTON_NAME);
         assertFalse(button.isEnabled());
 
-        // Abordagem alternativa: usar o Robot e esperar um pouco
-        Thread.sleep(100); // Dar tempo para a tela renderizar
+//        // Usar o Robot diretamente sem invokeAndWait
+//        selectField(FieldCatalog.DEPARTMENT_FIELD_NAME);
+//        type('A');
+//        robot.waitForIdle(); // Esperar os eventos do Robot
+//
+//        selectField(FieldCatalog.NUMBER_FIELD_NAME);
+//        type('1');
+//        robot.waitForIdle();
+//
+//        assertTrue(button.isEnabled());
 
-        selectField(FieldCatalog.DEPARTMENT_FIELD_NAME);
-        type('A');
-        robot.waitForIdle(); // Esperar os eventos do Robot
-        Thread.sleep(100); // Pausa adicional para garantir que a UI se atualize
+        SwingUtilities.invokeAndWait(() -> {
+            try {
+                // Focar o campo de departamento antes de digitar
+                panel.getField(FieldCatalog.DEPARTMENT_FIELD_NAME).requestFocusInWindow();
+                // Simular a digitação
+                type('A');
 
-        selectField(FieldCatalog.NUMBER_FIELD_NAME);
-        type('1');
-        robot.waitForIdle();
-        Thread.sleep(100);
+                // Focar o campo de número antes de digitar
+                panel.getField(FieldCatalog.NUMBER_FIELD_NAME).requestFocusInWindow();
+                // Simular a digitação
+                type('1');
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 
-//        SwingUtilities.invokeAndWait(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    selectField(FieldCatalog.DEPARTMENT_FIELD_NAME);
-//                    type('A');
-//                    selectField(FieldCatalog.NUMBER_FIELD_NAME);
-//                    type('1');
-//                } catch (Exception e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
-//        });
+        // Pausa para garantir que a UI se atualize após a interação
+        Thread.sleep(200);
 
-        //robot.waitForIdle();
         assertTrue(button.isEnabled());
+
     }
 
     private void selectField(String name) throws Exception {
