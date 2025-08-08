@@ -97,6 +97,7 @@ public class SisTest extends TestCase {
             @Override
             public void run() {
                 button.doClick();
+                while (panel.getCourseCount() == 0);
             }
         });
 

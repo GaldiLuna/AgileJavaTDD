@@ -1,8 +1,11 @@
 package Tests.sis.studentinfo;
 
 public class Course implements java.io.Serializable {
+    protected native Object clone() throws CloneNotSupportedException;
+
     private String department;
     private String number;
+    private String effectiveDate;
 
     public Course(String department, String number) {
         this.department = department;
@@ -44,5 +47,17 @@ public class Course implements java.io.Serializable {
     @Override
     public String toString() {
         return department + " " + number;
+    }
+
+    @Override
+    public Course clone() {
+        Course copy = null;
+        try {
+            copy = (Course)super.clone();
+        }
+        catch (CloneNotSupportedException impossible) {
+            throw new RuntimeException("unable to clone");
+        }
+        return copy;
     }
 }

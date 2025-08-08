@@ -78,9 +78,54 @@ public class Sis {
     }
 
     private void addCourse() {
-        Course course = new Course(panel.getText(FieldCatalog.DEPARTMENT_FIELD_NAME),
-                                    panel.getText(FieldCatalog.NUMBER_FIELD_NAME));
-        panel.addCourse(course);
+        frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        try {
+            Course course = new Course(panel.getText(FieldCatalog.DEPARTMENT_FIELD_NAME),
+                    panel.getText(FieldCatalog.NUMBER_FIELD_NAME));
+            try { Thread.sleep(3000); } catch (InterruptedException e) {}
+            JFormattedTextField effectiveDateField = (JFormattedTextField)panel.getField(FieldCatalog.EFFECTIVE_DATE_FIELD_NAME);
+            Date date = (Date)effectiveDateField.getValue();
+            course.setEffectiveDate(date);
+            panel.addCourse(course);
+        }
+        finally {
+            frame.setCursor(Cursor.getDefaultCursor());
+        }
+
+        //addCourse() usando o invokeAndWait() - ESSA MUDANÇA QUEBRARÁ O testAddCourse de SisTest.java
+        /**
+         * private void addCourse() {
+         *     Thread thread = new Thread() {
+         *         public void run() {
+         *             panel.setEnabled(CoursesPanel.ADD_BUTTON_NAME, false);
+         *             try {
+         *                 final Course course = basicAddCourse();
+         *                 SwingUtilities.invokeAndWait(new Runnable() {
+         *                     public void run() {
+         *                         panel.addCourse(course);
+         *                         panel.setEnabled(CoursesPanel.ADD_BUTTON_NAME, true);
+         *                     }
+         *                 });
+         *             }
+         *             catch (Exception e) {}
+         *         }
+         *     };
+         *     thread.start();
+         * }
+         */
+
+        //ESTA É UMA SOLUÇÃO INADEQUADA
+        /**
+         * Thread thread = new Thread() {
+         *         public void run() {
+         *             panel.setEnabled(CoursesPanel.ADD_BUTTON_NAME, false);
+         *             Course course = basicAddCourse();
+         *             panel.addCourse(course);
+         *             panel.setEnabled(CoursesPanel.ADD_BUTTON_NAME, true);
+         *         }
+         *     };
+         *     thread.start();
+         */
     }
 
     void setAddButtonState() {
@@ -93,8 +138,20 @@ public class Sis {
         return value.trim().equals("");
     }
 
-//    void addCourseAddListener(ActionListener listener) {
-//        addButton.addActionListener(listener);
-//    }
+    //PARTE DA SOLUÇÃO INADEQUADA
+    /**
+     * private Course basicAddCourse() {
+     *     try { Thread.sleep(3000); } catch (InterruptedException e) {}
+     *     Course course =
+     *         new Course(
+     *             panel.getText(FieldCatalog.DEPARTMENT_FIELD_NAME),
+     *             panel.getText(FieldCatalog.NUMBER_FIELD_NAME));
+     *     JFormattedTextField effectiveDateField =
+     *         (JFormattedTextField)panel.getField(FieldCatalog.EFFECTIVE_DATE_FIELD_NAME);
+     *     Date date = (Date)effectiveDateField.getValue();
+     *     course.setEffectiveDate(date);
+     *     return course;
+     * }
+     */
 
 }

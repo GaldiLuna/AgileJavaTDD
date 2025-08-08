@@ -18,6 +18,7 @@ public class CoursesPanel extends JPanel {
     static final String ADD_BUTTON_TEXT = "Add";
     static final String ADD_BUTTON_NAME = "addButton";
 
+    private Status status;
     private JButton addButton;
     private DefaultListModel coursesModel = new DefaultListModel();
 
@@ -28,13 +29,16 @@ public class CoursesPanel extends JPanel {
 
     private void createLayout() {
         JTable coursesTable = createCoursesTable();
-        JLabel coursesLabel = createLabel(COURSES_LABEL_NAME);
+        JLabel coursesLabel = createLabel(COURSES_LABEL_NAME, COURSES_LABEL_TEXT);
         JList coursesList = createList(COURSES_LIST_NAME, coursesModel);
-        JScrollPane coursesScroll = new JScrollPane(coursesTable);
+        //JScrollPane coursesScroll = new JScrollPane(coursesTable);
+        JScrollPane coursesScroll = new JScrollPane(coursesList);
         coursesScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         setLayout(new BorderLayout());
+
         final int pad = 6;
+        //setBorder(BorderFactory.createEmptyBorder(pad, pad, pad, pad));
         Border emptyBorder = BorderFactory.createEmptyBorder(pad, pad, pad, pad);
         Border bevelBorder = BorderFactory.createBevelBorder(BevelBorder.RAISED);
         Border titleBorder = BorderFactory.createTitledBorder(bevelBorder, COURSES_LABEL_TEXT);
@@ -45,17 +49,25 @@ public class CoursesPanel extends JPanel {
     }
 
     JPanel createBottomPanel() {
-        addButton = createButton(ADD_BUTTON_NAME, ADD_BUTTON_TEXT);
-        addButton.setMnemonic(ADD_BUTTON_MNEMONIC);
+        JLabel statusBar = new JLabel(" ");
+        statusBar.setBorder(BorderFactory.createLoweredBevelBorder());
+        status = new Status(statusBar);
         JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-        panel.add(Box.createRigidArea(new Dimension(0, 6)));
-        addButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(addButton);
-        panel.add(Box.createRigidArea(new Dimension(0, 6)));
-        panel.add(createFieldsPanel());
-        panel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+        panel.setLayout(new BorderLayout());
+        panel.add(statusBar, BorderLayout.SOUTH);
+        panel.add(createInputPanel(), BorderLayout.CENTER);
         return panel;
+//        addButton = createButton(ADD_BUTTON_NAME, ADD_BUTTON_TEXT);
+//        addButton.setMnemonic(ADD_BUTTON_MNEMONIC);
+//        JPanel panel = new JPanel();
+//        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+//        panel.add(Box.createRigidArea(new Dimension(0, 6)));
+//        addButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+//        panel.add(addButton);
+//        panel.add(Box.createRigidArea(new Dimension(0, 6)));
+//        panel.add(createFieldsPanel());
+//        panel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+//        return panel;
     }
 
     JPanel createFieldsPanel() {
@@ -65,30 +77,11 @@ public class CoursesPanel extends JPanel {
         FieldCatalog catalog = new FieldCatalog();
         for (String fieldName: getFieldNames()) {
             Field fieldSpec = catalog.get(fieldName);
-            addField(panel, layout, i++,
-                    createLabel(fieldSpec),
-                    TextFieldFactory.create(fieldSpec));
+            JTextField textField = TextFieldFactory.create(fieldSpec);
+            status.addText(textField, fieldSpec.getLabel());
+            addField(panel, layout, i++, createLabel(fieldSpec), TextFieldFactory.create(fieldSpec));
         }
         return panel;
-
-//        int columns = 20;
-//        addField(panel, layout, 0,
-//                DEPARTMENT_LABEL_NAME, DEPARTMENT_LABEL_TEXT,
-//                DEPARTMENT_FIELD_NAME, columns);
-//        addField(panel, layout, 1,
-//                NUMBER_LABEL_NAME, NUMBER_LABEL_TEXT,
-//                NUMBER_FIELD_NAME, columns);
-//
-//        Format format = new SimpleDateFormat("MM/dd/yy");
-//        JFormattedTextField dateField = new JFormattedTextField(format);
-//        dateField.setValue(new Date());
-//        dateField.setColumns(columns);
-//        dateField.setName(EFFECTIVE_DATE_FIELD_NAME);
-//        addField(panel, layout, 2,
-//                EFFECTIVE_DATE_LABEL_NAME, EFFECTIVE_DATE_LABEL_TEXT,
-//                dateField);
-//
-//        return panel;
     }
 
     private String[] getFieldNames() {
@@ -149,7 +142,7 @@ public class CoursesPanel extends JPanel {
         }
     }
 
-    private JLabel createLabel(Field fieldSpec) {
+    private JLabel createLabel(Field fieldSpec, Field fieldSpec2) {
         JLabel label = new JLabel(fieldSpec.getLabel());
         label.setName(fieldSpec.getLabelName());
         return label;
@@ -215,5 +208,9 @@ public class CoursesPanel extends JPanel {
 
     void setEnabled(String name, boolean state) {
         getButton(name).setEnabled(state);
+    }
+
+    int getCourseCount() {
+        return coursesTableModel.getRowCount();
     }
 }
