@@ -142,9 +142,9 @@ public class CoursesPanel extends JPanel {
         }
     }
 
-    private JLabel createLabel(Field fieldSpec, Field fieldSpec2) {
-        JLabel label = new JLabel(fieldSpec.getLabel());
-        label.setName(fieldSpec.getLabelName());
+    private JLabel createLabel(String name, String text) {
+        JLabel label = new JLabel(text);
+        label.setName(name);
         return label;
     }
 

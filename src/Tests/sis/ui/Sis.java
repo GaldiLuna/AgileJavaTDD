@@ -8,6 +8,7 @@ import javax.swing.*;
 import javax.swing.text.AbstractDocument;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Date;
 
 public class Sis {
     static final int WIDTH = 550;

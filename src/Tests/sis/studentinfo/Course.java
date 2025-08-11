@@ -1,11 +1,13 @@
 package Tests.sis.studentinfo;
 
-public class Course implements java.io.Serializable {
-    protected native Object clone() throws CloneNotSupportedException;
+import java.util.Date;
+
+public class Course implements java.io.Serializable, Cloneable {
+    //protected native Object clone() throws CloneNotSupportedException;
 
     private String department;
     private String number;
-    private String effectiveDate;
+    private Date effectiveDate;
 
     public Course(String department, String number) {
         this.department = department;
@@ -18,6 +20,14 @@ public class Course implements java.io.Serializable {
 
     public String getNumber() {
         return number;
+    }
+
+    public void setEffectiveDate(Date effectiveDate) {
+        this.effectiveDate = effectiveDate;
+    }
+
+    public Date getEffectiveDate() {
+        return effectiveDate;
     }
 
     @Override

@@ -12,6 +12,7 @@ public class Field {
     private boolean upcaseOnly;
     private Object initialValue;
     private DateFormat format;
+    private String info;
 
     public Field(String name) {
         this.name = name;
@@ -27,6 +28,10 @@ public class Field {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public String getShortName() {
+        return getLabel();
     }
 
     public int getColumns() {
@@ -75,5 +80,13 @@ public class Field {
 
     public void setLabelName(String labelName) {
         this.labelName = labelName;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
     }
 }

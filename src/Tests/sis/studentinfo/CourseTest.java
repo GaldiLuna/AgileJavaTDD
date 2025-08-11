@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Date;
 
 public class CourseTest extends TestCase {
     public void testCreate() {
