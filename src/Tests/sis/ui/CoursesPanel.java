@@ -2,6 +2,8 @@ package Tests.sis.ui;
 import Tests.sis.studentinfo.*;
 import static Tests.sis.ui.FieldCatalog.*;
 
+import java.util.List;
+import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
@@ -18,7 +20,9 @@ public class CoursesPanel extends JPanel {
     static final String ADD_BUTTON_TEXT = "Add";
     static final String ADD_BUTTON_NAME = "addButton";
 
-    private Status status;
+    private StatusBar statusBar = new StatusBar();
+    private CoursesTableModel coursesTableModel = new CoursesTableModel();
+    //private Status status;
     private JButton addButton;
     private DefaultListModel coursesModel = new DefaultListModel();
 
@@ -30,9 +34,10 @@ public class CoursesPanel extends JPanel {
     private void createLayout() {
         JTable coursesTable = createCoursesTable();
         JLabel coursesLabel = createLabel(COURSES_LABEL_NAME, COURSES_LABEL_TEXT);
-        JList coursesList = createList(COURSES_LIST_NAME, coursesModel);
-        //JScrollPane coursesScroll = new JScrollPane(coursesTable);
-        JScrollPane coursesScroll = new JScrollPane(coursesList);
+        //JList coursesList = createList(COURSES_LIST_NAME, coursesModel);
+        //JScrollPane coursesScroll = new JScrollPane(coursesList);
+        JScrollPane coursesScroll = new JScrollPane(coursesTable);
+
         coursesScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         setLayout(new BorderLayout());
@@ -49,12 +54,12 @@ public class CoursesPanel extends JPanel {
     }
 
     JPanel createBottomPanel() {
-        JLabel statusBar = new JLabel(" ");
+        //JLabel statusBar = new JLabel(" ");
         statusBar.setBorder(BorderFactory.createLoweredBevelBorder());
-        status = new Status(statusBar);
+        //status = new Status(statusBar);
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        panel.add(statusBar, BorderLayout.SOUTH);
+        panel.add(this.statusBar, BorderLayout.SOUTH);
         panel.add(createInputPanel(), BorderLayout.CENTER);
         return panel;
 //        addButton = createButton(ADD_BUTTON_NAME, ADD_BUTTON_TEXT);
@@ -70,18 +75,45 @@ public class CoursesPanel extends JPanel {
 //        return panel;
     }
 
-    JPanel createFieldsPanel() {
+    private JPanel createInputPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+
+        PanelWithFields fieldsResult = createFieldsPanel();
+        //panel.add(createFieldsPanel(), BorderLayout.CENTER);
+        panel.add(fieldsResult.panel, BorderLayout.CENTER);
+
+        addButton = createButton(ADD_BUTTON_NAME, ADD_BUTTON_TEXT);
+        addButton.setMnemonic(ADD_BUTTON_MNEMONIC);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(addButton);
+        panel.add(buttonPanel, BorderLayout.SOUTH);
+
+        return panel;
+    }
+
+    private PanelWithFields createFieldsPanel() {
         GridBagLayout layout = new GridBagLayout();
         JPanel panel = new JPanel(layout);
+        List<JTextField> textFields = new ArrayList<>();
+
         int i = 0;
         FieldCatalog catalog = new FieldCatalog();
+        //java.util.List<JTextField> textFields = new java.util.ArrayList<>();
         for (String fieldName: getFieldNames()) {
             Field fieldSpec = catalog.get(fieldName);
             JTextField textField = TextFieldFactory.create(fieldSpec);
-            status.addText(textField, fieldSpec.getLabel());
+            textFields.add(textField);
+
+            statusBar.setInfo(textField, fieldSpec.getInfo());
             addField(panel, layout, i++, createLabel(fieldSpec), TextFieldFactory.create(fieldSpec));
         }
-        return panel;
+
+        PanelWithFields result = new PanelWithFields();
+        result.panel = panel;
+        result.fields = textFields;
+
+        return result;
     }
 
     private String[] getFieldNames() {
@@ -148,11 +180,17 @@ public class CoursesPanel extends JPanel {
         return label;
     }
 
-    private JList createList(String name, ListModel model) {
-        JList list = new JList(model);
-        list.setName(name);
-        return list;
+    private JLabel createLabel(Field fieldSpec) {
+        JLabel label = new JLabel(fieldSpec.getLabel());
+        label.setName(fieldSpec.getLabelName());
+        return label;
     }
+
+//    private JList createList(String name, ListModel model) {
+//        JList list = new JList(model);
+//        list.setName(name);
+//        return list;
+//    }
 
     private JTable createCoursesTable() {
         JTable table = new JTable(coursesTableModel);
@@ -178,9 +216,9 @@ public class CoursesPanel extends JPanel {
         return (JLabel)Util.getComponent(this, name);
     }
 
-    JList getList(String name) {
-        return (JList)Util.getComponent(this, name);
-    }
+//    JList getList(String name) {
+//        return (JList)Util.getComponent(this, name);
+//    }
 
     JButton getButton(String name) {
         return (JButton)Util.getComponent(this, name);
@@ -213,4 +251,9 @@ public class CoursesPanel extends JPanel {
     int getCourseCount() {
         return coursesTableModel.getRowCount();
     }
+
+    JTable getTable(String name) {
+        return (JTable)Util.getComponent(this, name);
+    }
 }
+

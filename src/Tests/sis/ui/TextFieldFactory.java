@@ -6,19 +6,24 @@ import javax.swing.text.*;
 
 public class TextFieldFactory {
     public static JTextField create(Field fieldSpec) {
-        JTextField field = null;
-        if (fieldSpec.getFormat() != null)
+        JTextField field;
+
+        if (fieldSpec.getFormat() != null) {
+            //JFormattedTextField formattedField = createFormattedTextField(fieldSpec);
             field = createFormattedTextField(fieldSpec);
-        else {
+        } else {
             field = new JTextField();
-            if (fieldSpec.getInitialValue() != null)
+            if (fieldSpec.getInitialValue() != null) {
                 field.setText(fieldSpec.getInitialValue().toString());
+            }
         }
 
-        if (fieldSpec.getLimit() > 0)
+        if (fieldSpec.getLimit() > 0) {
             attachLimitFilter(field, fieldSpec.getLimit());
-        if (fieldSpec.isUpcaseOnly())
+        }
+        if (fieldSpec.isUpcaseOnly()) {
             attachUpcaseFilter(field);
+        }
 
         field.setColumns(fieldSpec.getColumns());
         field.setName(fieldSpec.getName());
@@ -33,14 +38,18 @@ public class TextFieldFactory {
         attachFilter(field, new ChainableFilter(new UpcaseFilter()));
     }
 
-    private static void attachFilter(
-            JTextField field, ChainableFilter filter) {
+    private static void attachFilter(JTextField field, ChainableFilter filter) {
         AbstractDocument document = (AbstractDocument)field.getDocument();
         DocumentFilter currentFilter = document.getDocumentFilter();
+
         if (currentFilter == null) {
             document.setDocumentFilter(filter);
         } else if (currentFilter instanceof ChainableFilter) {
-            ((ChainableFilter)currentFilter).setNext(filter);
+            ChainableFilter lastFilter = (ChainableFilter) currentFilter;
+            while (lastFilter.getNext() != null && lastFilter.getNext() instanceof ChainableFilter) {
+                lastFilter = lastFilter.getNext();
+            }
+            lastFilter.setNext(filter);
         } else {
             throw new IllegalStateException("O primeiro filtro não é um ChainableFilter.");
         }
@@ -53,9 +62,8 @@ public class TextFieldFactory {
 //            existingFilter.setNext(filter);
     }
 
-    private static JTextField createFormattedTextField(Field fieldSpec) {
-        JFormattedTextField field =
-                new JFormattedTextField(fieldSpec.getFormat());
+    private static JFormattedTextField createFormattedTextField(Field fieldSpec) {
+        JFormattedTextField field = new JFormattedTextField(fieldSpec.getFormat());
         field.setValue(fieldSpec.getInitialValue());
         return field;
     }

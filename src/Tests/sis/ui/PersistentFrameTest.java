@@ -32,12 +32,12 @@ public class PersistentFrameTest extends TestCase {
         int width = 150;
         int height = 160;
         frame.setBounds(x, y, width, height);
+        frame.saveWindowPosition();
         frame.dispose();
 
         PersistentFrame frame2 = new PersistentFrame();
         frame2.initialize();
         frame2.setVisible(true);
-        assertEquals(
-                new Rectangle(x, y, width, height), frame2.getBounds());
+        assertEquals(new Rectangle(x, y, width, height), frame2.getBounds());
     }
 }

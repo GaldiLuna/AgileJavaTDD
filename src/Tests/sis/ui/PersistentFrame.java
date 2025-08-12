@@ -33,7 +33,7 @@ public class PersistentFrame extends JFrame {
         });
     }
 
-    private void saveWindowPosition() {
+    public void saveWindowPosition() {
         Rectangle bounds = getBounds();
         preferences.putInt(X, bounds.x); // 3
         preferences.putInt(Y, bounds.y);

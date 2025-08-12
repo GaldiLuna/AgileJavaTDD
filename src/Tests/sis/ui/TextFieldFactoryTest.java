@@ -42,9 +42,8 @@ public class TextFieldFactoryTest extends TestCase {
         fieldSpec.setUpcaseOnly();
         JTextField field = TextFieldFactory.create(fieldSpec);
         AbstractDocument document = (AbstractDocument)field.getDocument();
-        ChainableFilter filter =
-                (ChainableFilter)document.getDocumentFilter();
-        assertEquals(UpcaseFilter.class, filter.getClass());
+        ChainableFilter chainableFilter = (ChainableFilter)document.getDocumentFilter();
+        assertEquals(UpcaseFilter.class, chainableFilter.getFilter().getClass());
     }
 
     public void testMultipleFilters() {
@@ -52,13 +51,15 @@ public class TextFieldFactoryTest extends TestCase {
         fieldSpec.setUpcaseOnly();
         JTextField field = TextFieldFactory.create(fieldSpec);
         AbstractDocument document = (AbstractDocument)field.getDocument();
-        ChainableFilter filter =
-                (ChainableFilter)document.getDocumentFilter();
-        Set<Class> filters = new HashSet<Class>();
-        filters.add(filter.getClass());
-        filters.add(filter.getNext().getClass());
-        assertTrue(filters.contains(LimitFilter.class));
-        assertTrue(filters.contains(UpcaseFilter.class));
+        ChainableFilter firstFilter = (ChainableFilter)document.getDocumentFilter();
+        ChainableFilter secondFilter = firstFilter.getNext();
+
+//        Set<Class> filters = new HashSet<Class>();
+//        filters.add(filter.getClass());
+//        filters.add(filter.getNext().getClass());
+
+        assertTrue(firstFilter.getFilter() instanceof LimitFilter);
+        assertTrue(secondFilter.getFilter() instanceof UpcaseFilter);
     }
 
     public void testCreateFormattedField() {

@@ -21,7 +21,7 @@ public class CoursesPanelTest extends TestCase {
     }
 
     public void testCreate() {
-        assertEmptyList(COURSES_LIST_NAME);
+        //assertEmptyList(COURSES_LIST_NAME);
         assertEmptyTable(COURSES_TABLE_NAME);
         assertButtonText(ADD_BUTTON_NAME, ADD_BUTTON_TEXT);
         String[] fields = { FieldCatalog.DEPARTMENT_FIELD_NAME,
@@ -40,13 +40,22 @@ public class CoursesPanelTest extends TestCase {
 
     private void assertFields(String[] fieldNames) {
         StatusBar statusBar = (StatusBar)Util.getComponent(panel, StatusBar.NAME);
+        assertNotNull(statusBar);
         FieldCatalog catalog = new FieldCatalog();
+
         for (String fieldName: fieldNames) {
             JTextField field = panel.getField(fieldName);
             Field fieldSpec = catalog.get(fieldName);
             assertEquals(fieldSpec.getInfo(), statusBar.getInfo(field));
             assertLabelText(fieldSpec.getLabelName(), fieldSpec.getLabel());
         }
+
+//        List<JTextField> fields = panel.getFields();
+//        for (int i = 0; i < fieldNames.length; i++) {
+//            JTextField field = fields.get(i);
+//            Field fieldSpec = catalog.get(fieldNames[i]);
+//            assertEquals(fieldSpec.getInfo(), statusBar.getInfo(field));
+//        }
     }
 
     private void assertLabelText(String name, String text) {
@@ -59,10 +68,10 @@ public class CoursesPanelTest extends TestCase {
         assertEquals("", field.getText());
     }
 
-    private void assertEmptyList(String name) {
-        JList list = panel.getList(name);
-        assertEquals(0, list.getModel().getSize());
-    }
+//    private void assertEmptyList(String name) {
+//        JList list = panel.getList(name);
+//        assertEquals(0, list.getModel().getSize());
+//    }
 
     private void assertEmptyTable(String name) {
         JTable table = panel.getTable(name);

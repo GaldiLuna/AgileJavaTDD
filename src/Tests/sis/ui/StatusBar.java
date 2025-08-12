@@ -3,11 +3,13 @@ package Tests.sis.ui;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class StatusBar extends JLabel {
     public static final String NAME = "StatusBar";
     private final static String EMPTY = " ";
-    private Map<JTextField,String> infos = new IdentityHashMap<JTextField,String>();
+    private Map<JTextField, String> infos = new HashMap<JTextField, String>();
 
     public StatusBar() {
         super(EMPTY);

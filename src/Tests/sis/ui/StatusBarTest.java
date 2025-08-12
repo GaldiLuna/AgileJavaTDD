@@ -30,13 +30,19 @@ public class StatusBarTest extends TestCase {
         statusBar.setInfo(field1, text1);
         statusBar.setInfo(field2, text2);
         Robot robot = new Robot();
+
         Point field1Location = field1.getLocationOnScreen();
         robot.mouseMove(field1Location.x - 1, field1Location.y - 1);
+        robot.delay(200);
         assertEquals("", statusBar.getText().trim());
+
         robot.mouseMove(field1Location.x + 1, field1Location.y + 1);
+        robot.delay(200);
         assertEquals(text1, statusBar.getText());
+
         Point field2Location = field2.getLocationOnScreen();
         robot.mouseMove(field2Location.x + 1, field2Location.y + 1);
+        robot.delay(200);
         assertEquals(text2, statusBar.getText());
     }
 

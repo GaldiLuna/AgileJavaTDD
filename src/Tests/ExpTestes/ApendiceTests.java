@@ -46,28 +46,34 @@ public class ApendiceTests extends TestCase {
         return results;
     }
 
-    public static String stripToDigits(String input) {
-        return input.replaceAll("\\D+", "");
-    }
+//    public static String stripToDigits(String input) {
+//        return input.replaceAll("\\D+", "");
+//    }
 }
 
 class Name {
     String firstName = "Jeffrey";
     String lastName = "Hyman";
     String fullName = firstName + lastName;
-    Name name = new Name(fullName);
 
-    void getFirstName() {
+    public Name(String fullName) {
+        this.fullName = fullName;
+        String[] parts = fullName.split("\\s+");
+        this.firstName = parts[0];
+        this.lastName = parts[1];
+    }
+
+    String getFirstName() {
         this.firstName = firstName;
         return firstName;
     }
 
-    void getLastName() {
+    String getLastName() {
         this.lastName = lastName;
         return lastName;
     }
 
-    void getFullName() {
+    String getFullName() {
         this.fullName = firstName + lastName;
         return fullName;
     }

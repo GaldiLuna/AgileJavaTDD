@@ -50,4 +50,8 @@ public class StringUtil {
         }
         return builder.toString();
     }
+
+    public static String stripToDigits(String input) {
+        return input.replaceAll("\\D+", "");
+    }
 }
